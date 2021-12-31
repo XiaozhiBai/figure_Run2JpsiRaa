@@ -1,5 +1,8 @@
-//PlottingHelper Class v0.1
-// Author: Dennis Weiser
+//*******************************************************************************
+// plot the results                                                             *
+// by Xiaozhi Bai xiaozhi.bai@cern.ch x.bai@gsi.de                              *
+// Wed Jul  8 20:02:05 CEST 2019                                                *
+//*******************************************************************************
 
 #include "TLatex.h"
 #include "TH1.h"
