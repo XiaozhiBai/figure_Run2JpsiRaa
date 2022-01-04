@@ -264,6 +264,15 @@ void plot_meanpT_data()
 void plot_raa_data()
 {
 
+  Double_t pp_x=30;
+  Double_t pp_phenix_x=10;
+  Double_t AA_x=50;
+  
+  Double_t pp_alice_5020_y=2.4;
+  Double_t pp_alice_2076_y=2.25;
+  Double_t pp_phenix_y=2.07;
+  Double_t na50_y=1.88;
+
   TGraphErrors *gr_CentraaStat5020 = (TGraphErrors*)GetCentraaStat5020();
   TGraphErrors *gr_CentraaSyst5020  = (TGraphErrors*)GetCentraaSyst5020();
 
@@ -280,17 +289,51 @@ void plot_raa_data()
   TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2.6);
   SetTH2F(mh2Dummy,0.07,0.07,0.95,0.7,0.06,0.06,0.015,0.015,504,504);
 
-  SetTGraphError(gr_CentraaStat5020,20,2.5,2,2,2,0);
-  SetTGraphError(gr_CentraaSyst5020,20,2.5,2,2,2,0);
-
-  SetErrorX(gr_CentraaSyst5020,6);
   
   pad1->cd();
   mh2Dummy->Draw();
 
 
+  /*  //5.02 PbPb */
+  SetTGraphError(gr_CentraaStat5020,20,2.5,2,2,2,0);
+  SetTGraphError(gr_CentraaSyst5020 ,20,2.5,2,2,2,0);
+  SetErrorX(gr_CentraaSyst5020 ,6);
+  DrawPoint(AA_x,pp_alice_5020_y,20,2.5,2,2,2);
 
-  //
+    
+  /*  //2.76 TeV PbPb */
+
+  SetTGraphError(graphraaALICE2760 ,21,2.5,4,4,2,0);
+  SetTGraphError(graphraaALICE2760Syst,21,2.5,4,4,2,0);
+  SetErrorX(graphMeanPtALICE2760Syst,6);
+  DrawPoint(AA_x,pp_alice_2076_y,21,3,4,4,2);
+
+
+  
+  
+  // 200 GeV AuAu
+
+  SetTGraphError(graphraaPhenixAuAu,33,3,kGreen+3,kGreen+3,2,0);
+  SetTGraphError(graphraaPhenixAuAuSyst,33,2.5,kGreen+3,kGreen+3,2,0);
+  SetErrorX(graphMeanPtPhenixAuAuSyst,6);
+  DrawPoint(pp_x,pp_phenix_y,33,3,kGreen+3,kGreen+3,2);
+
+
+  
+  
+  //200 GeV CuCu
+  SetTGraphError(graphraaPhenixCuCu,33,3,kGreen-3,kGreen-3,2,0);
+  SetTGraphError(graphraaPhenixCuCuSyst ,33,2.5,kGreen-3,kGreen-3,2,0);
+  SetErrorX(graphMeanPtPhenixCuCuSyst,6);
+  DrawPoint(AA_x,pp_phenix_y,33,3,kGreen-3,kGreen-3,2);
+
+
+  /* //NA 50 */
+
+
+  SetTGraphError(graphraaNA50,43,3,kMagenta,kMagenta,2,0);
+  DrawPoint(AA_x, na50_y ,43,3,kMagenta,kMagenta,2);
+
 
 
   
@@ -326,12 +369,17 @@ void plot_raa_data()
   
 
   TLatex tex3(0.5,0.5," ");
-  tex3.SetTextSize(0.035);
 
-  tex3.DrawLatex(60,2.3,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
-  tex3.DrawLatex(60,2.15,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
-  tex3.DrawLatex(60,2.0,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
-  tex3.DrawLatex(60,1.85,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+  tex3.SetTextSize(0.035);
+  tex3.SetTextFont(42);
+  tex3.SetNDC();
+  tex3.SetTextSize(0.035);
+  
+
+  tex3.DrawLatex(0.28,0.9,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(0.28,0.84,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(0.28,0.78,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
+  tex3.DrawLatex(0.28,0.72,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
 
 
   c1->SaveAs("output/raa_vs_Cent_data.pdf");
@@ -473,7 +521,7 @@ void plot_raa_model()
   tex1.DrawLatex(0.18,0.70," 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
 
-  //gr_CentraaTM1_5020->Draw("FL same");
+ 
   gr_CentraaTM2_5020->Draw("FL same");
 
   gr_CentraaStat5020->Draw("samePE");
