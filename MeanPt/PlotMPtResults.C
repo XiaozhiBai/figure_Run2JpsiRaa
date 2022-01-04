@@ -10,29 +10,6 @@ Double_t MeanPt502ppStatErr = 0.06;
 Double_t MeanPt502ppSystErr = 0.01;//0.03
 
 
-//theory graphs
-TGraph *graphPengLow = 0x0;
-TGraph *graphPengMPtSq = 0x0;
-TGraph *graphPengraa = 0x0;
-
-TGraph *graphRappMPtLow = 0x0;
-TGraph *graphRappMPtHigh = 0x0;
-TGraph *graphRappMPtSqLow = 0x0;
-TGraph *graphRappMPtSqHigh =0x0;
-TGraph *graphRappraaLow = 0x0;
-TGraph *graphRappraaHigh = 0x0;
-TGraphErrors *graphRappMeanPt = 0x0;
-TGraphErrors *graphRappraa = 0x0;
-
-TGraph *graphSHMMPtHigh = 0x0;
-TGraph *graphSHMMPtLow = 0x0;
-TGraphErrors *graphSHMMeanPt= 0x0;
-
-TGraph *graphSHMraaHigh = 0x0;
-TGraph *graphSHMraaLow = 0x0;
-TGraphErrors *graphSHMraa = 0x0;
-
-
 //data graphs
 
 TGraphErrors *graphMeanPtNA50=0x0;
@@ -61,60 +38,305 @@ TGraphErrors *graphraaALICE2760=0x0;
 TGraphErrors *graphraaALICE2760Syst =0x0;
 
 
-//TGraphErrors *graphMeanPtALICEpp=0x0;
-//TGraphErrors *graphMeanPtALICEppSyst=0x0;
+TGraphErrors *graphMeanPtALICEpp=0x0;
+TGraphErrors *graphMeanPtALICEppSyst=0x0;
 
 
- void DrawLegendaryLegendMPt();
- void DrawLegendaryLegendMPtSq();
- void PrepareLowerEnergyGraphs();
- void PrepareTheoryCurvePengfey();  
- void PrepareTheoryCurveRapp();
- void PrepareTheoryCurveSHM();
+void DrawLegendaryLegendMPt();
+void DrawLegendaryLegendMPtSq();
+void PrepareLowerEnergyGraphs();
 
 
-  TGraphErrors *GetCentMptStat5020();
-  TGraphErrors *GetCentMptSyst5020();
 
- TGraphErrors *GetCentraaStat5020();
- TGraphErrors *GetCentraaSyst5020();
+TGraphErrors *GetCentMptStat5020();
+TGraphErrors *GetCentMptSyst5020();
+
+TGraphErrors *GetCentraaStat5020();
+TGraphErrors *GetCentraaSyst5020();
 
 
 
 void plot_meanpT_model();
 void plot_raa_model();
 
+void plot_meanpT_data();
+void plot_raa_data();
+
 /* void plot_meanpT_data(); */
 /* void plot_raa_data(); */
 
 
+const char *fileTAMU_cent_MeanpT;
+const char *fileTHU_cent_MeanpT ;
+const char *fileSHM_cent_MeanpT;
+
+const char *fileTAMU_cent_raa;
+const char *fileTHU_cent_raa ;
+const char *fileSHM_cent_raa;
+
+//const char *fileComover_cent_raa;
+
 void PlotMPtResults(){
 
-  //Style
-  //  LoadLibs();
+
   SetStyle();
 
+  fileTAMU_cent_MeanpT="input/model/MeanPtRappInFile.txt";
+  fileTHU_cent_MeanpT="input/model/MeanPtPengfeyInFile.txt";
+  fileSHM_cent_MeanpT="input/model/input/model/MeanPtSHM09052018.txt";
 
-  gStyle->SetPadBottomMargin(0.15);
-  gStyle->SetPadLeftMargin(0.13);
-  gStyle->SetPadRightMargin(0.04);
-  gStyle->SetPadTopMargin(0.02);
+  fileTAMU_cent_raa="input/model/Rapp_raa.txt";
+  fileTHU_cent_raa="input/model/raa_vs_npart.dat";
 
+  //  fileSHM_cent_raa="input/model/input/model/MeanPtSHM09052018.txt";
   
-  
-  //Theory input
-  PrepareTheoryCurvePengfey();
-  PrepareTheoryCurveRapp();
-  PrepareTheoryCurveSHM();
-
   //lower energy data graphs
+
   PrepareLowerEnergyGraphs();
 
   plot_meanpT_model();
   plot_raa_model();
-  
+
+  plot_meanpT_data();
+  plot_raa_data();
+
 
 }
+
+
+
+
+
+void plot_meanpT_data()
+{
+
+  Double_t pp_x=30;
+  Double_t pp_phenix_x=10;
+  Double_t AA_x=50;
+  
+  Double_t pp_alice_5020_y=4.1;
+  Double_t pp_alice_2076_y=3.8;
+  Double_t pp_phenix_y=3.5;
+  Double_t na50_y=3.2;
+      
+  TGraphErrors *gr_CentMptStat5020 = (TGraphErrors*)GetCentMptStat5020();
+  TGraphErrors *gr_CentMptSyst5020  = (TGraphErrors*)GetCentMptSyst5020();
+
+  TCanvas *c1=new TCanvas("c1","",1100,850);
+  TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
+
+  SetPad(pad1,0.02,0.15,0.11,0.035);
+  pad1->Draw();
+
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #LT #it{p}_{T} #GT (GeV/#it{c})",100,-20,400,100,0.3,4.5);
+  SetTH2F(mh2Dummy,0.07,0.075,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+
+  
+  pad1->cd();
+  mh2Dummy->Draw();
+
+  //5.02 PbPb
+  SetTGraphError(gr_CentMptStat5020,20,2.5,2,2,2,0);
+  SetTGraphError(gr_CentMptSyst5020,20,2.5,2,2,2,0);
+  SetErrorX(gr_CentMptSyst5020,6);
+  DrawPoint(AA_x,pp_alice_5020_y,20,2.5,2,2,2);
+
+  //5.02 pp
+
+
+ 
+  
+  SetTGraphError(graphMeanPtALICEpp,24,2.5,2,2,2,0);
+  SetTGraphError(graphMeanPtALICEppSyst,24,2.5,2,2,2,0);
+  SetErrorX(graphMeanPtALICEppSyst,6);
+  DrawPoint(pp_x,pp_alice_5020_y,24,2.5,2,2,2);
+
+
+    
+   //2.76 TeV PbPb
+
+  SetTGraphError(graphMeanPtALICE2760,21,2.5,4,4,2,0);
+  SetTGraphError(graphMeanPtALICE2760Syst,21,2.5,4,4,2,0);
+  SetErrorX(graphMeanPtALICE2760Syst,6);
+  DrawPoint(AA_x,pp_alice_2076_y,21,3,4,4,2);
+
+  //2.76 pp
+  SetTGraphError(graphMeanPtALICE2760pp ,25,2.5,4,4,2,0);
+  SetTGraphError(graphMeanPtALICE2760Systpp,25,2.5,4,4,2,0);
+  SetErrorX(graphMeanPtALICE2760Systpp,6);
+  DrawPoint(pp_x,pp_alice_2076_y,25,2.5,4,4,2);
+
+  
+  
+  // 200 GeV AuAu
+
+  SetTGraphError(graphMeanPtPhenixAuAu,33,3,kGreen+3,kGreen+3,2,0);
+  SetTGraphError(graphMeanPtPhenixAuAuSyst,33,2.5,kGreen+3,kGreen+3,2,0);
+  SetErrorX(graphMeanPtPhenixAuAuSyst,6);
+  DrawPoint(pp_x,pp_phenix_y,33,3,kGreen+3,kGreen+3,2);
+
+
+  
+  
+  //200 GeV CuCu
+  SetTGraphError(graphMeanPtPhenixCuCu,33,3,kGreen-3,kGreen-3,2,0);
+  SetTGraphError(graphMeanPtPhenixCuCuSyst,33,2.5,kGreen-3,kGreen-3,2,0);
+  SetErrorX(graphMeanPtPhenixCuCuSyst,6);
+  DrawPoint(AA_x,pp_phenix_y,33,3,kGreen-3,kGreen-3,2);
+
+  // 200 GeV pp
+  SetTGraphError(graphMeanPtPhenixpp,27,3,kGreen,kGreen,2,0);
+  SetTGraphError(graphMeanPtPhenixppSyst,27,2.5,kGreen,kGreen,2,0);
+  SetErrorX(graphMeanPtPhenixppSyst,6);
+  DrawPoint(pp_phenix_x,pp_phenix_y,27,3,kGreen,kGreen,2);
+
+  //NA 50
+
+
+  SetTGraphError(graphMeanPtNA50,43,3,kMagenta,kMagenta,2,0);
+  
+  DrawPoint(AA_x, na50_y ,43,3,kMagenta,kMagenta,2);
+  
+  
+  
+
+  
+  graphMeanPtALICEpp->Draw("samePE");
+  graphMeanPtALICEppSyst->Draw("sameE2");
+   
+  gr_CentMptStat5020->Draw("samePE");
+  gr_CentMptSyst5020->Draw("sameE2");
+
+  
+  graphMeanPtNA50->Draw("samePE");
+
+
+
+    
+  graphMeanPtPhenixAuAu->Draw("samePE");
+  graphMeanPtPhenixAuAuSyst->Draw("sameE2");
+
+ 
+  graphMeanPtPhenixCuCu->Draw("samePE");
+  graphMeanPtPhenixCuCuSyst->Draw("sameE2");
+
+
+
+  graphMeanPtPhenixpp->Draw("samePE");
+  graphMeanPtPhenixppSyst ->Draw("sameE2");
+
+  graphMeanPtALICE2760->Draw("samePE");
+  graphMeanPtALICE2760Syst ->Draw("sameE2");
+
+  graphMeanPtALICE2760pp ->Draw("samePE");
+  graphMeanPtALICE2760Systpp ->Draw("sameE2");
+  
+
+  TLatex tex3(0.5,0.5," ");
+  tex3.SetTextSize(0.035);
+  tex3.SetTextFont(42);
+  tex3.SetNDC();
+  tex3.SetTextSize(0.035);
+
+
+  tex3.DrawLatex(0.3,0.89,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb-Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(0.3,0.83,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb-Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(0.3,0.77,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu-Cu, Au-Au, |#it{y}|<0.35");
+  tex3.DrawLatex(0.3,0.71,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+
+ 
+
+ 
+
+  TLatex tex1(0.5,0.5," ");
+  tex1.SetTextFont(42);
+  tex1.SetNDC();
+  tex1.SetTextSize(0.05);
+
+  
+
+  tex1.DrawLatex(0.65,0.22,"Inclusive J/#psi");
+
+  c1->SaveAs("output/MeanPt_vs_Cent_data.pdf");
+  delete mh2Dummy;
+}
+
+void plot_raa_data()
+{
+
+  TGraphErrors *gr_CentraaStat5020 = (TGraphErrors*)GetCentraaStat5020();
+  TGraphErrors *gr_CentraaSyst5020  = (TGraphErrors*)GetCentraaSyst5020();
+
+
+  
+  
+  TCanvas *c1=new TCanvas("c1","",1100,850);
+  TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
+
+  c1->cd();
+  SetPad(pad1,0.02,0.15,0.12,0.035);
+  pad1->Draw();
+
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2.6);
+  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.7,0.06,0.06,0.015,0.015,504,504);
+
+  SetTGraphError(gr_CentraaStat5020,20,2.5,2,2,2,0);
+  SetTGraphError(gr_CentraaSyst5020,20,2.5,2,2,2,0);
+
+  SetErrorX(gr_CentraaSyst5020,6);
+  
+  pad1->cd();
+  mh2Dummy->Draw();
+
+
+
+  //
+
+
+  
+
+
+  
+  graphraaNA50->Draw("samePE");
+  graphraaPhenixAuAu->Draw("samePE");
+  graphraaPhenixAuAuSyst->Draw("sameE2");
+
+
+
+ graphraaPhenixCuCu ->Draw("samePE");
+ graphraaPhenixCuCuSyst->Draw("sameE2");
+
+
+ graphraaALICE2760->Draw("samePE");
+ graphraaALICE2760Syst ->Draw("sameE2");
+
+ 
+
+  TLine *lineSq = new TLine(0,1,400,1);
+  lineSq->SetLineStyle(2);
+  lineSq->SetLineWidth(2);
+  lineSq->Draw();
+
+
+
+
+  gr_CentraaStat5020->Draw("samePE");
+  gr_CentraaSyst5020->Draw("sameE2");
+
+  
+
+  TLatex tex3(0.5,0.5," ");
+  tex3.SetTextSize(0.035);
+
+  tex3.DrawLatex(60,2.3,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(60,2.15,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(60,2.0,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
+  tex3.DrawLatex(60,1.85,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+
+
+  c1->SaveAs("output/raa_vs_Cent_data.pdf");
+}
+
 void plot_meanpT_model()
 {
 
@@ -122,40 +344,43 @@ void plot_meanpT_model()
   TGraphErrors *gr_CentMptSyst5020  = (TGraphErrors*)GetCentMptSyst5020();
 
 
-
-  TH2F *mh2Dummy = new TH2F("mh2Dummy","mh2Dummy",100,-20.,400,100,1.6,3.7);
+  TGraphErrors *gr_CentMptTM1_5020 = (TGraphErrors *) GetMeanpT_model(29,fileTAMU_cent_MeanpT);
+  TGraphErrors *gr_CentMptTM2_5020 = (TGraphErrors *) GetMeanpT_model(26,fileTHU_cent_MeanpT);
+  //TGraphErrors *gr_CentMptSHM_5020 = (TGraphErrors *) GetMeanpT_model(29,fileSHM_cent_MeanpT);
   
-  mh2Dummy->SetTitle(";#LT_{ }#it{N}_{part}_{ }#GT; #LT #it{p}_{T} #GT (GeV/#it{c})");
-  mh2Dummy->SetStats(0);
-  mh2Dummy->GetYaxis()->SetTitleSize(0.07);
-  mh2Dummy->GetXaxis()->SetTitleSize(0.07);
-  mh2Dummy->GetYaxis()->SetTitleOffset(0.75);
-  mh2Dummy->GetXaxis()->SetTitleOffset(0.85);
-  mh2Dummy->GetYaxis()->SetLabelSize(0.055);
-  mh2Dummy->GetXaxis()->SetLabelSize(0.055);
-  mh2Dummy->GetXaxis()->SetNdivisions(505);
-  mh2Dummy->GetYaxis()->SetNdivisions(505);
 
 
+  int ci1;
+  ci1 = TColor::GetColor("#33ccff");
 
-  gr_CentMptStat5020->SetMarkerStyle(20);
-  gr_CentMptStat5020->SetMarkerSize(2.8);
-  gr_CentMptStat5020->SetMarkerColor(2);
-  gr_CentMptStat5020->SetLineColor(2);
-  gr_CentMptStat5020->SetLineWidth(2);
 
-  gr_CentMptSyst5020->SetLineColor(2);
-  gr_CentMptSyst5020->SetFillStyle(0);
-  gr_CentMptSyst5020->SetLineWidth(2);
-
-  SetErrorX(gr_CentMptSyst5020,7);
-
+  gr_CentMptTM1_5020  ->SetFillColorAlpha(kOrange+1,0.2);
+  gr_CentMptTM1_5020 ->SetLineColor(kOrange+1);
   
- 
-  TCanvas *c1 = new TCanvas("c1", "c1", 1000, 800);
+  gr_CentMptTM2_5020 ->SetFillColorAlpha(kBlue,0.15);
+  gr_CentMptTM2_5020 ->SetLineColor(kBlue);
+  
+
+
+  TCanvas *c1=new TCanvas("c1","",1100,850);
+  TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
+
+  SetPad(pad1,0.02,0.15,0.11,0.035);
+  pad1->Draw();
+
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #LT #it{p}_{T} #GT (GeV/#it{c})",100,0,400,100,1.5,3.8);
+  SetTH2F(mh2Dummy,0.07,0.075,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+
+  SetTGraphError(gr_CentMptStat5020,20,2.5,2,2,2,0);
+  SetTGraphError(gr_CentMptSyst5020,20,2.5,2,2,2,0);
+
+  SetErrorX(gr_CentMptSyst5020,6);
+  
+  pad1->cd();
   mh2Dummy->Draw();
-
-
+  gr_CentMptTM1_5020->Draw("FL same");
+  gr_CentMptTM2_5020->Draw("FL same");
+  //  gr_CentMptStat5020->Print("all");
   gr_CentMptStat5020->Draw("samePE");
   gr_CentMptSyst5020->Draw("sameE2");
 
@@ -173,23 +398,14 @@ void plot_meanpT_model()
   tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
   tex1.DrawLatex(0.18,0.70," 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
-
-  //  graphPengLow->Draw("Same");
-  graphRappMPtLow->Draw("Same");
-  graphRappMPtHigh->Draw("Same");
-  graphRappMeanPt->Draw("Samee3");
-  graphSHMMPtHigh->Draw("Same");
-  graphSHMMPtLow->Draw("Same");
-  graphSHMMeanPt->Draw("Samee3");
-
-
   
   TLegend *leg = new TLegend(0.63, 0.7, 0.9, 0.95);
-  leg->SetTextSize(0.035);
-  leg->AddEntry(gr_CentMptStat5020,"Data, Pb-Pb","p");
-  leg->AddEntry(graphSHMMeanPt, "SHM (Andronic et al.)", "F");
-  leg->AddEntry(graphRappMeanPt,"TM1 (Du et al)","F");
-  //  leg->AddEntry(graphPengLow,"TM2 (Zhou et al.)","l");
+  //  leg->SetTextSize(0.035);
+  SetLegend(leg,42,0.04,0.0,0.0,0.0,0.0);
+  leg->AddEntry(gr_CentMptStat5020,"Data","p");
+  //  leg->AddEntry(graphSHMMeanPt, "SHM (Andronic et al.)", "F");
+  leg->AddEntry(gr_CentMptTM1_5020,"TAMU","F");
+  leg->AddEntry(gr_CentMptTM2_5020,"THU","F");
   leg->SetBorderSize(0);
   leg->SetFillColor(0);
   leg->SetFillStyle(0);
@@ -206,38 +422,35 @@ void plot_raa_model()
   TGraphErrors *gr_CentraaSyst5020  = (TGraphErrors*)GetCentraaSyst5020();
 
 
-
-  TH2F *hDummy2 = new TH2F("hDummy2","hDummy2",100,0.,400,100,0.3,2);
-  hDummy2->SetTitle(";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}");
-  hDummy2->SetStats(0);
-  hDummy2->GetYaxis()->SetTitleSize(0.07);
-  hDummy2->GetXaxis()->SetTitleSize(0.07);
-  hDummy2->GetYaxis()->SetTitleOffset(0.85);
-  hDummy2->GetXaxis()->SetTitleOffset(0.85);
-  hDummy2->GetYaxis()->SetLabelSize(0.055);
-  hDummy2->GetXaxis()->SetLabelSize(0.055);
-  hDummy2->GetXaxis()->SetNdivisions(505);
-  hDummy2->GetYaxis()->SetNdivisions(505);
+  TGraphErrors *gr_CentraaTM1_5020 = (TGraphErrors *) GetMeanpT_model(29,fileTAMU_cent_raa);
+  TGraphErrors *gr_CentraaTM2_5020 = (TGraphErrors *) GetMeanpT_model(26,fileTHU_cent_raa);
+  //TGraphErrors *gr_CentMptSHM_5020 = (TGraphErrors *) GetMeanpT_model(29,fileSHM_cent_MeanpT);
 
 
-  gr_CentraaStat5020->SetMarkerStyle(20);
-  gr_CentraaStat5020->SetMarkerSize(2.8);
-  gr_CentraaStat5020->SetMarkerColor(2);
-  gr_CentraaStat5020->SetLineColor(2);
-  gr_CentraaStat5020->SetLineWidth(2);
-
-  gr_CentraaSyst5020->SetLineColor(2);
-  gr_CentraaSyst5020->SetFillStyle(0);
-  gr_CentraaSyst5020->SetLineWidth(2);
-
-  SetErrorX(gr_CentraaSyst5020,7);
-
+  gr_CentraaTM1_5020  ->SetFillColorAlpha(kOrange+1,0.2);
+  gr_CentraaTM1_5020 ->SetLineColor(kOrange+1);
   
-
+  gr_CentraaTM2_5020 ->SetFillColorAlpha(kBlue,0.15);
+  gr_CentraaTM2_5020 ->SetLineColor(kBlue);
   
-  TCanvas *c1 = new TCanvas("c1", "c1", 1000, 700);
+  
+  TCanvas *c1=new TCanvas("c1","",1100,850);
+  TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
-  hDummy2->Draw();
+  c1->cd();
+  SetPad(pad1,0.02,0.15,0.12,0.035);
+  pad1->Draw();
+
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2);
+  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.7,0.06,0.06,0.015,0.015,504,504);
+
+  SetTGraphError(gr_CentraaStat5020,20,2.5,2,2,2,0);
+  SetTGraphError(gr_CentraaSyst5020,20,2.5,2,2,2,0);
+
+  SetErrorX(gr_CentraaSyst5020,6);
+  
+  pad1->cd();
+  mh2Dummy->Draw();
   
 
   TLine *lineSq = new TLine(0,1,400,1);
@@ -245,18 +458,6 @@ void plot_raa_model()
   lineSq->SetLineWidth(2);
   lineSq->Draw();
 
-  /* TBox *boxSq = new TBox(390,(MPtSq_pp-MPtSq_ppCombErr)/MPtSq_pp,400,(MPtSq_pp+MPtSq_ppCombErr)/MPtSq_pp); */
-  /* boxSq->SetFillColor(kRed); */
-  /* boxSq->SetLineWidth(2); */
-  /* boxSq->Draw(); */
-
-  /* TLatex tex1(0.5,0.5," "); */
-  /* tex1.SetTextSize(0.048); */
-  /* tex1.SetNDC(); */
-  /* tex1.DrawLatex(0.68, 0.90,"ALICE"); */
-  /* tex1.DrawLatex(0.58, 0.84,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV"); */
-  /* tex1.DrawLatex(0.58, 0.78,"Inclusive J/#psi, |#it{y}| < 0.9"); */
-  /* tex1.DrawLatex(0.17, 0.2,"#scale[0.8]{0.15 < #it{p}_{T} < 10 GeV/#it{c}}"); */
 
 
   TLatex tex1(0.5,0.5," ");
@@ -271,37 +472,25 @@ void plot_raa_model()
   tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
   tex1.DrawLatex(0.18,0.70," 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
-  
-  //  graphPengraa->Draw("Same");
-  graphRappraaHigh->Draw("Same");
-  graphRappraaLow->Draw("Same");
-  graphRappraa->Draw("Samee3");
 
-  graphSHMraaLow->Draw("Same");
-  graphSHMraaHigh->Draw("Same");
-  graphSHMraa->Draw("Samee3");
-
+  //gr_CentraaTM1_5020->Draw("FL same");
+  gr_CentraaTM2_5020->Draw("FL same");
 
   gr_CentraaStat5020->Draw("samePE");
   gr_CentraaSyst5020->Draw("sameE2");
 
   
-  TLegend *leg4 = new TLegend(0.63, 0.7, 0.9, 0.95);
-  leg4->SetTextSize(0.04);
+  TLegend *leg4 = new TLegend(0.63, 0.7, 0.9, 0.9);
+  SetLegend(leg4,42,0.04,0.0,0.0,0.0,0.0);
   leg4->AddEntry(gr_CentraaStat5020,"Data","p");
-  leg4->AddEntry(graphSHMMeanPt, "SHM (Andronic et al.)", "F");
-  leg4->AddEntry(graphRappMeanPt,"TM1 (Du et al.)","F");
-
-  leg4->SetBorderSize(0);
-  leg4->SetFillColor(0);
-  leg4->SetFillStyle(0);
+  leg4->AddEntry(gr_CentraaTM2_5020, "THU", "F");
+  /* leg4->AddEntry(gr_CentraaStat5020,20,"TM1 (Du et al.)","F"); */
   leg4->Draw();
 
 
 
   c1->SaveAs("output/raa_vs_Cent_model.pdf");
 }
-
 
 
 TGraphErrors *GetCentMptStat5020()
@@ -346,8 +535,6 @@ TGraphErrors *GetCentraaSyst5020()
 }
 
 
-
-
 /* TGraphErrors *GetCentMptStat5020() */
 /* { */
 
@@ -379,14 +566,14 @@ TGraphErrors *GetCentraaSyst5020()
   
 
   //  Double_t MPtSq_pp = 10.20; //+-0.29 (syst)                              
- // Double_t MPtSq_ppStatErr = 0.46;
- // Double_t MPtSq_ppSystErr = 0.1;//0.24              
+  // Double_t MPtSq_ppStatErr = 0.46;
+  // Double_t MPtSq_ppSystErr = 0.1;//0.24              
 
   Double_t MPtSq_ppCombErr = TMath::Sqrt(MPtSq_ppStatErr*MPtSq_ppStatErr + MPtSq_ppSystErr*MPtSq_ppSystErr);
 
   //Double_t MeanPt502pp = 2.66;//+-0.044 (syst)                                                                                                 
- // Double_t MeanPt502ppStatErr = 0.06;
- // Double_t MeanPt502ppSystErr = 0.01;//0.03    
+  // Double_t MeanPt502ppStatErr = 0.06;
+  // Double_t MeanPt502ppSystErr = 0.01;//0.03    
 
 
 
@@ -749,147 +936,147 @@ void DrawLegendaryLegendMPt(){
 
 
 
- //PHENIX DATA
+  //PHENIX DATA
 
- Double_t ppPHENIXx[One] = {20};
- Double_t ppPHENIXy[One] = {3.1};
+  Double_t ppPHENIXx[One] = {20};
+  Double_t ppPHENIXy[One] = {3.1};
 
- TGraph *gr2=new TGraph(One, ppPHENIXx, ppPHENIXy);
- gr2->SetLineWidth(2);
- gr2->SetLineColor(kBlack);
- gr2->SetMarkerColor(kBlack);
- gr2->SetMarkerStyle(27);
- gr2->SetMarkerSize(2);
- gr2->Draw("pz");
-
-
- Double_t CuCuPHENIXx[One] = {35};
- Double_t CuCuPHENIXy[One] = {3.1};
-
- TGraph *gr3=new TGraph(One, CuCuPHENIXx, CuCuPHENIXy);
- gr3->SetLineWidth(2);
- gr3->SetLineColor(kGray+1);
- gr3->SetMarkerColor(kGray+1);
- gr3->SetMarkerStyle(33);
- gr3->SetMarkerSize(2);
- gr3->Draw("pz");
+  TGraph *gr2=new TGraph(One, ppPHENIXx, ppPHENIXy);
+  gr2->SetLineWidth(2);
+  gr2->SetLineColor(kBlack);
+  gr2->SetMarkerColor(kBlack);
+  gr2->SetMarkerStyle(27);
+  gr2->SetMarkerSize(2);
+  gr2->Draw("pz");
 
 
- Double_t AuAuPHENIXx[One] = {50};
- Double_t AuAuPHENIXy[One] = {3.1};
+  Double_t CuCuPHENIXx[One] = {35};
+  Double_t CuCuPHENIXy[One] = {3.1};
 
- TGraph *gr4=new TGraph(One, AuAuPHENIXx, AuAuPHENIXy);
- gr4->SetLineWidth(2);
- gr4->SetLineColor(kBlack);
- gr4->SetMarkerColor(kBlack);
- gr4->SetMarkerStyle(33);
- gr4->SetMarkerSize(2);
- gr4->Draw("pz");
-
-
+  TGraph *gr3=new TGraph(One, CuCuPHENIXx, CuCuPHENIXy);
+  gr3->SetLineWidth(2);
+  gr3->SetLineColor(kGray+1);
+  gr3->SetMarkerColor(kGray+1);
+  gr3->SetMarkerStyle(33);
+  gr3->SetMarkerSize(2);
+  gr3->Draw("pz");
 
 
- Double_t PbPbNA50x[One] = {50};
- Double_t PbPbNA50y[One] = {2.93};
+  Double_t AuAuPHENIXx[One] = {50};
+  Double_t AuAuPHENIXy[One] = {3.1};
 
- TGraph *gr5=new TGraph(One,  PbPbNA50x,  PbPbNA50y);
- gr5->SetLineWidth(2);
- gr5->SetLineColor(kGreen-1);
- gr5->SetMarkerColor(kGreen-1);
- gr5->SetMarkerStyle(34);
- gr5->SetMarkerSize(1.5);
- gr5->Draw("pz");
-
- // NA50, #sqrt{s_{NN}}=17.3 GeV, Pb-Pb, |y|<1
+  TGraph *gr4=new TGraph(One, AuAuPHENIXx, AuAuPHENIXy);
+  gr4->SetLineWidth(2);
+  gr4->SetLineColor(kBlack);
+  gr4->SetMarkerColor(kBlack);
+  gr4->SetMarkerStyle(33);
+  gr4->SetMarkerSize(2);
+  gr4->Draw("pz");
 
 
- TLatex tex3(0.5,0.5," ");
- tex3.SetTextSize(0.035);
- // tex3.SetNDC();
- tex3.DrawLatex(65,3.4,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb-Pb, |#it{y}|<0.9");
- tex3.DrawLatex(65,3.23,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb-Pb, |#it{y}|<0.8");
- tex3.DrawLatex(65,3.06,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu-Cu, Au-Au, |#it{y}|<0.35");
- tex3.DrawLatex(65,2.89,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+
+
+  Double_t PbPbNA50x[One] = {50};
+  Double_t PbPbNA50y[One] = {2.93};
+
+  TGraph *gr5=new TGraph(One,  PbPbNA50x,  PbPbNA50y);
+  gr5->SetLineWidth(2);
+  gr5->SetLineColor(kGreen-1);
+  gr5->SetMarkerColor(kGreen-1);
+  gr5->SetMarkerStyle(34);
+  gr5->SetMarkerSize(1.5);
+  gr5->Draw("pz");
+
+  // NA50, #sqrt{s_{NN}}=17.3 GeV, Pb-Pb, |y|<1
+
+
+  TLatex tex3(0.5,0.5," ");
+  tex3.SetTextSize(0.035);
+  // tex3.SetNDC();
+  tex3.DrawLatex(65,3.4,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb-Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(65,3.23,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb-Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(65,3.06,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu-Cu, Au-Au, |#it{y}|<0.35");
+  tex3.DrawLatex(65,2.89,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
 
 
    
 }
 void DrawLegendaryLegendMPtSq(){
 
- //ALICE DATA                                                                                                                                   
+  //ALICE DATA                                                                                                                                   
 
   const Int_t One = 1;
- Double_t PbPbSqALICEx[One] = {45};
- Double_t ppSqALICEy[One] = {2.34};
+  Double_t PbPbSqALICEx[One] = {45};
+  Double_t ppSqALICEy[One] = {2.34};
 
- TGraph *gr1=new TGraph(One, PbPbSqALICEx, ppSqALICEy);
- gr1->SetLineWidth(2);
- gr1->SetLineColor(kRed);
- gr1->SetMarkerColor(kRed);
- gr1->SetMarkerStyle(20);
- gr1->SetMarkerSize(1.5);
- gr1->Draw("pz");
+  TGraph *gr1=new TGraph(One, PbPbSqALICEx, ppSqALICEy);
+  gr1->SetLineWidth(2);
+  gr1->SetLineColor(kRed);
+  gr1->SetMarkerColor(kRed);
+  gr1->SetMarkerStyle(20);
+  gr1->SetMarkerSize(1.5);
+  gr1->Draw("pz");
 
 
- Double_t ppSqALICEy2760[One] = {2.19};
+  Double_t ppSqALICEy2760[One] = {2.19};
 
- TGraph *gr1_2760=new TGraph(One, PbPbSqALICEx, ppSqALICEy2760);
- gr1_2760->SetLineWidth(2);
- gr1_2760->SetLineColor(kBlue);
- gr1_2760->SetMarkerColor(kBlue);
- gr1_2760->SetMarkerStyle(21);
- gr1_2760->SetMarkerSize(1.5);
- gr1_2760->Draw("pz");
+  TGraph *gr1_2760=new TGraph(One, PbPbSqALICEx, ppSqALICEy2760);
+  gr1_2760->SetLineWidth(2);
+  gr1_2760->SetLineColor(kBlue);
+  gr1_2760->SetMarkerColor(kBlue);
+  gr1_2760->SetMarkerStyle(21);
+  gr1_2760->SetMarkerSize(1.5);
+  gr1_2760->Draw("pz");
  
 
- //PHENIX DATA                                                                                                                                                                     
- Double_t CuCuPHENIXx[One] = {30};
- Double_t CuCuPHENIXy[One] = {2.04};
+  //PHENIX DATA                                                                                                                                                                     
+  Double_t CuCuPHENIXx[One] = {30};
+  Double_t CuCuPHENIXy[One] = {2.04};
 
- TGraph *gr3=new TGraph(One, CuCuPHENIXx, CuCuPHENIXy);
- gr3->SetLineWidth(2);
- gr3->SetLineColor(kGray+1);
- gr3->SetMarkerColor(kGray+1);
- gr3->SetMarkerStyle(33);
- gr3->SetMarkerSize(2);
- gr3->Draw("pz");
-
-
- Double_t AuAuPHENIXx[One] = {45};
- Double_t AuAuPHENIXy[One] = {2.04};
-
- TGraph *gr4=new TGraph(One, AuAuPHENIXx, AuAuPHENIXy);
- gr4->SetLineWidth(2);
- gr4->SetLineColor(kBlack);
- gr4->SetMarkerColor(kBlack);
- gr4->SetMarkerStyle(33);
- gr4->SetMarkerSize(2);
- gr4->Draw("pz");
+  TGraph *gr3=new TGraph(One, CuCuPHENIXx, CuCuPHENIXy);
+  gr3->SetLineWidth(2);
+  gr3->SetLineColor(kGray+1);
+  gr3->SetMarkerColor(kGray+1);
+  gr3->SetMarkerStyle(33);
+  gr3->SetMarkerSize(2);
+  gr3->Draw("pz");
 
 
+  Double_t AuAuPHENIXx[One] = {45};
+  Double_t AuAuPHENIXy[One] = {2.04};
+
+  TGraph *gr4=new TGraph(One, AuAuPHENIXx, AuAuPHENIXy);
+  gr4->SetLineWidth(2);
+  gr4->SetLineColor(kBlack);
+  gr4->SetMarkerColor(kBlack);
+  gr4->SetMarkerStyle(33);
+  gr4->SetMarkerSize(2);
+  gr4->Draw("pz");
 
 
 
 
- Double_t PbPbNA50x[One] = {45};
- Double_t PbPbNA50y[One] = {1.89};
-
- TGraph *gr5=new TGraph(One,  PbPbNA50x,  PbPbNA50y);
- gr5->SetLineWidth(2);
- gr5->SetLineColor(kGreen-1);
- gr5->SetMarkerColor(kGreen-1);
- gr5->SetMarkerStyle(34);
- gr5->SetMarkerSize(1.5);
- gr5->Draw("pz");
 
 
- TLatex tex3(0.5,0.5," ");
- tex3.SetTextSize(0.035);
- // tex3.SetNDC();
- tex3.DrawLatex(60,2.3,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
- tex3.DrawLatex(60,2.15,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
- tex3.DrawLatex(60,2.0,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
- tex3.DrawLatex(60,1.85,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+  Double_t PbPbNA50x[One] = {45};
+  Double_t PbPbNA50y[One] = {1.89};
+
+  TGraph *gr5=new TGraph(One,  PbPbNA50x,  PbPbNA50y);
+  gr5->SetLineWidth(2);
+  gr5->SetLineColor(kGreen-1);
+  gr5->SetMarkerColor(kGreen-1);
+  gr5->SetMarkerStyle(34);
+  gr5->SetMarkerSize(1.5);
+  gr5->Draw("pz");
+
+
+  TLatex tex3(0.5,0.5," ");
+  tex3.SetTextSize(0.035);
+  // tex3.SetNDC();
+  tex3.DrawLatex(60,2.3,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(60,2.15,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(60,2.0,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
+  tex3.DrawLatex(60,1.85,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
 
 
 
@@ -941,14 +1128,14 @@ void PrepareLowerEnergyGraphs(){
   Double_t MeanPtALICE2760[nBinsALICE2760] = {2.23,2.01,2.02};
   Double_t MeanPtALICE2760StatErr[nBinsALICE2760] = {0.1,0.12,0.19};
   Double_t MeanPtALICE2760SystErr[nBinsALICE2760] = {TMath::Sqrt(0.08*0.08 + 0.04*0.04),
-						     TMath::Sqrt(0.08*0.08 + 0.04*0.04),
-						     TMath::Sqrt(0.29*0.29 + 0.04*0.04)};
+    TMath::Sqrt(0.08*0.08 + 0.04*0.04),
+    TMath::Sqrt(0.29*0.29 + 0.04*0.04)};
   
   Double_t raaALICE2760[nBinsALICE2760]        = {0.61,0.55,0.57};
   Double_t raaALICE2760StatErr[nBinsALICE2760] = {0.06,0.07,0.12};
   Double_t raaALICE2760SystErr[nBinsALICE2760] = {TMath::Sqrt(0.03*0.03 + 0.01*0.01),
-						      TMath::Sqrt(0.04*0.04 + 0.01*0.01),
-						      TMath::Sqrt(0.13*0.13 + 0.01*0.01)};
+    TMath::Sqrt(0.04*0.04 + 0.01*0.01),
+    TMath::Sqrt(0.13*0.13 + 0.01*0.01)};
   
 
   graphMeanPtALICE2760 = new TGraphErrors(nBinsALICE2760,NPartALICE2760 ,MeanPtALICE2760 , NPartErrALICE2760_0, MeanPtALICE2760StatErr);
@@ -1053,7 +1240,7 @@ void PrepareLowerEnergyGraphs(){
     raaPhenixAuAuStatErr[iCount] = TMath::Sqrt((MeanPtSqPhenixppValStatErr/MeanPtSqPhenixppVal)*(MeanPtSqPhenixppValStatErr/MeanPtSqPhenixppVal) + (MeanPtSqPhenixAuAuStatErr[iCount]/MeanPtSqPhenixAuAu[iCount])*(MeanPtSqPhenixAuAuStatErr[iCount]/MeanPtSqPhenixAuAu[iCount]))*raaPhenixAuAu[iCount];
 
     raaPhenixAuAuSystErr[iCount] = TMath::Sqrt((MeanPtSqPhenixppValSystErr/MeanPtSqPhenixppVal)*(MeanPtSqPhenixppValSystErr/MeanPtSqPhenixppVal) + (MeanPtSqPhenixAuAuSystErr[iCount]/MeanPtSqPhenixAuAu[iCount])*(MeanPtSqPhenixAuAuSystErr[iCount]/MeanPtSqPhenixAuAu[iCount]))*raaPhenixAuAu[iCount];
-}
+  }
 
 
 
@@ -1078,70 +1265,70 @@ void PrepareLowerEnergyGraphs(){
   for (Int_t iCount = 0; iCount < nBinsPhenixCuCu; iCount++) { raaPhenixCuCu[iCount] = MeanPtSqPhenixCuCu[iCount]/MeanPtSqPhenixppVal;
     raaPhenixCuCuStatErr[iCount] = TMath::Sqrt((MeanPtSqPhenixppValStatErr/MeanPtSqPhenixppVal)*(MeanPtSqPhenixppValStatErr/MeanPtSqPhenixppVal) + (MeanPtSqPhenixCuCuStatErr[iCount]/MeanPtSqPhenixAuAu[iCount])*(MeanPtSqPhenixCuCuStatErr[iCount]/MeanPtSqPhenixAuAu[iCount]))*raaPhenixCuCu[iCount];
 
- raaPhenixCuCuSystErr[iCount] = TMath::Sqrt((MeanPtSqPhenixppValSystErr/MeanPtSqPhenixppVal)*(MeanPtSqPhenixppValSystErr/MeanPtSqPhenixppVal) + (MeanPtSqPhenixCuCuSystErr[iCount]/MeanPtSqPhenixCuCu[iCount])*(MeanPtSqPhenixCuCuSystErr[iCount]/MeanPtSqPhenixCuCu[iCount]))*raaPhenixCuCu[iCount];
+    raaPhenixCuCuSystErr[iCount] = TMath::Sqrt((MeanPtSqPhenixppValSystErr/MeanPtSqPhenixppVal)*(MeanPtSqPhenixppValSystErr/MeanPtSqPhenixppVal) + (MeanPtSqPhenixCuCuSystErr[iCount]/MeanPtSqPhenixCuCu[iCount])*(MeanPtSqPhenixCuCuSystErr[iCount]/MeanPtSqPhenixCuCu[iCount]))*raaPhenixCuCu[iCount];
   }
 
 
 
-/////////PLOTS/////////////////////
+  /////////PLOTS/////////////////////
 
 
- //NA50
-    graphMeanPtNA50 = new TGraphErrors(nBinsNA50, NPartNA50, MeanPtNA50, ZeroArr, MeanPtErrNA50);
-    graphMeanPtSqNA50 = new TGraphErrors(nBinsNA50, NPartNA50, MeanPtSqNA50, ZeroArr, MeanPtSqErrNA50);
-    graphraaNA50 = new TGraphErrors(nBinsNA50, NPartNA50, raaNA50, ZeroArr, raaNA50Err);
+  //NA50
+  graphMeanPtNA50 = new TGraphErrors(nBinsNA50, NPartNA50, MeanPtNA50, ZeroArr, MeanPtErrNA50);
+  graphMeanPtSqNA50 = new TGraphErrors(nBinsNA50, NPartNA50, MeanPtSqNA50, ZeroArr, MeanPtSqErrNA50);
+  graphraaNA50 = new TGraphErrors(nBinsNA50, NPartNA50, raaNA50, ZeroArr, raaNA50Err);
     
-    graphMeanPtNA50->SetLineWidth(2);
-    graphMeanPtNA50->SetLineColor(kGreen-1); 
-    graphMeanPtNA50->SetMarkerColor(kGreen-1);
-    graphMeanPtNA50->SetMarkerStyle(34);
-    graphMeanPtNA50->SetMarkerSize(1.5);
-    //    graphMeanPtNA50->SetLineColor(kRed);
+  graphMeanPtNA50->SetLineWidth(2);
+  graphMeanPtNA50->SetLineColor(kGreen-1); 
+  graphMeanPtNA50->SetMarkerColor(kGreen-1);
+  graphMeanPtNA50->SetMarkerStyle(34);
+  graphMeanPtNA50->SetMarkerSize(1.5);
+  //    graphMeanPtNA50->SetLineColor(kRed);
   //  graphMeanPtNA50->Draw("pz");
-   //   MeanPtNA50->Draw("e2");
+  //   MeanPtNA50->Draw("e2");
 
 
-    //PHENIX AU+AU
-    graphMeanPtPhenixAuAu = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, MeanPtPhenixAuAu, ZeroArr, MeanPtPhenixAuAuStatErr);
-    graphMeanPtPhenixAuAuSyst = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, MeanPtPhenixAuAu,  NPartErrPhenixAuAu, MeanPtPhenixAuAuSystErr);
+  //PHENIX AU+AU
+  graphMeanPtPhenixAuAu = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, MeanPtPhenixAuAu, ZeroArr, MeanPtPhenixAuAuStatErr);
+  graphMeanPtPhenixAuAuSyst = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, MeanPtPhenixAuAu,  NPartErrPhenixAuAu, MeanPtPhenixAuAuSystErr);
 
-    graphraaPhenixAuAu = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, raaPhenixAuAu, ZeroArr, raaPhenixAuAuStatErr);
-    graphraaPhenixAuAuSyst = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, raaPhenixAuAu,  NPartErrPhenixAuAu, raaPhenixAuAuSystErr);
-
-
-    //PHENIX CU+CU
-
-    graphMeanPtPhenixCuCu = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, MeanPtPhenixCuCu, ZeroArr, MeanPtPhenixCuCuStatErr);
-    graphMeanPtPhenixCuCuSyst = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, MeanPtPhenixCuCu,  NPartErrPhenixCuCu, MeanPtPhenixCuCuSystErr);
-
-    graphraaPhenixCuCu = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, raaPhenixCuCu, ZeroArr, raaPhenixCuCuStatErr);
-    graphraaPhenixCuCuSyst = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, raaPhenixCuCu,  NPartErrPhenixCuCu, raaPhenixCuCuSystErr);
-
-    const Int_t nBinsPhenixpp = 1;
-    Double_t NPartPhenixpp[nBinsPhenixpp] = {2};
-    Double_t NPartErrPhenixpp[nBinsPhenixpp] ={5};
-    Double_t MeanPtPhenixppArr[nBinsPhenixpp]= {MeanPtPhenixppVal};
-    Double_t MeanPtPhenixppStatArr[nBinsPhenixpp] = {MeanPtPhenixppValStatErr};
-    Double_t MeanPtPhenixppSystArr[nBinsPhenixpp]= {MeanPtPhenixppValSystErr};
-
-    //PHENIX pp
-    graphMeanPtPhenixpp = new TGraphErrors( nBinsPhenixpp, NPartPhenixpp, MeanPtPhenixppArr, ZeroArr, MeanPtPhenixppStatArr);
-    graphMeanPtPhenixppSyst = new TGraphErrors( nBinsPhenixpp, NPartPhenixpp, MeanPtPhenixppArr,  NPartErrPhenixpp, MeanPtPhenixppSystArr);
+  graphraaPhenixAuAu = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, raaPhenixAuAu, ZeroArr, raaPhenixAuAuStatErr);
+  graphraaPhenixAuAuSyst = new TGraphErrors( nBinsPhenixAuAu, NPartPhenixAuAu, raaPhenixAuAu,  NPartErrPhenixAuAu, raaPhenixAuAuSystErr);
 
 
-    //PP reference
-    const Int_t nBinsALICEpp = 1;
-    Double_t NPartALICEpp[nBinsPhenixpp] = {2};
-    Double_t NPartErrALICEpp[nBinsPhenixpp] ={5};
-    Double_t MeanPtALICEppArr[nBinsPhenixpp]= {MeanPt502pp}; //0.15-10GeV
-    Double_t MeanPtALICEppStatArr[nBinsPhenixpp] = {MeanPt502ppStatErr}; 
-    Double_t MeanPtALICEppSystArr[nBinsPhenixpp]= {MeanPt502ppSystErr};
+  //PHENIX CU+CU
+
+  graphMeanPtPhenixCuCu = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, MeanPtPhenixCuCu, ZeroArr, MeanPtPhenixCuCuStatErr);
+  graphMeanPtPhenixCuCuSyst = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, MeanPtPhenixCuCu,  NPartErrPhenixCuCu, MeanPtPhenixCuCuSystErr);
+
+  graphraaPhenixCuCu = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, raaPhenixCuCu, ZeroArr, raaPhenixCuCuStatErr);
+  graphraaPhenixCuCuSyst = new TGraphErrors( nBinsPhenixCuCu, NPartPhenixCuCu, raaPhenixCuCu,  NPartErrPhenixCuCu, raaPhenixCuCuSystErr);
+
+  const Int_t nBinsPhenixpp = 1;
+  Double_t NPartPhenixpp[nBinsPhenixpp] = {2};
+  Double_t NPartErrPhenixpp[nBinsPhenixpp] ={5};
+  Double_t MeanPtPhenixppArr[nBinsPhenixpp]= {MeanPtPhenixppVal};
+  Double_t MeanPtPhenixppStatArr[nBinsPhenixpp] = {MeanPtPhenixppValStatErr};
+  Double_t MeanPtPhenixppSystArr[nBinsPhenixpp]= {MeanPtPhenixppValSystErr};
+
+  //PHENIX pp
+  graphMeanPtPhenixpp = new TGraphErrors( nBinsPhenixpp, NPartPhenixpp, MeanPtPhenixppArr, ZeroArr, MeanPtPhenixppStatArr);
+  graphMeanPtPhenixppSyst = new TGraphErrors( nBinsPhenixpp, NPartPhenixpp, MeanPtPhenixppArr,  NPartErrPhenixpp, MeanPtPhenixppSystArr);
 
 
-    //ALICE pp
+  //PP reference
+  const Int_t nBinsALICEpp = 1;
+  Double_t NPartALICEpp[nBinsPhenixpp] = {2};
+  Double_t NPartErrALICEpp[nBinsPhenixpp] ={5};
+  Double_t MeanPtALICEppArr[nBinsPhenixpp]= {MeanPt502pp}; //0.15-10GeV
+  Double_t MeanPtALICEppStatArr[nBinsPhenixpp] = {MeanPt502ppStatErr}; 
+  Double_t MeanPtALICEppSystArr[nBinsPhenixpp]= {MeanPt502ppSystErr};
 
-  //  graphMeanPtALICEpp = new TGraphErrors( nBinsALICEpp, NPartALICEpp, MeanPtALICEppArr, ZeroArr, MeanPtALICEppStatArr);
-  //  graphMeanPtALICEppSyst = new TGraphErrors( nBinsALICEpp, NPartALICEpp, MeanPtALICEppArr,  NPartErrALICEpp, MeanPtALICEppSystArr);
+
+  //ALICE pp
+
+   graphMeanPtALICEpp = new TGraphErrors( nBinsALICEpp, NPartALICEpp, MeanPtALICEppArr, ZeroArr, MeanPtALICEppStatArr);
+   graphMeanPtALICEppSyst = new TGraphErrors( nBinsALICEpp, NPartALICEpp, MeanPtALICEppArr,  NPartErrALICEpp, MeanPtALICEppSystArr);
 
 
 
@@ -1151,450 +1338,128 @@ void PrepareLowerEnergyGraphs(){
 
 
     
-    ////<pT>/////////////////////
+  ////<pT>/////////////////////
 
-    //PHENIX                                                                                                                                                               
+  //PHENIX                                                                                                                                                               
 
-    graphMeanPtPhenixAuAu->SetLineWidth(2);
-    graphMeanPtPhenixAuAu->SetLineColor(kBlack);
-    graphMeanPtPhenixAuAu->SetMarkerColor(kBlack);
-    graphMeanPtPhenixAuAu->SetMarkerStyle(33);
-    graphMeanPtPhenixAuAu->SetMarkerSize(2);
-   // graphMeanPtPhenixAuAu->Draw("pz");
+  graphMeanPtPhenixAuAu->SetLineWidth(2);
+  graphMeanPtPhenixAuAu->SetLineColor(kBlack);
+  graphMeanPtPhenixAuAu->SetMarkerColor(kBlack);
+  graphMeanPtPhenixAuAu->SetMarkerStyle(33);
+  graphMeanPtPhenixAuAu->SetMarkerSize(2);
+  // graphMeanPtPhenixAuAu->Draw("pz");
 
-    graphMeanPtPhenixAuAuSyst->SetFillColor(1);
-    graphMeanPtPhenixAuAuSyst->SetFillStyle(0);
-    //  ci = TColor::GetColor("#ff0000");                                                                                                                                        
+  graphMeanPtPhenixAuAuSyst->SetFillColor(1);
+  graphMeanPtPhenixAuAuSyst->SetFillStyle(0);
+  //  ci = TColor::GetColor("#ff0000");                                                                                                                                        
                                                                                                                                                                                  
-    graphMeanPtPhenixAuAuSyst->SetLineColor(kBlack);
-    graphMeanPtPhenixAuAuSyst->SetLineWidth(2);
+  graphMeanPtPhenixAuAuSyst->SetLineColor(kBlack);
+  graphMeanPtPhenixAuAuSyst->SetLineWidth(2);
                                                                                                                                                                                
-    graphMeanPtPhenixAuAuSyst->SetMarkerStyle(20);
-    graphMeanPtPhenixAuAuSyst->SetMarkerSize(1.5);
-    //graphMeanPtPhenixAuAuSyst->Draw("e2");
+  graphMeanPtPhenixAuAuSyst->SetMarkerStyle(20);
+  graphMeanPtPhenixAuAuSyst->SetMarkerSize(1.5);
+  //graphMeanPtPhenixAuAuSyst->Draw("e2");
 
 
 
-    graphMeanPtPhenixCuCu->SetLineWidth(2);
-    graphMeanPtPhenixCuCu->SetLineColor(kGray+1);
-    graphMeanPtPhenixCuCu->SetMarkerColor(kGray+1);
-    graphMeanPtPhenixCuCu->SetMarkerStyle(33);
-    graphMeanPtPhenixCuCu->SetMarkerSize(2);
-    //graphMeanPtPhenixCuCu->Draw("pz");
+  graphMeanPtPhenixCuCu->SetLineWidth(2);
+  graphMeanPtPhenixCuCu->SetLineColor(kGray+1);
+  graphMeanPtPhenixCuCu->SetMarkerColor(kGray+1);
+  graphMeanPtPhenixCuCu->SetMarkerStyle(33);
+  graphMeanPtPhenixCuCu->SetMarkerSize(2);
+  //graphMeanPtPhenixCuCu->Draw("pz");
 
-    graphMeanPtPhenixCuCuSyst->SetFillColor(1);
-    graphMeanPtPhenixCuCuSyst->SetFillStyle(0);
+  graphMeanPtPhenixCuCuSyst->SetFillColor(1);
+  graphMeanPtPhenixCuCuSyst->SetFillStyle(0);
                                                                                                                                                                                   
-    graphMeanPtPhenixCuCuSyst->SetLineColor(kGray+1);
-    graphMeanPtPhenixCuCuSyst->SetLineWidth(2);
+  graphMeanPtPhenixCuCuSyst->SetLineColor(kGray+1);
+  graphMeanPtPhenixCuCuSyst->SetLineWidth(2);
     
-    graphMeanPtPhenixCuCuSyst->SetMarkerStyle(20);
-    graphMeanPtPhenixCuCuSyst->SetMarkerSize(1.5);
-   // graphMeanPtPhenixCuCuSyst->Draw("e2");
-    graphMeanPtPhenixAuAu->SetTitle("");
+  graphMeanPtPhenixCuCuSyst->SetMarkerStyle(20);
+  graphMeanPtPhenixCuCuSyst->SetMarkerSize(1.5);
+  // graphMeanPtPhenixCuCuSyst->Draw("e2");
+  graphMeanPtPhenixAuAu->SetTitle("");
 
 
     
-    graphMeanPtPhenixpp->SetLineWidth(2);
-    graphMeanPtPhenixpp->SetLineColor(kBlack);
-    graphMeanPtPhenixpp->SetMarkerColor(kBlack);
-    graphMeanPtPhenixpp->SetMarkerStyle(27);
-    graphMeanPtPhenixpp->SetMarkerSize(2);
-    ///graphMeanPtPhenixpp->Draw("pz");
+  graphMeanPtPhenixpp->SetLineWidth(2);
+  graphMeanPtPhenixpp->SetLineColor(kBlack);
+  graphMeanPtPhenixpp->SetMarkerColor(kBlack);
+  graphMeanPtPhenixpp->SetMarkerStyle(27);
+  graphMeanPtPhenixpp->SetMarkerSize(2);
+  ///graphMeanPtPhenixpp->Draw("pz");
 
 
 
-    graphMeanPtPhenixppSyst->SetFillColor(1);
-    graphMeanPtPhenixppSyst->SetFillStyle(0);
-    graphMeanPtPhenixppSyst->SetLineColor(kBlack);
-    graphMeanPtPhenixppSyst->SetLineWidth(2);
-    graphMeanPtPhenixppSyst->SetMarkerStyle(20);
-    graphMeanPtPhenixppSyst->SetMarkerSize(1.5);
-    //graphMeanPtPhenixppSyst->Draw("e2");
+  graphMeanPtPhenixppSyst->SetFillColor(1);
+  graphMeanPtPhenixppSyst->SetFillStyle(0);
+  graphMeanPtPhenixppSyst->SetLineColor(kBlack);
+  graphMeanPtPhenixppSyst->SetLineWidth(2);
+  graphMeanPtPhenixppSyst->SetMarkerStyle(20);
+  graphMeanPtPhenixppSyst->SetMarkerSize(1.5);
+  //graphMeanPtPhenixppSyst->Draw("e2");
  
 
 
 
 
-    ///////////////<pT^2>/////////////////////
+  ///////////////<pT^2>/////////////////////
 
 
-    graphraaNA50->SetLineWidth(2);
-    graphraaNA50->SetLineColor(kGreen-1);
-    graphraaNA50->SetMarkerColor(kGreen-1);
-    graphraaNA50->SetMarkerStyle(34);
-    graphraaNA50->SetMarkerSize(1.5);
-    //graphraaNA50->Draw("pz");
+  graphraaNA50->SetLineWidth(2);
+  graphraaNA50->SetLineColor(kGreen-1);
+  graphraaNA50->SetMarkerColor(kGreen-1);
+  graphraaNA50->SetMarkerStyle(34);
+  graphraaNA50->SetMarkerSize(1.5);
+  //graphraaNA50->Draw("pz");
 
 
 
-    graphraaPhenixAuAu->SetLineColor(kBlack);
-    graphraaPhenixAuAu->SetMarkerColor(kBlack);
-    graphraaPhenixAuAu->SetMarkerStyle(33);
-    graphraaPhenixAuAu->SetMarkerSize(2);
-    //graphraaPhenixAuAu->Draw("apz");
+  graphraaPhenixAuAu->SetLineColor(kBlack);
+  graphraaPhenixAuAu->SetMarkerColor(kBlack);
+  graphraaPhenixAuAu->SetMarkerStyle(33);
+  graphraaPhenixAuAu->SetMarkerSize(2);
+  //graphraaPhenixAuAu->Draw("apz");
 
-    graphraaPhenixAuAuSyst->SetFillColor(1);
-    graphraaPhenixAuAuSyst->SetFillStyle(0);
-    graphraaPhenixAuAuSyst->SetLineColor(kBlack);
-    graphraaPhenixAuAuSyst->SetLineWidth(2);
+  graphraaPhenixAuAuSyst->SetFillColor(1);
+  graphraaPhenixAuAuSyst->SetFillStyle(0);
+  graphraaPhenixAuAuSyst->SetLineColor(kBlack);
+  graphraaPhenixAuAuSyst->SetLineWidth(2);
 
-    graphraaPhenixAuAuSyst->SetMarkerStyle(20);
-    graphraaPhenixAuAuSyst->SetMarkerSize(1.5);
+  graphraaPhenixAuAuSyst->SetMarkerStyle(20);
+  graphraaPhenixAuAuSyst->SetMarkerSize(1.5);
 
-    //graphraaPhenixAuAuSyst->Draw("e2");
+  //graphraaPhenixAuAuSyst->Draw("e2");
     
 
 
 
-    graphraaPhenixCuCu->SetLineWidth(2);
-    graphraaPhenixCuCu->SetLineColor(kGray+1);
-    graphraaPhenixCuCu->SetMarkerColor(kGray+1);
-    graphraaPhenixCuCu->SetMarkerStyle(33);
-    graphraaPhenixCuCu->SetMarkerSize(2);
-//    graphraaPhenixCuCu->Draw("pz");
+  graphraaPhenixCuCu->SetLineWidth(2);
+  graphraaPhenixCuCu->SetLineColor(kGray+1);
+  graphraaPhenixCuCu->SetMarkerColor(kGray+1);
+  graphraaPhenixCuCu->SetMarkerStyle(33);
+  graphraaPhenixCuCu->SetMarkerSize(2);
+  //    graphraaPhenixCuCu->Draw("pz");
 
-    graphraaPhenixCuCuSyst->SetFillColor(1);
-    graphraaPhenixCuCuSyst->SetFillStyle(0);
-    graphraaPhenixCuCuSyst->SetLineColor(kGray+1);
-    graphraaPhenixCuCuSyst->SetLineWidth(2);
+  graphraaPhenixCuCuSyst->SetFillColor(1);
+  graphraaPhenixCuCuSyst->SetFillStyle(0);
+  graphraaPhenixCuCuSyst->SetLineColor(kGray+1);
+  graphraaPhenixCuCuSyst->SetLineWidth(2);
 
-    graphraaPhenixCuCuSyst->SetMarkerStyle(20);
-    graphraaPhenixCuCuSyst->SetMarkerSize(1.5);
+  graphraaPhenixCuCuSyst->SetMarkerStyle(20);
+  graphraaPhenixCuCuSyst->SetMarkerSize(1.5);
 
   //  graphraaPhenixCuCuSyst->Draw("e2");
 
-    graphraaPhenixAuAu->SetTitle("");
+  graphraaPhenixAuAu->SetTitle("");
 
 
 
 
 
-   ///////LEGEND////////////
+  ///////LEGEND////////////
 
 
 
 }
 
-void PrepareTheoryCurvePengfey(){
-
-
-  //============================                                                                                                                
-  //PENGFEY                                                                                                                                     
-  //============================                                                                                                                
-
-  const Int_t NBinsPeng=26; 
-  Double_t Peng_MPt[NBinsPeng]={0};
-  Double_t Peng_nPart[NBinsPeng]={0};
-
-  std::ifstream infilePengMPt("input/model/MeanPtPengfeyInFile.txt");
-
-  int lineCounterRapp=0;
-
-  double r1,r2,r3;
-
-  while (infilePengMPt >> r1 >> r2 >> r3 )
-    {
-      //      cout << "Line " << lineCounterRapp << r1 << " " << r2 << "" << r3  <<endl;
-      Peng_nPart[lineCounterRapp] = r2;
-
-      Peng_MPt[lineCounterRapp]= r3;
-
-      lineCounterRapp++;
-
-    }
-
-
-  graphPengLow=new TGraph(NBinsPeng, Peng_nPart, Peng_MPt);
-  graphPengLow->SetName("");
-
-  Double_t Peng_MPtSq[NBinsPeng]={0};
-  Double_t Peng_raa[NBinsPeng]={0}; 
-
-
-  std::ifstream infilePengMPtSq("input/model/MeanPtSqPengfeyInFile.txt");
-
-  int lineCounterPeng=0;
-
-  double p1Sq,p2Sq,p3Sq, p4Sq;
-
-
-  while (infilePengMPtSq >> p1Sq >> p2Sq >> p3Sq >> p4Sq )
-    {
-      // cout << "Line " << lineCounterPeng << " "<< p1Sq << " " << p2Sq << " " <<  p3Sq << " " << p4Sq  <<endl;
-
-      Peng_MPtSq[lineCounterPeng] = p3Sq;
-      Peng_raa[lineCounterPeng]= p4Sq;
-
-      lineCounterPeng++;
-
-    }
-
-  graphPengMPtSq=new TGraph(NBinsPeng, Peng_nPart, Peng_MPtSq);
-  graphPengraa=new TGraph(NBinsPeng, Peng_nPart, Peng_raa);
-
-
-
-
-  Int_t cj = TColor::GetColor("#6666ff");
-  //  graphPengLow->GetXaxis()->SetLimits(0, 400);
-  graphPengLow->SetLineWidth(4);
-  graphPengLow->SetLineColor(cj);
-  graphPengLow->SetTitle("");
-
-
-  graphPengMPtSq->SetLineWidth(4);
-  graphPengMPtSq->SetLineColor(cj);
-
-  graphPengraa->SetLineWidth(4);
-  graphPengraa->SetLineColor(cj);
-
-}
-
-
-void PrepareTheoryCurveRapp(){
-  //==============================================                                                                                              
-  //RAPP                                                                                                                                        
-  //==============================================                                                                                              
-
-  const Int_t NBinsRapp=29; // danger hard coding going on                                                                                      
-
-
-  Double_t Rapp_MPtHigh[NBinsRapp]={0};
-  Double_t Rapp_MPtLow[NBinsRapp]={0};
-
-  Double_t Rapp_nPart[NBinsRapp]={0};
-
-  Double_t Rapp_MPt[NBinsRapp]={0};
-  Double_t Rapp_MPtErr[NBinsRapp]={0};
-
-  //  std::ifstream infileRappMPt("MeanPtRappInFile.txt");                                                                                      
-  //Pt<10                                                                                                                                       
-  std::ifstream infileRappMPt("input/model/RappPtSmaller10_MeanPtInFile.txt");
-
-
-  int lineCounterRapp=0;
-
-  double r1,r2,r3;
-
-  while (infileRappMPt >> r1 >> r2 >> r3 )
-    {
-      //      cout << "Line " << lineCounterRapp << " "<< r1 << " " << r2 << " " <<  r3 << endl;
-
-      Rapp_nPart[lineCounterRapp] = r1;
-      Rapp_MPtLow[lineCounterRapp]= r2;
-      Rapp_MPtHigh[lineCounterRapp]= r3;
-
-      Rapp_MPt[lineCounterRapp]= (r3+r2)/2;
-      Rapp_MPtErr[lineCounterRapp]= r3 - (r3+r2)/2;
-
-
-
-      lineCounterRapp++;
-
-    }
-
-
-
-  graphRappMPtLow=new TGraph(NBinsRapp, Rapp_nPart, Rapp_MPtLow);
-  graphRappMPtHigh=new TGraph(NBinsRapp, Rapp_nPart, Rapp_MPtHigh);
-
-  Int_t ci = TColor::GetColor("#ff9999");
-  graphRappMPtHigh->SetLineColor(kOrange+1);
-  graphRappMPtHigh->SetLineWidth(2);
-
-  graphRappMPtLow->SetLineWidth(2);
-  graphRappMPtLow->SetLineColor(kOrange+1);
-
-
-  Double_t NullArrayRapp[NBinsRapp] = {0};
-
-  graphRappMeanPt = new TGraphErrors(NBinsRapp, Rapp_nPart,  Rapp_MPt, NullArrayRapp,   Rapp_MPtErr);
-
-
-
-  graphRappMeanPt->SetFillColorAlpha(kOrange+1,0.2);
-  graphRappMeanPt->SetLineColor(kOrange+1);
-
-
-
-  Double_t Rapp_raaHigh[NBinsRapp]={0};
-  Double_t Rapp_raaLow[NBinsRapp]={0};
-
-  Double_t Rapp_raa[NBinsRapp]={0};
-  Double_t Rapp_raaErr[NBinsRapp]={0};
-
-  Double_t Rapp_MPtSqHigh[NBinsRapp]={0};
-  Double_t Rapp_MPtSqLow[NBinsRapp]={0};
-
-  Double_t Rapp_MPtSq[NBinsRapp]={0};
-  Double_t Rapp_MPtSqErr[NBinsRapp]={0};
-
-  //not interpolation any more...
-  Double_t MPtSqPPMarkusPtSmaller10 = MPtSq_pp;
-
-  std::ifstream infileRappMPtSq("input/model/RappPtSmaller10_MeanPtSqInFile.txt");
-
-  int lineCounterRappMPtSq=0;
-
-  double r1Sq,r2Sq,r3Sq;
-
-
-  while (infileRappMPtSq >> r1Sq >> r2Sq >> r3Sq )
-    {
-      //      cout << "Line " << lineCounterRappMPtSq << " "<< r1Sq << " " << r2Sq << " " <<  r3Sq << endl;
-
-
-      Rapp_MPtSqLow[lineCounterRappMPtSq]=r2Sq;
-      Rapp_MPtSqHigh[lineCounterRappMPtSq]=r3Sq;
-
-      Rapp_MPtSq[lineCounterRappMPtSq]=(r3Sq+r2Sq)/2;
-      Rapp_MPtSqErr[lineCounterRappMPtSq]=(r3Sq - (r3Sq+r2Sq)/2);
-
-      //Rapp_nPart[lineCounterRappMPtSq] = r1;                                                                                                  
-      Rapp_raaLow[lineCounterRappMPtSq]= r2Sq/MPtSqPPMarkusPtSmaller10;
-      Rapp_raaHigh[lineCounterRappMPtSq]= r3Sq/MPtSqPPMarkusPtSmaller10;
-
-      Rapp_raa[lineCounterRappMPtSq]= (r3Sq+r2Sq)/(2*MPtSqPPMarkusPtSmaller10);
-      Rapp_raaErr[lineCounterRappMPtSq]= (r3Sq - (r3Sq+r2Sq)/2)/MPtSqPPMarkusPtSmaller10;
-
-
-
-      lineCounterRappMPtSq++;
-
-    }
-
-  graphRappMPtSqLow=new TGraph(NBinsRapp, Rapp_nPart, Rapp_MPtSqLow);
-  graphRappMPtSqHigh=new TGraph(NBinsRapp, Rapp_nPart, Rapp_MPtSqHigh);
-
-  graphRappraaLow=new TGraph(NBinsRapp, Rapp_nPart, Rapp_raaLow);
-  graphRappraaHigh=new TGraph(NBinsRapp, Rapp_nPart, Rapp_raaHigh);
-
-
-  graphRappraaLow->SetLineWidth(2);
-  graphRappraaLow->SetLineColor(kOrange+1);
-
-  graphRappraaHigh->SetLineWidth(2);
-  graphRappraaHigh->SetLineColor(kOrange+1);
-
-
-  graphRappraa = new TGraphErrors(NBinsRapp, Rapp_nPart,  Rapp_raa, NullArrayRapp,   Rapp_raaErr);
-                                                                                                                                            
- graphRappraa->SetName("Graph2");
- graphRappraa->SetTitle("Graph");
-
- graphRappraa->SetFillColorAlpha(kOrange+1,0.2);
-
-
-
-}
-void PrepareTheoryCurveSHM(){
-
-  const Int_t NBinsSHM=4; // danger hard coding going on                                                                                        
-
-
-  Double_t SHM_MPtHigh[NBinsSHM]={0};
-  Double_t SHM_MPtLow[NBinsSHM]={0};
-
-  Double_t SHM_nPart[NBinsSHM]={0};
-
-  Double_t SHM_MPt[NBinsSHM]={0};
-  Double_t SHM_MPtErr[NBinsSHM]={0};
-
-
-
-  Double_t SHM_raaHigh[NBinsSHM]={0};
-  Double_t SHM_raaLow[NBinsSHM]={0};
-
-  Double_t SHM_raa[NBinsSHM]={0};
-  Double_t SHM_raaErr[NBinsSHM]={0};
-
-  Double_t SHM_MPtSqHigh[NBinsSHM]={0};
-  Double_t SHM_MPtSqLow[NBinsSHM]={0};
-
-  Double_t SHM_MPtSq[NBinsSHM]={0};
-  Double_t SHM_MPtSqErr[NBinsSHM]={0};
-
-
-  std::ifstream infileSHM("input/model/MeanPtSHM09052018.txt");
-
-  int lineCounterSHM=0;
-
-  double r1SHM,r2SHM,r3SHM,r4SHM,r5SHM;
-
-  while (infileSHM >> r1SHM >> r2SHM >> r3SHM >> r4SHM >> r5SHM)
-    {
-      /* cout << "SHM: " << endl; */
-      /* cout << "Line " << lineCounterSHM << " " << r1SHM << " " << r2SHM << " " <<  r3SHM << " " << r4SHM << " " << r5SHM <<  endl; */
-
-
-      SHM_nPart[lineCounterSHM] = r1SHM;
-
-      SHM_MPtLow[lineCounterSHM]=r2SHM;
-      SHM_MPtHigh[lineCounterSHM]=r3SHM;
-
-      SHM_MPt[lineCounterSHM]=(r3SHM + r2SHM)/2;
-      SHM_MPtErr[lineCounterSHM]=r3SHM - SHM_MPt[lineCounterSHM];
-
-      /* cout << "SHM_MPt: " <<SHM_MPt[lineCounterSHM] << endl; */
-      /* cout << "SHM_MPtErr: " << SHM_MPtErr[lineCounterSHM] << endl; */
-
-
-      SHM_MPtSqLow[lineCounterSHM]=r4SHM;
-      SHM_MPtSqHigh[lineCounterSHM]=r5SHM;
-
-      SHM_raaLow[lineCounterSHM]= r4SHM/MPtSq_pp;
-      SHM_raaHigh[lineCounterSHM]= r5SHM/MPtSq_pp;
-
-      SHM_raa[lineCounterSHM]= (r4SHM+r5SHM)/(2*MPtSq_pp);
-      SHM_raaErr[lineCounterSHM]= (r5SHM - (r4SHM+r5SHM)/2)/MPtSq_pp;
-
-
-
-      lineCounterSHM++;
-    }
-
-  graphSHMMPtLow=new TGraph(NBinsSHM, SHM_nPart, SHM_MPtLow);
-  graphSHMMPtHigh=new TGraph(NBinsSHM, SHM_nPart, SHM_MPtHigh);
-
-  graphSHMraaLow=new TGraph(NBinsSHM, SHM_nPart, SHM_raaLow);
-  graphSHMraaHigh=new TGraph(NBinsSHM, SHM_nPart, SHM_raaHigh);
-
-  int ci1;
-  ci1 = TColor::GetColor("#33ccff");
-  
-
-  graphSHMMPtLow->SetLineColor(ci1);
-  graphSHMMPtLow->SetLineWidth(2);
-  graphSHMMPtHigh->SetLineColor(ci1);
-  graphSHMMPtHigh->SetLineWidth(2);
-
-  Double_t NullArraySHM[NBinsSHM]={0};
-
-  graphSHMMeanPt = new TGraphErrors(NBinsSHM, SHM_nPart,  SHM_MPt, NullArraySHM, SHM_MPtErr);
-
-  graphSHMMeanPt->SetName("Graph2");
-  graphSHMMeanPt->SetTitle("Graph");
-                                                      
-  graphSHMMeanPt->SetFillColorAlpha(ci1,0.3);                                                                                                     
-  graphSHMMeanPt->SetLineColor(ci1);
-  graphSHMMeanPt->SetLineWidth(2);
-
-  graphSHMraaLow->SetLineColor(ci1);
-  graphSHMraaLow->SetLineWidth(2);
-
-  graphSHMraaHigh->SetLineColor(ci1);
-  graphSHMraaHigh->SetLineWidth(2);
-
-
-
-  graphSHMraa = new TGraphErrors(NBinsSHM, SHM_nPart,  SHM_raa, NullArraySHM,   SHM_raaErr);
-
-  graphSHMraa->SetName("Graph12");
-  graphSHMraa->SetTitle("Grap1h");
-                                                                                                    
-  graphSHMraa->SetFillColorAlpha(ci1,0.3);                                                                                                      
-  graphSHMraa->SetLineColor(ci1);
-
-
-}

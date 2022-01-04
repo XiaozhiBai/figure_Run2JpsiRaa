@@ -30,7 +30,23 @@ void DrawText(const char *text, Double_t xCoord=0.5, Double_t yCoord=0.5, Double
 
 
 }
+void DrawPoint(Double_t dummy_x,Double_t dummy_y,Double_t MarkerStyle=20, Double_t MarkerSize=1.0,Double_t MarkerColor=1,Double_t LineColor=1, Double_t LineWidth=2.0)
+{
+  const Int_t One = 1; 
 
+  Double_t dummmyArr_x[One]={dummy_x};
+  Double_t dummmyArr_y[One]={dummy_y};
+
+  TGraph *gr_dummy=new TGraph(One, dummmyArr_x,dummmyArr_y);
+  
+  gr_dummy->SetMarkerStyle(MarkerStyle);
+  gr_dummy->SetMarkerSize(MarkerSize);
+  gr_dummy->SetMarkerColor(MarkerColor);
+  gr_dummy->SetLineColor(LineColor);
+  gr_dummy->SetLineWidth(LineWidth);
+  //  pad->cd();
+  gr_dummy->Draw("same pz");
+ }
 void SetPad(TPad *pad,Double_t top,Double_t bottom, Double_t left, Double_t right)
 {
   pad->SetBottomMargin(bottom);
@@ -80,6 +96,20 @@ void SetTGraphError(TGraphErrors *gr_dummy, Double_t MarkerStyle=20, Double_t Ma
   return;  
 
 }
+
+void SetTGraph(TGraph *gr_dummy, Double_t MarkerStyle=20, Double_t MarkerSize=1.0,Double_t MarkerColor=1,Double_t LineColor=1, Double_t LineWidth=2.0, Double_t FillStyle=0.0)
+{
+  gr_dummy->SetMarkerStyle(MarkerStyle);
+  gr_dummy->SetMarkerSize(MarkerSize);
+  gr_dummy->SetMarkerColor(MarkerColor);
+  gr_dummy->SetLineColor(LineColor);
+  gr_dummy->SetLineWidth(LineWidth);
+   gr_dummy->SetFillStyle(FillStyle);
+  
+  return;  
+
+}
+
 void LoadLibs() {
   gSystem->Load("libCore.so");
   gSystem->Load("libGeom.so");
@@ -616,3 +646,39 @@ TGraph *GetCentRaaComv020_model(Int_t Npoint, const  char *input)
   return graaComv;  
   
 } 
+
+TGraph *GetMeanpT_model(Int_t Npoint, const char * input)
+{
+
+  ifstream myfileMeanPt (input);
+  const int nMeanPt = Npoint; // lines in the txt file
+  double npartMeanPt[nMeanPt];
+  double raaMeanPtmax[nMeanPt];
+  double raaMeanPtmin[nMeanPt];
+  double npartT = 0.;
+  double raaMinT = 0.;
+  double raaMaxT = 0.;
+  
+  int iMeanPt = 0; // counter
+
+  while(myfileMeanPt>>npartT>>raaMinT>>raaMaxT){
+    npartMeanPt[iMeanPt]  = npartT;
+    raaMeanPtmin[iMeanPt] = raaMinT;
+    raaMeanPtmax[iMeanPt] = raaMaxT;
+    
+    iMeanPt++;
+  }
+
+  
+  TGraph *graaMeanPtmin = new TGraph(nMeanPt,npartMeanPt,raaMeanPtmin);
+  TGraph *graaMeanPtmax = new TGraph(nMeanPt,npartMeanPt,raaMeanPtmax);
+  
+  TGraph *graaMeanPt = new TGraph(2*nMeanPt);
+  for(int i=0 ; i<nMeanPt ; i++){
+    graaMeanPt->SetPoint(i,graaMeanPtmax->GetX()[i],graaMeanPtmax->GetY()[i]);
+    graaMeanPt->SetPoint(nMeanPt+i,graaMeanPtmax->GetX()[nMeanPt-i-1],graaMeanPtmin->GetY()[nMeanPt-i-1]);
+  }
+  return graaMeanPt;
+  
+
+}
