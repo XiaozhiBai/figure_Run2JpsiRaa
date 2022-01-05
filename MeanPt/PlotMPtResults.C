@@ -1,13 +1,30 @@
 #include "../common/PlottingHelper.h"
 
 
+
+/* const Double_t  mean_pt_pp=2.66; */
+/*   const Double_t  mean_pt_pp_sts=0.06; */
+/*   const Double_t  mean_pt_pp_sys=0.01; */
+
+/*   const Double_t  mean_pts_pp=10.2; */
+/*   const Double_t  mean_pts_pp_sts=0.5; */
+/*   const Double_t  mean_pts_pp_sys=0.1; */
+
+
+
+
+
 Double_t MPtSq_pp = 10.20;
 Double_t MPtSq_ppStatErr = 0.46;
 Double_t MPtSq_ppSystErr = 0.1;//0.24   
 
+Double_t raa_global=sqrt(MPtSq_ppStatErr*MPtSq_ppStatErr+MPtSq_ppSystErr*MPtSq_ppSystErr)/MPtSq_pp;
+
+  
 Double_t MeanPt502pp = 2.66;//+-0.044 (syst)                                                                                                 
 Double_t MeanPt502ppStatErr = 0.06;
 Double_t MeanPt502ppSystErr = 0.01;//0.03
+
 
 
 //data graphs
@@ -367,7 +384,10 @@ void plot_raa_data()
   gr_CentraaSyst5020->Draw("sameE2");
 
   
-
+  TBox *boxraa    = new TBox(390,1.-raa_global,400,1.+raa_global);
+  boxraa ->SetFillColor(kRed);
+  boxraa->Draw("sameE2");
+  
   TLatex tex3(0.5,0.5," ");
 
   tex3.SetTextSize(0.035);
@@ -432,6 +452,7 @@ void plot_meanpT_model()
   gr_CentMptStat5020->Draw("samePE");
   gr_CentMptSyst5020->Draw("sameE2");
 
+  //  gr_CentMptTM1_5020->Print("all");
 
 
   TLatex tex1(0.5,0.5," ");
@@ -480,6 +501,11 @@ void plot_raa_model()
   
   gr_CentraaTM2_5020 ->SetFillColorAlpha(kBlue,0.15);
   gr_CentraaTM2_5020 ->SetLineColor(kBlue);
+
+
+  /* gr_CentraaTM1_5020 ->SetLineStyle(7); */
+  /* gr_CentraaTM2_5020 ->SetLineStyle(7); */
+
   
   
   TCanvas *c1=new TCanvas("c1","",1100,850);
@@ -521,16 +547,21 @@ void plot_raa_model()
   tex1.DrawLatex(0.18,0.70," 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
 
- 
+  gr_CentraaTM1_5020->Draw("FL same");
   gr_CentraaTM2_5020->Draw("FL same");
 
   gr_CentraaStat5020->Draw("samePE");
   gr_CentraaSyst5020->Draw("sameE2");
 
-  
+
+    TBox *boxraa    = new TBox(390,1.-raa_global,400,1.+raa_global);
+  boxraa ->SetFillColor(kRed);
+  boxraa->Draw("sameE2");
+
   TLegend *leg4 = new TLegend(0.63, 0.7, 0.9, 0.9);
   SetLegend(leg4,42,0.04,0.0,0.0,0.0,0.0);
   leg4->AddEntry(gr_CentraaStat5020,"Data","p");
+  leg4->AddEntry(gr_CentraaTM1_5020, "TAMU", "F");
   leg4->AddEntry(gr_CentraaTM2_5020, "THU", "F");
   /* leg4->AddEntry(gr_CentraaStat5020,20,"TM1 (Du et al.)","F"); */
   leg4->Draw();
