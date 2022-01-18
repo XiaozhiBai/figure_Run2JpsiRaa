@@ -51,12 +51,13 @@ void plot_pt_spectrum_ee()
  
   final_results_pt_midy=new TFile("input/data/Raa_final.root","READ");
 
-  fileTAMU_pt_spectrum_0_10 = "input/models/TAMU_5020_0010_pT_qm_2019.txt";
-  fileTinghua_pt_spectrum_0_10 = "input/models/Tinghua/data_5020_central/Part2/pt_spectrum_c010.dat";
+  fileTAMU_pt_spectrum_0_10 = "../models/Ralf_Rapp/data/m0-10dNdy.dat";
+  fileTinghua_pt_spectrum_0_10 = "../models/PengfeiTM2/fig--central-rapidity-2022/spectrum/theory-spectrum-cent010.dat";  
   fileSHM_pt_spectrum_0_10 = "input/models/SHM_PtDep_5020_midy_Cent0_11012019.txt";    
 
-  fileTAMU_pt_spectrum_30_50 = "input/models/TAMU_5020_3050_pT_qm_2019.txt";
-  fileTinghua_pt_spectrum_30_50= "input/models/Tinghua/data_5020_central/Part2/pt_spectrum_c3050.dat";
+  fileTAMU_pt_spectrum_30_50 = "../models/Ralf_Rapp/data/m30-50dNdy.dat";
+
+  fileTinghua_pt_spectrum_30_50= "../models/PengfeiTM2/fig--central-rapidity-2022/spectrum/theory-spectrum-cent3050.dat";
   fileSHM_pt_spectrum_30_50 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";    
 
   
@@ -71,11 +72,13 @@ void plot_spectrum_pt_0_10(){
   TGraphErrors *gr_PtSpecSyst5020_00_10  = (TGraphErrors*)GetPtSpecSyst5020_00_10();
 
 
-  TGraph * gr_PtSpecTM15020_00_10_model=  (TGraph *)GetPtSpecTM1_5020_model(76,fileTAMU_pt_spectrum_0_10);
+  TGraph * gr_PtSpecTM15020_00_10_model=  (TGraph *)GetPtSpecTM1_5020_model(16,fileTAMU_pt_spectrum_0_10);
   TGraph * gr_PtSpecTM25020_00_10_model=  (TGraph *)GetPtSpecTM2_5020_model(16,fileTinghua_pt_spectrum_0_10);
   TGraph * gr_PtSpecSHM5020_00_10_model=   (TGraph *)GetPtSpecSHM_5020_model(100,fileSHM_pt_spectrum_0_10);
   
+  TGraph * gr_ratio_PtSpecTM1_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_00_10,gr_PtSpecSyst5020_00_10,gr_PtSpecTM15020_00_10_model);
   TGraph * gr_ratio_PtSpecTM2_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_00_10,gr_PtSpecSyst5020_00_10,gr_PtSpecTM25020_00_10_model);
+
   
   gr_PtSpecTM15020_00_10_model ->SetFillColorAlpha(kOrange+1,0.2);
   gr_PtSpecTM15020_00_10_model->SetLineColor(kOrange+1);
@@ -86,9 +89,14 @@ void plot_spectrum_pt_0_10(){
   gr_PtSpecTM25020_00_10_model  ->SetFillColorAlpha(kBlue,0.15);
   gr_PtSpecTM25020_00_10_model ->SetLineColor(kBlue);
 
+  gr_ratio_PtSpecTM1_data  ->SetFillColorAlpha(kOrange+1,0.2);
+  gr_ratio_PtSpecTM1_data->SetLineColor(kOrange+1);
+
   gr_ratio_PtSpecTM2_data  ->SetFillColorAlpha(kBlue,0.15);
   gr_ratio_PtSpecTM2_data->SetLineColor(kBlue);
-   
+  
+
+  
  
   int ci1;
   ci1 = TColor::GetColor("#33ccff");
@@ -109,7 +117,7 @@ void plot_spectrum_pt_0_10(){
   pad1->SetLogy();
   
   TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,15,100,1.1e-5,0.3);
-  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,5);
+  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,2.5);
 
   SetTH2F(h_dummy1,0.07,0.07,0.9,0.9,0.05,0.06,0.01,0.01,504,504);
   SetTH2F(h_dummy2,0.11,0.11, 1,0.5, 0.1,0.09, 0.02,0.02, 504,504);
@@ -125,6 +133,7 @@ void plot_spectrum_pt_0_10(){
   gr_PtSpecSHM5020_00_10_model->Draw("FL same");
   gr_PtSpecTM15020_00_10_model->Draw("FL same");
   gr_PtSpecTM25020_00_10_model->Draw("FL same");
+
   gr_PtSpecStat5020_00_10->Draw("samePE");
   gr_PtSpecSyst5020_00_10->Draw("sameE2");
 
@@ -154,6 +163,8 @@ void plot_spectrum_pt_0_10(){
   
   h_dummy2->Draw();
   line_unity->Draw("same");
+
+  gr_ratio_PtSpecTM1_data->Draw("FL same");
   gr_ratio_PtSpecTM2_data->Draw("FL same");
 
   c_temp->SaveAs("output/Spectrum_Vs_pt_0_10_015_model_ee.pdf");
@@ -175,11 +186,12 @@ void plot_spectrum_pt_30_50(){
 
   
 
-  TGraph * gr_PtSpecTM15020_30_50_model=  (TGraph *)GetPtSpecTM1_5020_model(76,fileTAMU_pt_spectrum_30_50);
+  TGraph * gr_PtSpecTM15020_30_50_model=  (TGraph *)GetPtSpecTM1_5020_model(12,fileTAMU_pt_spectrum_30_50);
   TGraph * gr_PtSpecTM25020_30_50_model=  (TGraph *)GetPtSpecTM2_5020_model(12,fileTinghua_pt_spectrum_30_50);
   TGraph * gr_PtSpecSHM5020_30_50_model=   (TGraph *)GetPtSpecSHM_5020_model(100,fileSHM_pt_spectrum_30_50);
 
   
+  TGraph * gr_ratio_PtSpecTM1_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_30_50,gr_PtSpecSyst5020_30_50,gr_PtSpecTM15020_30_50_model);
   TGraph * gr_ratio_PtSpecTM2_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_30_50,gr_PtSpecSyst5020_30_50,gr_PtSpecTM25020_30_50_model);
 
 
@@ -194,6 +206,9 @@ void plot_spectrum_pt_30_50(){
 
   gr_PtSpecTM25020_30_50_model  ->SetFillColorAlpha(kBlue,0.15);
   gr_PtSpecTM25020_30_50_model ->SetLineColor(kBlue);
+
+  gr_ratio_PtSpecTM1_data  ->SetFillColorAlpha(kOrange,0.15);
+  gr_ratio_PtSpecTM1_data ->SetLineColor(kOrange);
 
   gr_ratio_PtSpecTM2_data  ->SetFillColorAlpha(kBlue,0.15);
   gr_ratio_PtSpecTM2_data ->SetLineColor(kBlue);
@@ -215,7 +230,7 @@ void plot_spectrum_pt_30_50(){
 
 
   TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,15,100,5e-6,3e-2);
-  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,3.7);
+  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,2.7);
 
   SetTH2F(h_dummy1,0.07,0.07,0.9,0.9,0.05,0.06,0.01,0.01,504,504);
   SetTH2F(h_dummy2,0.11,0.11, 1,0.5, 0.1,0.09, 0.02,0.02, 504,504);
@@ -258,6 +273,7 @@ void plot_spectrum_pt_30_50(){
   TLine *line_unity= (TLine *)GetLine(0,1.0,15,1.0,2,3,7);
   h_dummy2->Draw();
   line_unity->Draw("same");
+  gr_ratio_PtSpecTM1_data->Draw("FL same");
   gr_ratio_PtSpecTM2_data->Draw("FL same");
   
   c_temp->SaveAs("output/Spectrum_Vs_pt_30_50_015_model_ee.pdf");

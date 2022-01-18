@@ -72,11 +72,10 @@ void plot_centrality_raa_ee()
   SetStyle();
 
   final_results_cent_midy=new TFile("input/data/results_centrality.root","READ");
-
   final_results_cent_fwdy= "input/data/Raa_vs_centrality_fwd.txt";
 
-  fileTAMU_cent_raa = "input/models/TAMU_5020_cent_RAA_mid.txt";
-  fileQinghua_cent_raa = "input/models/Raa_npart.dat";
+  fileTAMU_cent_raa = "../models/Ralf_Rapp/data/TAMU_5020_cent_RAA_mid.txt";
+  fileQinghua_cent_raa = "../models/PengfeiTM2/fig--central-rapidity-2022/RAA-Np-2022Jan5/theory-RAA-Np.dat";
   fileComover_cent_raa = "input/models/comover_5020_midy.txt";
   fileSHM_cent_raa = "input/models/SHM_CentDep_PbPb5020_midy_11012019.txt";    
 
@@ -197,13 +196,16 @@ void plot_raa_cent_data(){
 
   TBox *box_fwdy    = new TBox(400,1.-common_uncertainty_fwdy,408,1.+common_uncertainty_fwdy);
   box_fwdy ->SetFillColor(kBlue);
+
+  SetTGraphError(gr_CentRaaStat5020,20,2.5,2,2,2,0);
+  SetTGraphError(gr_CentRaaSyst5020,20,2.5,2,2,2,0);
+
   
-  
-  SetTGraphError(gr_CentRaaStat5020,20,2,2,2,2,0);
-  SetTGraphError(gr_CentRaaSyst5020,20,2,2,2,2,0);
+  /* SetTGraphError(gr_CentRaaStat5020,20,2,2,2,2,0); */
+  /* SetTGraphError(gr_CentRaaSyst5020,20,2,2,2,2,0); */
   SetErrorX(gr_CentRaaSyst5020,6);
 
-  SetTGraphError(gr_CentRaaStat5020_fwd,20,2.,4,4,2,0);
+  SetTGraphError(gr_CentRaaStat5020_fwd,20,2.5,4,4,2,0);
   SetTGraphError(gr_CentRaaSyst5020_fwd,20,2.5,4,4,2,0);
   SetErrorX(gr_CentRaaSyst5020_fwd,6);
 
@@ -224,6 +226,8 @@ void plot_raa_cent_data(){
     
   TLine *line_unity= (TLine *)GetLine(0,1.0,400,1.0,1,2,7);
   line_unity  ->Draw("same");
+
+
   
   TLatex tex1(0.5,0.5," ");
   tex1.SetTextFont(42);
@@ -237,11 +241,13 @@ void plot_raa_cent_data(){
   tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi");
   //  tex1.DrawLatex(0.18,0.70,"#it{p}_{T} > 0.15 GeV/#it{c}");
   
-  TLegend  *legend= new TLegend(0.5,0.65,0.8,0.8);
-  SetLegend(legend,42,0.04,0.0,0.0,0.0,0.0);
+  TLegend  *legend= new TLegend(0.4,0.6,0.8,0.75);
+  SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
   
-  legend->AddEntry( gr_CentRaaStat5020,"|y| < 0.9 (#it{p}_{T} < 8 GeV/#it{c})","P");
-  legend->AddEntry( gr_CentRaaStat5020_fwd,"2.5 < y < 4 (#it{p}_{T} > 0.15 GeV/#it{c})","P");
+
+  legend->AddEntry( gr_CentRaaStat5020,"|y| < 0.9 (0.15 < #it{p}_{T} < 15 GeV/#it{c})","P");
+  legend->AddEntry( gr_CentRaaStat5020_fwd,"2.5 < y < 4 (0.3 < #it{p}_{T} < 8 GeV/#it{c})","P");
+  
   legend->Draw();
 
   gPad->RedrawAxis();

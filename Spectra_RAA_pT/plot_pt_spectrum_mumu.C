@@ -68,20 +68,21 @@ const char *fileSHM_pt_spectrum_40_90;
 
 void plot_pt_spectrum_mumu()
 {
+
   SetStyle();
  
   final_results_pt_fwdy=new TFile("input/data/mumu/Yields/Yields_vs_pT.root","READ");
 
-  fileTAMU_pt_spectrum_0_20 = "input/models/TAMU_5020_0010_pT_qm_2019.txt";
-  fileTinghua_pt_spectrum_0_20 = "input/models/Tinghua/data_5020_forward/Part2/pt_spectrum_f020.dat";
+  fileTAMU_pt_spectrum_0_20 = "../models/Ralf_Rapp/data/f0-20dNdy.dat";
+  fileTinghua_pt_spectrum_0_20 = "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/spectrum/theory-spectrum-cent020.dat";
   fileSHM_pt_spectrum_0_20 = "input/models/SHM_PtDep_5020_midy_Cent0_11012019.txt";    
 
-  fileTAMU_pt_spectrum_20_40 = "input/models/TAMU_5020_3050_pT_qm_2019.txt";
-  fileTinghua_pt_spectrum_20_40= "input/models/Tinghua/data_5020_forward/Part2/pt_spectrum_f2040.dat";
+  fileTAMU_pt_spectrum_20_40 = "../models/Ralf_Rapp/data/f20-40dNdy.dat";
+  fileTinghua_pt_spectrum_20_40= "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/spectrum/theory-spectrum-cent2040.dat";
   fileSHM_pt_spectrum_20_40 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";    
 
-  fileTAMU_pt_spectrum_40_90 = "input/models/TAMU_5020_3050_pT_qm_2019.txt";
-  fileTinghua_pt_spectrum_40_90= "input/models/Tinghua/data_5020_forward/Part2/pt_spectrum_f4090.dat";
+  fileTAMU_pt_spectrum_40_90 = "../models/Ralf_Rapp/data/f40-90dNdy.dat";
+  fileTinghua_pt_spectrum_40_90= "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/spectrum/theory-spectrum-cent4090.dat";
   fileSHM_pt_spectrum_40_90 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";    
   
 
@@ -97,10 +98,11 @@ void plot_spectrum_pt_0_20(){
   TGraphErrors *gr_PtSpecStat5020_00_20 = (TGraphErrors*)GetPtSpecStat5020_00_20();
   TGraphErrors *gr_PtSpecSyst5020_00_20  = (TGraphErrors*)GetPtSpecSyst5020_00_20();
 
-  TGraph * gr_PtSpecTM15020_00_20_model=  (TGraph *)GetPtSpecTM1_5020_model(76,fileTAMU_pt_spectrum_0_20);
+  TGraph * gr_PtSpecTM15020_00_20_model=  (TGraph *)GetPtSpecTM1_5020_model(30,fileTAMU_pt_spectrum_0_20);
   TGraph * gr_PtSpecTM25020_00_20_model=  (TGraph *)GetPtSpecTM2_5020_model(30,fileTinghua_pt_spectrum_0_20);
   TGraph * gr_PtSpecSHM5020_00_20_model=  (TGraph *)GetPtSpecSHM_5020_model(100,fileSHM_pt_spectrum_0_20);
 
+  TGraph * gr_ratio_PtSpecTM1_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_00_20,gr_PtSpecSyst5020_00_20,gr_PtSpecTM15020_00_20_model);
   TGraph * gr_ratio_PtSpecTM2_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_00_20,gr_PtSpecSyst5020_00_20,gr_PtSpecTM25020_00_20_model);
   
   gr_PtSpecTM15020_00_20_model ->SetFillColorAlpha(kOrange+1,0.2);
@@ -112,9 +114,12 @@ void plot_spectrum_pt_0_20(){
   gr_PtSpecTM25020_00_20_model  ->SetFillColorAlpha(kBlue,0.15);
   gr_PtSpecTM25020_00_20_model ->SetLineColor(kBlue);
 
+  gr_ratio_PtSpecTM1_data  ->SetFillColorAlpha(kOrange,0.15);
+  gr_ratio_PtSpecTM1_data->SetLineColor(kOrange);
+
   gr_ratio_PtSpecTM2_data  ->SetFillColorAlpha(kBlue,0.15);
   gr_ratio_PtSpecTM2_data->SetLineColor(kBlue);
-   
+  
  
   int ci1;
   ci1 = TColor::GetColor("#33ccff");
@@ -147,11 +152,12 @@ void plot_spectrum_pt_0_20(){
   
   h_dummy1->Draw();
 
-
-  /* gr_PtSpecSHM5020_00_20_model->Draw("FL same"); */
-  /* gr_PtSpecTM15020_00_20_model->Draw("FL same"); */
+  //  gr_PtSpecSHM5020_00_20_model->Draw("FL same");
+  gr_PtSpecTM15020_00_20_model->Draw("FL same");
   gr_PtSpecTM25020_00_20_model->Draw("FL same");
 
+
+    
   gr_PtSpecStat5020_00_20->Draw("samePE");
   gr_PtSpecSyst5020_00_20->Draw("sameE2");
 
@@ -181,6 +187,7 @@ void plot_spectrum_pt_0_20(){
   
   h_dummy2->Draw();
   line_unity->Draw("same");
+  gr_ratio_PtSpecTM1_data->Draw("FL same");
   gr_ratio_PtSpecTM2_data->Draw("FL same");
 
   c_temp->SaveAs("output/Spectrum_Vs_pt_0_20_015_model_mm.pdf");
@@ -197,17 +204,18 @@ void plot_spectrum_pt_20_40(){
 
 
 
-  TGraph * gr_PtSpecTM15020_20_40_model=  (TGraph *)GetPtSpecTM1_5020_model(76,fileTAMU_pt_spectrum_0_20); //!!!!!!!!!!!!!
+  TGraph * gr_PtSpecTM15020_20_40_model=  (TGraph *)GetPtSpecTM1_5020_model(30,fileTAMU_pt_spectrum_20_40); //!!!!!!!!!!!!!
   TGraph * gr_PtSpecTM25020_20_40_model=  (TGraph *)GetPtSpecTM2_5020_model(30,fileTinghua_pt_spectrum_20_40); //!!!!!!!!!! 
   TGraph * gr_PtSpecSHM5020_20_40_model=  (TGraph *)GetPtSpecSHM_5020_model(100,fileSHM_pt_spectrum_0_20); //!!!!!!!!!!
 
 
   
+  TGraph * gr_ratio_PtSpecTM1_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_20_40,gr_PtSpecSyst5020_20_40,gr_PtSpecTM15020_20_40_model);
   TGraph * gr_ratio_PtSpecTM2_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_20_40,gr_PtSpecSyst5020_20_40,gr_PtSpecTM25020_20_40_model);
 
 
    
-  gr_PtSpecTM15020_20_40_model ->SetFillColorAlpha(kOrange+1,0.2);
+  gr_PtSpecTM15020_20_40_model ->SetFillColorAlpha(kOrange+1,0.15);
   gr_PtSpecTM15020_20_40_model->SetLineColor(kOrange+1);
 
   int ci1;
@@ -215,12 +223,16 @@ void plot_spectrum_pt_20_40(){
   gr_PtSpecSHM5020_20_40_model->SetFillColorAlpha(ci1,0.2);
   gr_PtSpecSHM5020_20_40_model->SetLineColor(ci1);
 
+
   gr_PtSpecTM25020_20_40_model  ->SetFillColorAlpha(kBlue,0.15);
   gr_PtSpecTM25020_20_40_model ->SetLineColor(kBlue);
 
+  gr_ratio_PtSpecTM1_data  ->SetFillColorAlpha(kOrange,0.15);
+  gr_ratio_PtSpecTM1_data->SetLineColor(kOrange);
+
   gr_ratio_PtSpecTM2_data  ->SetFillColorAlpha(kBlue,0.15);
-  gr_ratio_PtSpecTM2_data ->SetLineColor(kBlue);
-  
+  gr_ratio_PtSpecTM2_data->SetLineColor(kBlue);
+
 
 
   TCanvas *c_temp=new TCanvas("c_temp","",1000,1000);
@@ -253,8 +265,9 @@ void plot_spectrum_pt_20_40(){
 
   
   /* gr_PtSpecSHM5020_20_40_model->Draw("FL same"); */
-  /* gr_PtSpecTM15020_20_40_model->Draw("FL same"); */
+  gr_PtSpecTM15020_20_40_model->Draw("FL same");
   gr_PtSpecTM25020_20_40_model->Draw("FL same");
+
   gr_PtSpecStat5020_20_40->Draw("samePE");
   gr_PtSpecSyst5020_20_40->Draw("sameE2");
 
@@ -268,7 +281,7 @@ void plot_spectrum_pt_20_40(){
   tex1.SetTextSize(0.058);
 
   tex1.DrawLatex(0.45,0.8,"Pb-Pb, 20-40%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.45,0.72,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.45,0.72,"Inclusive J/#psi, 2.5<#it{y}<4");
 
   
   TLegend *legend = new TLegend(0.2,0.17,0.5,0.45);
@@ -281,9 +294,10 @@ void plot_spectrum_pt_20_40(){
 
 
   pad2->cd();
-  TLine *line_unity= (TLine *)GetLine(0,1.0,15,1.0,2,3,7);
+  TLine *line_unity= (TLine *)GetLine(0,1.0,20,1.0,2,3,7);
   h_dummy2->Draw();
   line_unity->Draw("same");
+  gr_ratio_PtSpecTM1_data->Draw("FL same");
   gr_ratio_PtSpecTM2_data->Draw("FL same");
   
   c_temp->SaveAs("output/Spectrum_Vs_pt_20_40_015_model_mm.pdf");
@@ -301,26 +315,36 @@ void plot_spectrum_pt_40_90(){
   TGraphErrors *gr_PtSpecStat5020_40_90 = (TGraphErrors*)GetPtSpecStat5020_40_90();
   TGraphErrors *gr_PtSpecSyst5020_40_90  = (TGraphErrors*)GetPtSpecSyst5020_40_90();
 
-  TGraph * gr_PtSpecTM15020_40_90_model=  (TGraph *)GetPtSpecTM1_5020_model(76,fileTAMU_pt_spectrum_0_20); //!!!!!!!!!!!!!
+  TGraph * gr_PtSpecTM15020_40_90_model=  (TGraph *)GetPtSpecTM1_5020_model(30,fileTAMU_pt_spectrum_40_90); //!!!!!!!!!!!!!
   TGraph * gr_PtSpecTM25020_40_90_model=  (TGraph *)GetPtSpecTM2_5020_model(30,fileTinghua_pt_spectrum_40_90); //!!!!!!!!!! 
   TGraph * gr_PtSpecSHM5020_40_90_model=  (TGraph *)GetPtSpecSHM_5020_model(100,fileSHM_pt_spectrum_0_20); //!!!!!!!!!!
 
+  TGraph * gr_ratio_PtSpecTM1_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_40_90,gr_PtSpecSyst5020_40_90,gr_PtSpecTM15020_40_90_model);
   TGraph * gr_ratio_PtSpecTM2_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_40_90,gr_PtSpecSyst5020_40_90,gr_PtSpecTM25020_40_90_model);
+  
    
-  gr_PtSpecTM15020_40_90_model ->SetFillColorAlpha(kOrange+1,0.2);
-  gr_PtSpecTM15020_40_90_model->SetLineColor(kOrange+1);
-
+ 
   int ci1;
   ci1 = TColor::GetColor("#33ccff");
   gr_PtSpecSHM5020_40_90_model->SetFillColorAlpha(ci1,0.2);
   gr_PtSpecSHM5020_40_90_model->SetLineColor(ci1);
 
+  gr_PtSpecTM15020_40_90_model ->SetFillColorAlpha(kOrange+1,0.2);
+  gr_PtSpecTM15020_40_90_model->SetLineColor(kOrange+1);
+
+  
   gr_PtSpecTM25020_40_90_model  ->SetFillColorAlpha(kBlue,0.15);
   gr_PtSpecTM25020_40_90_model ->SetLineColor(kBlue);
+
+  gr_ratio_PtSpecTM1_data  ->SetFillColorAlpha(kOrange,0.15);
+  gr_ratio_PtSpecTM1_data ->SetLineColor(kOrange);
 
   gr_ratio_PtSpecTM2_data  ->SetFillColorAlpha(kBlue,0.15);
   gr_ratio_PtSpecTM2_data ->SetLineColor(kBlue);
 
+  
+
+  
   TCanvas *c_temp=new TCanvas("c_temp","",1000,1000);
   TPad *pad1 = new TPad("pad1", "", 0, 0.4, 1, 1);
   TPad *pad2 = new TPad("pad2", "", 0, 0., 1, 0.4); 
@@ -334,7 +358,7 @@ void plot_spectrum_pt_40_90(){
   pad1->cd();
   pad1->SetLogy();
   
-  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,20,100,5e-7,3e-2);
+  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,20,100,5e-8,9e-3);
   TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,20,100,1e-2,3.7);
 
   SetTH2F(h_dummy1,0.07,0.07,0.9,0.9,0.05,0.06,0.01,0.01,504,504);
@@ -349,7 +373,8 @@ void plot_spectrum_pt_40_90(){
   h_dummy1->Draw();
   
   /* gr_PtSpecSHM5020_40_90_model->Draw("FL same"); */
-  /* gr_PtSpecTM15020_40_90_model->Draw("FL same"); */
+
+  gr_PtSpecTM15020_40_90_model->Draw("FL same");
   gr_PtSpecTM25020_40_90_model->Draw("FL same");
   gr_PtSpecStat5020_40_90->Draw("samePE");
   gr_PtSpecSyst5020_40_90->Draw("sameE2");
@@ -362,7 +387,7 @@ void plot_spectrum_pt_40_90(){
   tex1.SetTextSize(0.058);
 
   tex1.DrawLatex(0.45,0.8,"Pb-Pb, 40-90%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.45,0.72,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.45,0.72,"Inclusive J/#psi, 2.5<#it{y}<4");
 
   
   TLegend *legend = new TLegend(0.2,0.17,0.5,0.45);
@@ -377,7 +402,9 @@ void plot_spectrum_pt_40_90(){
   pad2->cd();
   TLine *line_unity= (TLine *)GetLine(0,1.0,20,1.0,2,3,7);
   h_dummy2->Draw();
+
   line_unity->Draw("same");
+  gr_ratio_PtSpecTM1_data->Draw("FL same");
   gr_ratio_PtSpecTM2_data->Draw("FL same");
   
   c_temp->SaveAs("output/Spectrum_Vs_pt_40_90_015_model_mm.pdf");

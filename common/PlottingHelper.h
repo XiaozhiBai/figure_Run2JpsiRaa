@@ -310,8 +310,12 @@ TGraph *GetPtSpecTM2_5020_model(Int_t Npoint, const  char *input)
     ptTinghua[iTinghua]     = ptT;
     spectrumTinghuamin[iTinghua] = spectrumMinT;
     spectrumTinghuamax[iTinghua] = spectrumMaxT;
+
+    //    cout<< std::fixed << std::setprecision(15)<<" "<<spectrumTinghuamin[iTinghua]<< " "<<double(spectrumTinghuamin[iTinghua])<<endl;
+
     iTinghua++;
-  
+
+
   }
 
   TGraph *gspectrumTinghuamin = new TGraph(nTinghua,ptTinghua,spectrumTinghuamin);

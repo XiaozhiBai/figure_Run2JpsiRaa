@@ -98,12 +98,12 @@ void PlotMPtResults(){
 
   SetStyle();
 
-  fileTAMU_cent_MeanpT="input/model/MeanPtRappInFile.txt";
-  fileTHU_cent_MeanpT="input/model/MeanPtPengfeyInFile.txt";
+  fileTAMU_cent_MeanpT="../models/Ralf_Rapp/data/MeanPtRappInFile.txt";
+  fileTHU_cent_MeanpT="../models/PengfeiTM2/fig--central-rapidity-2022/rAA-meanPT-2022Jan5/mean-pt.dat";
   fileSHM_cent_MeanpT="input/model/input/model/MeanPtSHM09052018.txt";
 
-  fileTAMU_cent_raa="input/model/Rapp_raa.txt";
-  fileTHU_cent_raa="input/model/raa_vs_npart.dat";
+  fileTAMU_cent_raa="../models/Ralf_Rapp/data/Rapp_raa.txt";
+  fileTHU_cent_raa="../models/PengfeiTM2/fig--central-rapidity-2022/rAA-meanPT-2022Jan5/rAA_mean-pt2.dat";
 
   //  fileSHM_cent_raa="input/model/input/model/MeanPtSHM09052018.txt";
   
@@ -472,9 +472,10 @@ void plot_meanpT_model()
   //  leg->SetTextSize(0.035);
   SetLegend(leg,42,0.04,0.0,0.0,0.0,0.0);
   leg->AddEntry(gr_CentMptStat5020,"Data","p");
-  //  leg->AddEntry(graphSHMMeanPt, "SHM (Andronic et al.)", "F");
+  
   leg->AddEntry(gr_CentMptTM1_5020,"TAMU","F");
   leg->AddEntry(gr_CentMptTM2_5020,"THU","F");
+  //  leg->AddEntry(graphSHMMeanPt, "SHM (place holder)", "F");
   leg->SetBorderSize(0);
   leg->SetFillColor(0);
   leg->SetFillStyle(0);

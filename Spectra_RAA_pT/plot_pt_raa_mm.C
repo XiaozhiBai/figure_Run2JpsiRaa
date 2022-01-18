@@ -84,13 +84,13 @@ void plot_pt_raa_mm()
   final_results_pt_fwdy_40_90 =new TFile("input/data/mumu/RAA/RAA_vs_pT_40to90.root","READ");
 
   
-  fileTAMU_pt_raa_00_20 = "input/models/TAMU/f0-20RAA.dat";
-  fileTAMU_pt_raa_20_40 = "input/models/TAMU/f20-40RAA.dat";
-  fileTAMU_pt_raa_40_90 = "input/models/TAMU/f40-90RAA.dat";
+  fileTAMU_pt_raa_00_20 = "../models/Ralf_Rapp/data/f0-20RAA.dat";
+  fileTAMU_pt_raa_20_40 = "../models/Ralf_Rapp/data/f20-40RAA.dat";
+  fileTAMU_pt_raa_40_90 = "../models/Ralf_Rapp/data/f40-90RAA.dat";
 
-  fileTHUA_pt_raa_00_20 = "input/models/Tinghua/data_5020_forward/Part2/Raa_pt_f020.dat";
-  fileTHUA_pt_raa_20_40 = "input/models/Tinghua/data_5020_forward/Part2/Raa_pt_f2040.dat";
-  fileTHUA_pt_raa_40_90 = "input/models/Tinghua/data_5020_forward/Part2/Raa_pt_f4090.dat";
+  fileTHUA_pt_raa_00_20 = "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/cent020-RAA-pt-forwdY-2022/theory-RAA-pt-b48.dat";
+  fileTHUA_pt_raa_20_40 = "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/cent2040-RAA-pt-forwdY-2022/theory-RAA-pt-b84.dat";
+  fileTHUA_pt_raa_40_90 = "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/cent4090-RAA-pt-forwdY-2022/theory-RAA-pt-b114.dat";
   
   fileSHM_pt_raa_00_20 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";
   fileSHM_pt_raa_20_40 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";
@@ -173,7 +173,7 @@ void plot_raa_pt_0_20(){
   legend->AddEntry( gr_PtRaaStat5020_00_20,"Data","P");
   legend->AddEntry(gr_PtRaaTM15020_00_20_model,"TAMU","f");
   legend->AddEntry(gr_PtRaaTM25020_00_20_model,"THU","f");
-  //legend->AddEntry(gr_PtRaaSHM5020_00_20_model,"SHM (Andronic et al.)","f");
+  legend->AddEntry(gr_PtRaaSHM5020_00_20_model,"SHM","f");
     
   legend->Draw();
   gPad->RedrawAxis();
@@ -256,7 +256,7 @@ void plot_raa_pt_20_40(){
   legend->AddEntry( gr_PtRaaStat5020_20_40,"Data","P");
   legend->AddEntry(gr_PtRaaTM15020_20_40_model,"TAMU","f");
   legend->AddEntry(gr_PtRaaTM25020_20_40_model,"THU","f");
-  //legend->AddEntry(gr_PtRaaSHM5020_20_40_model,"SHM (Andronic et al.)","f");
+  legend->AddEntry(gr_PtRaaSHM5020_20_40_model,"SHM","f");
     
 
   legend->Draw();

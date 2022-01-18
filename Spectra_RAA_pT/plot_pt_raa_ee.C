@@ -63,12 +63,12 @@ void plot_pt_raa_ee()
 
   final_results_pt_midy=new TFile("input/data/Raa_final.root","READ");
 
-  fileTAMU_pt_raa_0_10 = "input/models/TAMU/m0-10RAA.dat";
-  fileTHUA_pt_raa_0_10 = "input/models/Tinghua/data_5020_central/Part2/Raa_pt_c010.dat";
+  fileTAMU_pt_raa_0_10 = "../models/Ralf_Rapp/data/m0-10RAA.dat";
+  fileTHUA_pt_raa_0_10 = "../models/PengfeiTM2/fig--central-rapidity-2022/RAA-pt-cent0-10--2022Jan5/theory-RAA-pt-cent0-10.dat";
   fileSHM_pt_raa_0_10 = "input/models/SHM_PtDep_5020_midy_Cent0_11012019.txt";    
 
-  fileTAMU_pt_raa_30_50 = "input/models/TAMU/m30-50RAA.dat";
-  fileTHUA_pt_raa_30_50 = "input/models/Tinghua/data_5020_central/Part2/raa_pt_c3050.dat";
+  fileTAMU_pt_raa_30_50 = "../models/Ralf_Rapp/data/m30-50RAA.dat";
+  fileTHUA_pt_raa_30_50 = "../models/PengfeiTM2/fig--central-rapidity-2022/RAA-pt-cent30-50-2022Jan5/theory-RAA-pt-cent30-50.dat";
   fileSHM_pt_raa_30_50 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";    
 
   plot_raa_pt_0_10();
