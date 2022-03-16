@@ -13,8 +13,16 @@
 #include "TAxis.h"
 #include "TGaxis.h"
 #include "TGraphErrors.h"
+#include "TGraphAsymmErrors.h"
 #include "TPad.h"
 #include "TColor.h"
+
+const char * lg_data="Data";
+const char * lg_TM1="Transport (R.Rapp et al.)";
+const char * lg_TM2="Transport (P.Zhuang et al.)";
+const char * lg_SHM="SHM (A.Andronic et al.)";
+const char * lg_EL="Energy loss (R. Baier et al.)";
+
 
 
 
@@ -82,6 +90,19 @@ void SetLegend(TLegend *legend, Double_t TextFont=42, Double_t TextSize=0.05,Dou
   legend->SetLineColor(lineColor);
   legend->SetLineWidth(lineWidth);
   return ; 
+}
+
+void SetTGraphAsymmErrors(TGraphAsymmErrors *gr_dummy, Double_t MarkerStyle=20, Double_t MarkerSize=1.0,Double_t MarkerColor=1,Double_t LineColor=1, Double_t LineWidth=2.0, Double_t FillStyle=0.0)
+{
+  gr_dummy->SetMarkerStyle(MarkerStyle);
+  gr_dummy->SetMarkerSize(MarkerSize);
+  gr_dummy->SetMarkerColor(MarkerColor);
+  gr_dummy->SetLineColor(LineColor);
+  gr_dummy->SetLineWidth(LineWidth);
+   gr_dummy->SetFillStyle(FillStyle);
+  
+  return;  
+
 }
 
 void SetTGraphError(TGraphErrors *gr_dummy, Double_t MarkerStyle=20, Double_t MarkerSize=1.0,Double_t MarkerColor=1,Double_t LineColor=1, Double_t LineWidth=2.0, Double_t FillStyle=0.0)
@@ -255,6 +276,65 @@ TGraph *GetRatioDataModel(TGraphErrors *gr_data_sts,TGraphErrors *gr_data_sys,TG
   }
 
   return gspectrum_ratio;
+}
+
+
+TGraphErrors *GetRatioDataUncertainty(TGraphErrors *gr_data_sts,TGraphErrors *gr_data_sys)
+{
+  TGraphErrors *grData_sts= (TGraphErrors *) gr_data_sts->Clone("grData_sts");
+  TGraphErrors *grData_sys= (TGraphErrors *) gr_data_sys->Clone("grData_sys");
+  
+  cout<<" the ratio uncertanties data"<<endl;
+
+ const  int Npoints=gr_data_sts->GetN();
+
+  Double_t x_data;
+  Double_t y_data;
+
+  Double_t xErr_data_sts;
+  Double_t yErr_data_sts;
+
+  Double_t xErr_data_sys;
+  Double_t yErr_data_sys;
+
+  Double_t xErr_data_sts_sys;
+  Double_t yErr_data_sts_sys;
+  
+  
+  
+  Double_t x_ratio[Npoints];
+  Double_t y_ratio[Npoints];  
+
+  Double_t x_ratio_err[Npoints];
+  Double_t y_ratio_err[Npoints];  
+  
+
+  
+  for(int ipoint=0;ipoint<Npoints;ipoint++)
+  
+    {
+      gr_data_sts->GetPoint(ipoint,x_data,y_data);
+
+      xErr_data_sts= gr_data_sts->GetErrorX(ipoint);
+      yErr_data_sts= gr_data_sts->GetErrorY(ipoint);
+
+      yErr_data_sys= gr_data_sys->GetErrorY(ipoint);
+
+      yErr_data_sts_sys=sqrt(yErr_data_sts*yErr_data_sts+yErr_data_sys*yErr_data_sys);
+
+      yErr_data_sts_sys=yErr_data_sts_sys/y_data;
+      //      cout<< ipoint<< " "<<x_data << " "<<y_data<< " "<<yErr_data_sts<< " "<< yErr_data_sts_sys<<std::endl;
+
+      x_ratio[ipoint]=x_data;
+      y_ratio[ipoint]=1.0;
+
+      x_ratio_err[ipoint]=xErr_data_sts;
+      y_ratio_err[ipoint]=yErr_data_sts_sys;
+    }
+  
+      TGraphErrors* gr_Ratio_data_err = new TGraphErrors(Npoints,x_ratio,y_ratio,x_ratio_err,y_ratio_err);
+
+   return gr_Ratio_data_err;
 }
 
 TLine *GetLine(Double_t x1,Double_t y1,Double_t x2,Double_t y2,Double_t lineColor,Double_t lineWidth,Double_t lineStyle){
@@ -499,7 +579,35 @@ TGraph *GetPtRaaSHM5020_model(Int_t Npoint, const  char * input){
   return graaSHM;
 } 
 
+TGraphAsymmErrors *GetPtRaaEnergyLoss5020_model(const  char * input_file,const  char *gr_name)
+  {
 
+    TFile *file= new TFile(input_file,"READ");
+
+    //    if(gr_name=="RAA_binned_centrality_0_10")
+
+    if(!strcmp(gr_name,"RAA_binned_centrality_0_10"))
+      {
+	const Int_t Npoint=1;
+	Double_t      x_arr[Npoint+1]={12.5};
+	Double_t      y_arr[Npoint]={0.1744};//0.5*(RAA_centrality_0_10_Down->Eval(12.5)+RAA_centrality_0_10_Up->Eval(12.5))
+	Double_t      exl[Npoint]= {2.5};
+	Double_t      exh[Npoint] ={2.5};
+	Double_t      eyl[Npoint] = {0.04};
+	Double_t      eyh[Npoint] = {0.04}; 
+
+	auto gr = new TGraphAsymmErrors(Npoint,x_arr,y_arr,exl,exh,eyl,eyh);
+
+	return gr;
+	
+      }
+    
+    TGraphAsymmErrors *gr_EL= (TGraphAsymmErrors *) file->Get(gr_name);
+
+
+    
+    return  gr_EL;
+  }
 
 TGraph *GetCentRaaTM1_5020_model(Int_t Npoint, const  char *input)
 {

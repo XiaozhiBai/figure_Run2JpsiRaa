@@ -47,6 +47,7 @@ inline TGraphErrors *GetPtRaaSyst5020_30_50();
 
 TFile *final_results_pt_midy;
 
+
 const char *fileTAMU_pt_raa_0_10;
 const char *fileTHUA_pt_raa_0_10;
 const char *fileSHM_pt_raa_0_10;
@@ -55,6 +56,7 @@ const char *fileTAMU_pt_raa_30_50;
 const char *fileTHUA_pt_raa_30_50;
 const char *fileSHM_pt_raa_30_50;
 
+const char *fileEnergy_loss_model;
 
 void plot_pt_raa_ee()
 {
@@ -71,9 +73,13 @@ void plot_pt_raa_ee()
   fileTHUA_pt_raa_30_50 = "../models/PengfeiTM2/fig--central-rapidity-2022/RAA-pt-cent30-50-2022Jan5/theory-RAA-pt-cent30-50.dat";
   fileSHM_pt_raa_30_50 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";    
 
+  //energy losse mdoel
+  fileEnergy_loss_model= "../models/energy-loss-model/ElossPredictions.root";
+  
   plot_raa_pt_0_10();
   plot_raa_pt_30_50();
   plot_raa_pt_0_10_30_50();
+ 
 }
 void plot_raa_pt_0_10(){
 
@@ -83,6 +89,8 @@ void plot_raa_pt_0_10(){
   TGraph * gr_PtRaaTM15020_0_10_model=  (TGraph *) GetPtRaaTM15020_model(16,fileTAMU_pt_raa_0_10);
   TGraph * gr_PtRaaTM25020_0_10_model=  (TGraph *) GetPtRaaTM15020_model(16,fileTHUA_pt_raa_0_10);
   TGraph * gr_PtRaaSHM5020_0_10_model=  (TGraph *) GetPtRaaSHM5020_model(100,fileSHM_pt_raa_0_10);
+
+  TGraphAsymmErrors * gr_PtRaaEL5020_0_10_model=  (TGraphAsymmErrors *) GetPtRaaEnergyLoss5020_model(fileEnergy_loss_model,"RAA_binned_centrality_0_10");
   
   int ci1;
   ci1 = TColor::GetColor("#33ccff");
@@ -95,6 +103,9 @@ void plot_raa_pt_0_10(){
 
   gr_PtRaaTM25020_0_10_model->SetFillColorAlpha(kBlue+1,0.2);
   gr_PtRaaTM25020_0_10_model->SetLineColor(kBlue+1);
+
+  gr_PtRaaEL5020_0_10_model->SetFillColorAlpha(kPink+1,0.4);
+  gr_PtRaaEL5020_0_10_model->SetLineColor(kPink+9);
 
   
   TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
@@ -122,6 +133,9 @@ void plot_raa_pt_0_10(){
   gr_PtRaaTM25020_0_10_model->Draw("FL same");
   gr_PtRaaSHM5020_0_10_model->Draw("FL same");
 
+  gr_PtRaaEL5020_0_10_model->Draw("same E2");
+  
+
   gr_PtRaaStat5020_00_10->Draw("samePE");
   gr_PtRaaSyst5020_00_10->Draw("sameE2");
 
@@ -142,11 +156,13 @@ void plot_raa_pt_0_10(){
 
   TLegend *legend = new TLegend(0.47,0.5,0.85,0.75);
   SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
-  legend->AddEntry( gr_PtRaaStat5020_00_10,"Data","P");
-  legend->AddEntry(gr_PtRaaTM15020_0_10_model,"TAMU","f");
-  legend->AddEntry(gr_PtRaaTM25020_0_10_model,"THU","f");
-  legend->AddEntry(gr_PtRaaSHM5020_0_10_model,"SHM (old)","f");
-    
+
+  legend->AddEntry( gr_PtRaaStat5020_00_10,lg_data,"P");
+  legend->AddEntry(gr_PtRaaTM15020_0_10_model,lg_TM1,"f");
+  legend->AddEntry(gr_PtRaaTM25020_0_10_model,lg_TM2,"f");
+  legend->AddEntry(gr_PtRaaSHM5020_0_10_model,lg_SHM,"f");
+  legend->AddEntry(gr_PtRaaEL5020_0_10_model,lg_EL,"f");
+
   legend->Draw();
   gPad->RedrawAxis();
   c_temp->SaveAs("output/Raa_Vs_pt_0_10_015_model_ee.pdf");
@@ -162,6 +178,9 @@ void plot_raa_pt_30_50(){
   TGraph * gr_PtRaaTM15020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileTAMU_pt_raa_30_50);
   TGraph * gr_PtRaaTM25020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileTHUA_pt_raa_30_50);
   TGraph * gr_PtRaaSHM5020_30_50_model=  (TGraph *)GetPtRaaSHM5020_model(100,fileSHM_pt_raa_0_10);
+
+
+  TGraphAsymmErrors * gr_PtRaaEL5020_30_50_model=  (TGraphAsymmErrors *) GetPtRaaEnergyLoss5020_model(fileEnergy_loss_model,"RAA_binned_centrality_30_50");
   
   gr_PtRaaTM15020_30_50_model ->SetFillColorAlpha(kOrange+1,0.2);
   gr_PtRaaTM15020_30_50_model->SetLineColor(kOrange+1);
@@ -174,6 +193,9 @@ void plot_raa_pt_30_50(){
   gr_PtRaaSHM5020_30_50_model->SetFillColorAlpha(ci1,0.2);
   gr_PtRaaSHM5020_30_50_model->SetLineColor(ci1);
 
+  gr_PtRaaEL5020_30_50_model->SetFillColorAlpha(kPink+1,0.4);
+  gr_PtRaaEL5020_30_50_model->SetLineColor(kPink+9);
+  
 
   
   TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
@@ -202,6 +224,8 @@ void plot_raa_pt_30_50(){
   gr_PtRaaSHM5020_30_50_model->Draw("FL same");
   gr_PtRaaTM15020_30_50_model->Draw("FL same");
   gr_PtRaaTM25020_30_50_model->Draw("FL same");
+  gr_PtRaaEL5020_30_50_model->Draw("same E2");
+
   gr_PtRaaStat5020_30_50->Draw("samePE");
   gr_PtRaaSyst5020_30_50->Draw("sameE2");
 
@@ -219,11 +243,20 @@ void plot_raa_pt_30_50(){
 
   TLegend *legend = new TLegend(0.47,0.5,0.85,0.75);
   SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
-  legend->AddEntry( gr_PtRaaStat5020_30_50,"Data","P");
-  legend->AddEntry(gr_PtRaaTM15020_30_50_model,"TAMU","f");
-  legend->AddEntry(gr_PtRaaTM25020_30_50_model,"THU","f");  
-  legend->AddEntry(gr_PtRaaSHM5020_30_50_model,"SHM (old)","f");
-  legend->Draw();
+
+  /* legend->AddEntry( gr_PtRaaStat5020_30_50,"Data","P"); */
+  /* legend->AddEntry(gr_PtRaaTM15020_30_50_model,"TAMU","f"); */
+  /* legend->AddEntry(gr_PtRaaTM25020_30_50_model,"THU","f");   */
+  /* legend->AddEntry(gr_PtRaaSHM5020_30_50_model,"SHM (old)","f"); */
+  /* legend->AddEntry(gr_PtRaaEL5020_30_50_model,"Energy loss","f"); */
+
+  legend->AddEntry( gr_PtRaaStat5020_30_50,lg_data,"P");
+  legend->AddEntry(gr_PtRaaTM15020_30_50_model,lg_TM1,"f");
+  legend->AddEntry(gr_PtRaaTM25020_30_50_model,lg_TM2,"f");
+  legend->AddEntry(gr_PtRaaSHM5020_30_50_model,lg_SHM,"f");
+  legend->AddEntry(gr_PtRaaEL5020_30_50_model,lg_EL,"f");
+
+  //  legend->Draw();
 
   TLine *line_unity= (TLine *)GetLine(0,1.0,15,1.0,1,2,7);
   line_unity  ->Draw("same");

@@ -133,8 +133,8 @@ void plot_meanpT_data()
   
   Double_t pp_alice_5020_y=4.1;
   Double_t pp_alice_2076_y=3.8;
-  Double_t pp_phenix_y=3.5;
-  Double_t na50_y=3.2;
+  Double_t pp_phenix_y=3.7;
+  Double_t na50_y=3.25;
       
   TGraphErrors *gr_CentMptStat5020 = (TGraphErrors*)GetCentMptStat5020();
   TGraphErrors *gr_CentMptSyst5020  = (TGraphErrors*)GetCentMptSyst5020();
@@ -175,13 +175,13 @@ void plot_meanpT_data()
   SetTGraphError(graphMeanPtALICE2760,21,2.5,4,4,2,0);
   SetTGraphError(graphMeanPtALICE2760Syst,21,2.5,4,4,2,0);
   SetErrorX(graphMeanPtALICE2760Syst,6);
-  DrawPoint(AA_x,pp_alice_2076_y,21,3,4,4,2);
+  //DrawPoint(AA_x,pp_alice_2076_y,21,3,4,4,2);
 
   //2.76 pp
   SetTGraphError(graphMeanPtALICE2760pp ,25,2.5,4,4,2,0);
   SetTGraphError(graphMeanPtALICE2760Systpp,25,2.5,4,4,2,0);
   SetErrorX(graphMeanPtALICE2760Systpp,6);
-  DrawPoint(pp_x,pp_alice_2076_y,25,2.5,4,4,2);
+  // DrawPoint(pp_x,pp_alice_2076_y,25,2.5,4,4,2);
 
   
   
@@ -242,11 +242,11 @@ void plot_meanpT_data()
   graphMeanPtPhenixpp->Draw("samePE");
   graphMeanPtPhenixppSyst ->Draw("sameE2");
 
-  graphMeanPtALICE2760->Draw("samePE");
-  graphMeanPtALICE2760Syst ->Draw("sameE2");
+  /* graphMeanPtALICE2760->Draw("samePE"); */
+  /* graphMeanPtALICE2760Syst ->Draw("sameE2"); */
 
-  graphMeanPtALICE2760pp ->Draw("samePE");
-  graphMeanPtALICE2760Systpp ->Draw("sameE2");
+  /* graphMeanPtALICE2760pp ->Draw("samePE"); */
+  /* graphMeanPtALICE2760Systpp ->Draw("sameE2"); */
   
 
   TLatex tex3(0.5,0.5," ");
@@ -257,9 +257,9 @@ void plot_meanpT_data()
 
 
   tex3.DrawLatex(0.3,0.89,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb-Pb, |#it{y}|<0.9");
-  tex3.DrawLatex(0.3,0.83,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb-Pb, |#it{y}|<0.8");
-  tex3.DrawLatex(0.3,0.77,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu-Cu, Au-Au, |#it{y}|<0.35");
-  tex3.DrawLatex(0.3,0.71,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+  //  tex3.DrawLatex(0.3,0.83,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb-Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(0.3,0.81,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu-Cu, Au-Au, |#it{y}|<0.35");
+  tex3.DrawLatex(0.3,0.72,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
 
  
 
@@ -287,7 +287,7 @@ void plot_raa_data()
   
   Double_t pp_alice_5020_y=2.4;
   Double_t pp_alice_2076_y=2.25;
-  Double_t pp_phenix_y=2.07;
+  Double_t pp_phenix_y=2.15;
   Double_t na50_y=1.88;
 
   TGraphErrors *gr_CentraaStat5020 = (TGraphErrors*)GetCentraaStat5020();
@@ -323,7 +323,7 @@ void plot_raa_data()
   SetTGraphError(graphraaALICE2760 ,21,2.5,4,4,2,0);
   SetTGraphError(graphraaALICE2760Syst,21,2.5,4,4,2,0);
   SetErrorX(graphMeanPtALICE2760Syst,6);
-  DrawPoint(AA_x,pp_alice_2076_y,21,3,4,4,2);
+  //  DrawPoint(AA_x,pp_alice_2076_y,21,3,4,4,2);
 
 
   
@@ -367,8 +367,8 @@ void plot_raa_data()
  graphraaPhenixCuCuSyst->Draw("sameE2");
 
 
- graphraaALICE2760->Draw("samePE");
- graphraaALICE2760Syst ->Draw("sameE2");
+ /* graphraaALICE2760->Draw("samePE"); */
+ /* graphraaALICE2760Syst ->Draw("sameE2"); */
 
  
 
@@ -397,8 +397,8 @@ void plot_raa_data()
   
 
   tex3.DrawLatex(0.28,0.9,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
-  tex3.DrawLatex(0.28,0.84,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
-  tex3.DrawLatex(0.28,0.78,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
+  //  tex3.DrawLatex(0.28,0.84,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(0.28,0.81,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
   tex3.DrawLatex(0.28,0.72,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
 
 
@@ -468,13 +468,13 @@ void plot_meanpT_model()
   tex1.DrawLatex(0.18,0.70," 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
   
-  TLegend *leg = new TLegend(0.63, 0.7, 0.9, 0.95);
+  TLegend *leg = new TLegend(0.5, 0.7, 0.85, 0.95);
   //  leg->SetTextSize(0.035);
   SetLegend(leg,42,0.04,0.0,0.0,0.0,0.0);
-  leg->AddEntry(gr_CentMptStat5020,"Data","p");
+  leg->AddEntry(gr_CentMptStat5020,lg_data,"p");
   
-  leg->AddEntry(gr_CentMptTM1_5020,"TAMU","F");
-  leg->AddEntry(gr_CentMptTM2_5020,"THU","F");
+  leg->AddEntry(gr_CentMptTM1_5020,lg_TM1,"F");
+  leg->AddEntry(gr_CentMptTM2_5020,lg_TM2,"F");
   //  leg->AddEntry(graphSHMMeanPt, "SHM (place holder)", "F");
   leg->SetBorderSize(0);
   leg->SetFillColor(0);
@@ -559,11 +559,11 @@ void plot_raa_model()
   boxraa ->SetFillColor(kRed);
   boxraa->Draw("sameE2");
 
-  TLegend *leg4 = new TLegend(0.63, 0.7, 0.9, 0.9);
+  TLegend *leg4 = new TLegend(0.5, 0.7, 0.85, 0.9);
   SetLegend(leg4,42,0.04,0.0,0.0,0.0,0.0);
-  leg4->AddEntry(gr_CentraaStat5020,"Data","p");
-  leg4->AddEntry(gr_CentraaTM1_5020, "TAMU", "F");
-  leg4->AddEntry(gr_CentraaTM2_5020, "THU", "F");
+  leg4->AddEntry(gr_CentraaStat5020,lg_data,"p");
+  leg4->AddEntry(gr_CentraaTM1_5020, lg_TM1, "F");
+  leg4->AddEntry(gr_CentraaTM2_5020, lg_TM2, "F");
   /* leg4->AddEntry(gr_CentraaStat5020,20,"TM1 (Du et al.)","F"); */
   leg4->Draw();
 

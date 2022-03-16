@@ -79,7 +79,9 @@ void plot_spectrum_pt_0_10(){
   TGraph * gr_ratio_PtSpecTM1_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_00_10,gr_PtSpecSyst5020_00_10,gr_PtSpecTM15020_00_10_model);
   TGraph * gr_ratio_PtSpecTM2_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_00_10,gr_PtSpecSyst5020_00_10,gr_PtSpecTM25020_00_10_model);
 
-  
+
+  TGraphErrors * gr_ratio_uncertainty_data=(TGraphErrors *) GetRatioDataUncertainty(gr_PtSpecStat5020_00_10,gr_PtSpecSyst5020_00_10);
+    
   gr_PtSpecTM15020_00_10_model ->SetFillColorAlpha(kOrange+1,0.2);
   gr_PtSpecTM15020_00_10_model->SetLineColor(kOrange+1);
 
@@ -94,6 +96,9 @@ void plot_spectrum_pt_0_10(){
 
   gr_ratio_PtSpecTM2_data  ->SetFillColorAlpha(kBlue,0.15);
   gr_ratio_PtSpecTM2_data->SetLineColor(kBlue);
+
+  gr_ratio_uncertainty_data->SetFillColorAlpha(kRed,0.45);
+  gr_ratio_uncertainty_data->SetLineColor(kRed);
   
 
   
@@ -116,7 +121,7 @@ void plot_spectrum_pt_0_10(){
   pad1->cd();
   pad1->SetLogy();
   
-  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,15,100,1.1e-5,0.3);
+  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,15,100,2e-6,0.3);
   TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,2.5);
 
   SetTH2F(h_dummy1,0.07,0.07,0.9,0.9,0.05,0.06,0.01,0.01,504,504);
@@ -124,7 +129,8 @@ void plot_spectrum_pt_0_10(){
 
   SetTGraphError(gr_PtSpecStat5020_00_10,20,2.5,2,2,2,0);
   SetTGraphError(gr_PtSpecSyst5020_00_10,20,2.5,2,2,2,0);
-  
+
+  SetErrorX(gr_ratio_uncertainty_data,0.2);
   SetErrorX(gr_PtSpecSyst5020_00_10,0.5);
   
   h_dummy1->Draw();
@@ -148,13 +154,13 @@ void plot_spectrum_pt_0_10(){
   tex1.DrawLatex(0.5,0.8,"Pb-Pb, 0-10%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
   tex1.DrawLatex(0.5,0.72,"Inclusive J/#psi, |#it{y}|<0.9");
 
-  TLegend *legend = new TLegend(0.2,0.1,0.5,0.35);
+  TLegend *legend = new TLegend(0.17,0.06,0.46,0.35);
   SetLegend(legend,42,0.06,0.0,0.0,0.0,0.0);
 
-  legend->AddEntry( gr_PtSpecStat5020_00_10,"Data","P");
-  legend->AddEntry(gr_PtSpecTM15020_00_10_model,"TAMU","f");
-  legend->AddEntry(gr_PtSpecTM25020_00_10_model,"THU","f");
-  legend->AddEntry(gr_PtSpecSHM5020_00_10_model,"SHM","f");
+  legend->AddEntry( gr_PtSpecStat5020_00_10,lg_data,"P");
+  legend->AddEntry(gr_PtSpecTM15020_00_10_model,lg_TM1,"f");
+  legend->AddEntry(gr_PtSpecTM25020_00_10_model,lg_TM2,"f");
+  legend->AddEntry(gr_PtSpecSHM5020_00_10_model,lg_SHM,"f");
   legend->Draw();
 
   pad2->cd();
@@ -166,7 +172,7 @@ void plot_spectrum_pt_0_10(){
 
   gr_ratio_PtSpecTM1_data->Draw("FL same");
   gr_ratio_PtSpecTM2_data->Draw("FL same");
-
+  gr_ratio_uncertainty_data->Draw("sameE2");
   c_temp->SaveAs("output/Spectrum_Vs_pt_0_10_015_model_ee.pdf");
   
   delete h_dummy1;
@@ -194,7 +200,9 @@ void plot_spectrum_pt_30_50(){
   TGraph * gr_ratio_PtSpecTM1_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_30_50,gr_PtSpecSyst5020_30_50,gr_PtSpecTM15020_30_50_model);
   TGraph * gr_ratio_PtSpecTM2_data=(TGraph *) GetRatioDataModel(gr_PtSpecStat5020_30_50,gr_PtSpecSyst5020_30_50,gr_PtSpecTM25020_30_50_model);
 
+  TGraphErrors * gr_ratio_uncertainty_data=(TGraphErrors *) GetRatioDataUncertainty(gr_PtSpecStat5020_30_50,gr_PtSpecSyst5020_30_50);
 
+  
   
   gr_PtSpecTM15020_30_50_model ->SetFillColorAlpha(kOrange+1,0.2);
   gr_PtSpecTM15020_30_50_model->SetLineColor(kOrange+1);
@@ -207,13 +215,16 @@ void plot_spectrum_pt_30_50(){
   gr_PtSpecTM25020_30_50_model  ->SetFillColorAlpha(kBlue,0.15);
   gr_PtSpecTM25020_30_50_model ->SetLineColor(kBlue);
 
-  gr_ratio_PtSpecTM1_data  ->SetFillColorAlpha(kOrange,0.15);
-  gr_ratio_PtSpecTM1_data ->SetLineColor(kOrange);
+  gr_ratio_PtSpecTM1_data  ->SetFillColorAlpha(kOrange+1,0.2);
+  gr_ratio_PtSpecTM1_data ->SetLineColor(kOrange+1);
 
   gr_ratio_PtSpecTM2_data  ->SetFillColorAlpha(kBlue,0.15);
   gr_ratio_PtSpecTM2_data ->SetLineColor(kBlue);
   
+  gr_ratio_uncertainty_data->SetFillColorAlpha(kRed,0.45);
+  gr_ratio_uncertainty_data->SetLineColor(kRed);
 
+  
 
   TCanvas *c_temp=new TCanvas("c_temp","",1000,1000);
   TPad *pad1 = new TPad("pad1", "", 0, 0.4, 1, 1);
@@ -229,16 +240,22 @@ void plot_spectrum_pt_30_50(){
   pad1->SetLogy();
 
 
-  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,15,100,5e-6,3e-2);
-  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,2.7);
+  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/d#it{y}d#it{p}_{T} (GeV/#it{c})^{-1}",100,0,15,100,2e-6,3e-2);
+  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,2.1);
 
   SetTH2F(h_dummy1,0.07,0.07,0.9,0.9,0.05,0.06,0.01,0.01,504,504);
   SetTH2F(h_dummy2,0.11,0.11, 1,0.5, 0.1,0.09, 0.02,0.02, 504,504);
 
   SetTGraphError(gr_PtSpecStat5020_30_50,20,2.5,2,2,2,0);
   SetTGraphError(gr_PtSpecSyst5020_30_50,20,2.5,2,2,2,0);
-  
+
+  //  SetTGraphError(gr_ratio_uncertainty_data,20,2.5,2,2,2,0);
+
   SetErrorX(gr_PtSpecSyst5020_30_50,0.5);
+  SetErrorX(gr_ratio_uncertainty_data,0.2);
+  
+
+  
   
   h_dummy1->Draw();
 
@@ -256,16 +273,16 @@ void plot_spectrum_pt_30_50(){
   tex1.DrawLatex(0.62,0.88,"ALICE");
   tex1.SetTextSize(0.058);
 
-  tex1.DrawLatex(0.5,0.8,"Pb-Pb, 30-50%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.5,0.72,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.46,0.8,"Pb-Pb, 30-50%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.46,0.72,"Inclusive J/#psi, |#it{y}|<0.9");
 
   
-  TLegend *legend = new TLegend(0.2,0.17,0.5,0.45);
+  TLegend *legend = new TLegend(0.17,0.06,0.46,0.35);
   SetLegend(legend,42,0.06,0.0,0.0,0.0,0.0);
-  legend->AddEntry( gr_PtSpecStat5020_30_50,"Data","P");
-  legend->AddEntry(gr_PtSpecTM15020_30_50_model,"TAMU","f");
-  legend->AddEntry(gr_PtSpecTM25020_30_50_model,"THU","f");  
-  legend->AddEntry(gr_PtSpecSHM5020_30_50_model,"SHM","f");
+  legend->AddEntry( gr_PtSpecStat5020_30_50,lg_data,"P");
+  legend->AddEntry(gr_PtSpecTM15020_30_50_model,lg_TM1,"f");
+  legend->AddEntry(gr_PtSpecTM25020_30_50_model,lg_TM2,"f");  
+  legend->AddEntry(gr_PtSpecSHM5020_30_50_model,lg_SHM,"f");
   legend->Draw();
 
 
@@ -273,8 +290,11 @@ void plot_spectrum_pt_30_50(){
   TLine *line_unity= (TLine *)GetLine(0,1.0,15,1.0,2,3,7);
   h_dummy2->Draw();
   line_unity->Draw("same");
-  gr_ratio_PtSpecTM1_data->Draw("FL same");
+
+  gr_ratio_uncertainty_data->Draw("sameE2");
+
   gr_ratio_PtSpecTM2_data->Draw("FL same");
+  gr_ratio_PtSpecTM1_data->Draw("FL same");
   
   c_temp->SaveAs("output/Spectrum_Vs_pt_30_50_015_model_ee.pdf");
 

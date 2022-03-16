@@ -153,13 +153,13 @@ void plot_raa_cent_model(){
   tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
   tex1.DrawLatex(0.18,0.70,"#it{p}_{T} > 0.15 GeV/#it{c}");
   
-  TLegend  *legend= new TLegend(0.65,0.7,0.92,0.92);
-  SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
+  TLegend  *legend= new TLegend(0.52,0.7,0.82,0.92);
+  SetLegend(legend,42,0.044,0.0,0.0,0.0,0.0);
   
-  legend->AddEntry( gr_CentRaaStat5020,"Data","P");
-  legend->AddEntry(gr_CentRaaTM15020_model,"TAMU","f");
-  legend->AddEntry(gr_CentRaaTM25020_model,"THU","f");
-  legend->AddEntry(gr_CentRaaSHM5020_model,"SHM (old)","f");
+  legend->AddEntry( gr_CentRaaStat5020,lg_data,"P");
+  legend->AddEntry(gr_CentRaaTM15020_model,lg_TM1,"f");
+  legend->AddEntry(gr_CentRaaTM25020_model,lg_TM2,"f");
+  legend->AddEntry(gr_CentRaaSHM5020_model,lg_SHM,"f");
   
   legend->Draw();
 
