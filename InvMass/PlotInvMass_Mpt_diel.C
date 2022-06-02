@@ -68,7 +68,7 @@ void plot_0_5_Cent()
   c->cd();
   pad1->cd();
 
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{ee} (GeV/#it{c}^{2});#LT #it{p}^{2}_{T}^{ee} #GT (GeV^{2}/#it{c^{2}})",100,2.5,3.4,100,1.5,2); 
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{ee} (GeV/#it{c}^{2});#LT #it{p}_{T}^{ee} #GT (GeV/#it{c})",100,2.5,3.4,100,1.5,2); 
 
   SetTH2F(mh2Dummy,0.055,0.055,0.95,0.95,0.05,0.05,0.01,0.01,504,504);
 
@@ -133,7 +133,7 @@ void plot_70_90_Cent()
   pad1->Draw();  
   pad1->cd();
 
- TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{ee} (GeV/#it{c}^{2});#LT #it{p}^{2}_{T}^{ee} #GT (GeV^{2}/#it{c^{2}})",100,2.3,3.5,100,1.5,3.2); 
+ TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{ee} (GeV/#it{c}^{2});#LT #it{p}_{T}^{ee} #GT (GeV^{2}/#it{c})",100,2.3,3.5,100,1.5,3.2); 
 
   SetTH2F(mh2Dummy,0.055,0.055,0.95,0.95,0.05,0.05,0.01,0.01,504,504);
   

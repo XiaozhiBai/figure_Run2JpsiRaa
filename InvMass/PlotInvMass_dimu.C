@@ -70,7 +70,7 @@ void PlotInvMass_dimu(){
   hMC->SetLineColor(kBlue);
 
   fResidual->SetLineWidth(2);
-  fResidual->SetLineColor(1);
+  fResidual->SetLineColor(4);
 
   fFit->SetLineColor(2);
   fFit->SetLineWidth(2);
@@ -118,7 +118,8 @@ void PlotInvMass_dimu(){
   hDummyUp->GetYaxis()->SetMaxDigits(3);
   hDummyLo->GetYaxis()->SetMaxDigits(3);
     
-  TCanvas *cInvMass = new TCanvas("cInvMass","cInvMass",800,1000);
+    TCanvas *cInvMass = new TCanvas("cInvMass","cInvMass",800,1000);
+  //  TCanvas *cInvMass = new TCanvas("cInvMass","cInvMass",2800,5000);
   auto padUp = new TPad("padUp","padUp",0.0,0.5,1,1);
   auto padLo = new TPad("padLo","padLo",0.,0.,1,0.5);
 

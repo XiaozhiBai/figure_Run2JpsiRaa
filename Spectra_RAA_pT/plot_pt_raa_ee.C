@@ -151,9 +151,11 @@ void plot_raa_pt_0_10(){
   tex1.DrawLatex(0.62,0.9,"ALICE");
   tex1.SetTextSize(0.047);
 
-  tex1.DrawLatex(0.47,0.84,"Pb-Pb, 0-10%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.47,0.84,"Pb#font[122]{-}Pb,0#font[122]{-}10%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
   tex1.DrawLatex(0.47,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
 
+  //  tex1.DrawLatex(0.17,0.65,"Pb#font[122]{-}Pb,0#font[122]{-}10%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+    
   TLegend *legend = new TLegend(0.47,0.5,0.85,0.75);
   SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
 

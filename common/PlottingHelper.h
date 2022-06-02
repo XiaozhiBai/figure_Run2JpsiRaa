@@ -18,10 +18,10 @@
 #include "TColor.h"
 
 const char * lg_data="Data";
-const char * lg_TM1="Transport (R.Rapp et al.)";
-const char * lg_TM2="Transport (P.Zhuang et al.)";
-const char * lg_SHM="SHM (A.Andronic et al.)";
-const char * lg_EL="Energy loss (R. Baier et al.)";
+const char * lg_TM1="Transport (R.Rapp #it{et al.})";
+const char * lg_TM2="Transport (P.Zhuang #it{et al.})";
+const char * lg_SHM="SHMc (A.Andronic #it{et al.})";
+const char * lg_EL="Energy loss (F.Arleo #it{et al.})";
 
 
 

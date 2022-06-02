@@ -100,8 +100,8 @@ void plot_pt_raa_mm()
   fileTHUA_pt_raa_20_40 = "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/cent2040-RAA-pt-forwdY-2022/theory-RAA-pt-b84.dat";
   fileTHUA_pt_raa_40_90 = "../models/PengfeiTM2/fig--forward-rapidity-2022_sigmacc718/cent4090-RAA-pt-forwdY-2022/theory-RAA-pt-b114.dat";
 
-  fileSHM_pt_raa_00_20 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";
-  fileSHM_pt_raa_20_40 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";
+  fileSHM_pt_raa_00_20 = "../models/SHMc/gRaaSHMc_fwdy_0_20.txt";
+  fileSHM_pt_raa_20_40 = "../models/SHMc/gRaaSHMc_fwdy_20_40.txt";
   fileSHM_pt_raa_40_90 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";
 
 
@@ -122,7 +122,7 @@ void plot_raa_pt_0_20(){
   
   TGraph * gr_PtRaaTM15020_00_20_model=  (TGraph *) GetPtRaaTM15020_model(28,fileTAMU_pt_raa_00_20);
   TGraph * gr_PtRaaTM25020_00_20_model=  (TGraph *) GetPtRaaTM15020_model(28,fileTHUA_pt_raa_00_20);
-  TGraph * gr_PtRaaSHM5020_00_20_model=  (TGraph *) GetPtRaaSHM5020_model(100,fileSHM_pt_raa_00_20);
+  TGraph * gr_PtRaaSHM5020_00_20_model=  (TGraph *) GetPtRaaTM15020_model(28,fileSHM_pt_raa_00_20);
 
   TGraphAsymmErrors * gr_PtRaaEL5020_00_20_model=  (TGraphAsymmErrors *) GetPtRaaEnergyLoss5020_model(fileEnergy_loss_model,"RAA_binned_centrality_0_20_ForwardRap");
   //  gr_PtRaaEL5020_00_20_model->Draw();
@@ -216,7 +216,8 @@ void plot_raa_pt_20_40(){
   
   TGraph * gr_PtRaaTM15020_20_40_model=  (TGraph *) GetPtRaaTM15020_model(28,fileTAMU_pt_raa_20_40);
   TGraph * gr_PtRaaTM25020_20_40_model=  (TGraph *) GetPtRaaTM25020_model(28,fileTHUA_pt_raa_20_40);
-  TGraph * gr_PtRaaSHM5020_20_40_model=  (TGraph *) GetPtRaaSHM5020_model(100,fileSHM_pt_raa_20_40);
+  TGraph * gr_PtRaaSHM5020_20_40_model=  (TGraph *) GetPtRaaTM15020_model(28,fileSHM_pt_raa_20_40);
+  //  TGraph * gr_PtRaaSHM5020_20_40_model=  (TGraph *) GetPtRaaSHM5020_model(100,fileSHM_pt_raa_20_40);
 
   TGraphAsymmErrors * gr_PtRaaEL5020_20_40_model=  (TGraphAsymmErrors *) GetPtRaaEnergyLoss5020_model(fileEnergy_loss_model,"RAA_binned_centrality_20_40_ForwardRap");
     
