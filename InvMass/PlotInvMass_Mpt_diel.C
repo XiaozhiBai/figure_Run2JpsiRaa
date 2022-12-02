@@ -63,14 +63,15 @@ void plot_0_5_Cent()
   
   TCanvas *c=new TCanvas("c","",1000,800);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
-  SetPad(pad1,0.03,0.13,0.12,0.03);
+  SetPad(pad1,0.03,0.14,0.15,0.03);
   pad1->Draw();
   c->cd();
   pad1->cd();
 
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{ee} (GeV/#it{c}^{2});#LT #it{p}_{T}^{ee} #GT (GeV/#it{c})",100,2.5,3.4,100,1.5,2); 
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{e^{+}e^{-}} (GeV/#it{c}^{2});#LT #it{p}_{T}^{e^{+}e^{-}} #GT (GeV/#it{c})",100,2.3,3.5,100,1.5,2.2);
+  //  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{e^{+}e^{-}} (GeV/#it{c}^{2});#LT #it{p}_{T}^{e^{+}e^{-}} #GT (GeV/#it{c})",100,2.5,3.4,100,1.5,2); 
 
-  SetTH2F(mh2Dummy,0.055,0.055,0.95,0.95,0.05,0.05,0.01,0.01,504,504);
+  SetTH2F(mh2Dummy,0.055,0.055,1.1,1.1,0.05,0.05,0.01,0.01,504,504);
 
   hUS->SetMarkerStyle(20);
   hUS->SetMarkerSize(2.2);
@@ -91,9 +92,10 @@ void plot_0_5_Cent()
   hUS->Draw("same");
   fFit->Draw("same");
   
-  TLegend *legend1 = new TLegend(0.17,0.7,0.5,0.9);
+  //  TLegend *legend1 = new TLegend(0.17,0.7,0.5,0.9);
+  TLegend *legend1 = new TLegend(0.5,0.4,0.85,0.6);
 
-  SetLegend(legend1,42,0.042,0.0,0.0,0.0,0.0);
+  SetLegend(legend1,42,0.051,0.0,0.0,0.0,0.0);
   
   legend1->AddEntry(hUS,"Same event ","p");
   legend1->AddEntry(hME,"Mixed events","l");
@@ -105,11 +107,12 @@ void plot_0_5_Cent()
   latex1.SetTextFont(42);
   latex1.SetTextSize(0.05);
   latex1.DrawLatex(0.6, 0.9, "ALICE");
-  latex1.SetTextSize(0.04);
+  latex1.SetTextSize(0.05);
 
-  latex1.DrawLatex(0.5, 0.83, "Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  latex1.DrawLatex(0.5, 0.76, "Centrality 0-5%, |#it{y}|<0.9");
-  latex1.DrawLatex(0.5, 0.68, "Inclusive J/#psi, 0.15 < #it{p}_{T} <15 GeV/#it{c}");
+  latex1.DrawLatex(0.5, 0.83, "Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  latex1.DrawLatex(0.5, 0.76, "Centrality 0#font[122]{-}5%, |#it{y}|<0.9");
+  //  latex1.DrawLatex(0.5, 0.68, "Inclusive J/#psi, 0.15 < #it{p}_{T} <15 GeV/#it{c}");
+  latex1.DrawLatex(0.5, 0.68, "0.15 < #it{p}_{T} <15 GeV/#it{c}");
 
   c->SaveAs("output/InvMass_midy_MeanpT_0_5.pdf");
 }
@@ -127,15 +130,15 @@ void plot_70_90_Cent()
 
   TCanvas *c=new TCanvas("c","",1000,800);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
-  SetPad(pad1,0.03,0.13,0.12,0.03);
+  SetPad(pad1,0.03,0.14,0.13,0.03);
 
   c->cd();
   pad1->Draw();  
   pad1->cd();
 
- TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{ee} (GeV/#it{c}^{2});#LT #it{p}_{T}^{ee} #GT (GeV^{2}/#it{c})",100,2.3,3.5,100,1.5,3.2); 
+ TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{m}_{e^{+}e^{-}} (GeV/#it{c}^{2});#LT #it{p}_{T}^{e^{+}e^{-}} #GT (GeV/#it{c})",100,2.3,3.5,100,1.5,2.8); 
 
-  SetTH2F(mh2Dummy,0.055,0.055,0.95,0.95,0.05,0.05,0.01,0.01,504,504);
+  SetTH2F(mh2Dummy,0.055,0.055,1.1,1.1,0.05,0.05,0.01,0.01,504,504);
   
   
   hUS->SetMarkerStyle(20);
@@ -174,12 +177,13 @@ void plot_70_90_Cent()
   latex1.SetNDC();
   latex1.SetTextFont(42);
   latex1.SetTextSize(0.05);
-  latex1.DrawLatex(0.6, 0.9, "ALICE");
-  latex1.SetTextSize(0.042);
+  /* latex1.DrawLatex(0.6, 0.9, "ALICE"); */
+  latex1.SetTextSize(0.05);
 
-  latex1.DrawLatex(0.5, 0.82, "Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  latex1.DrawLatex(0.5, 0.76, "Centrality 70-90%, |#it{y}|<0.9");
-  latex1.DrawLatex(0.5, 0.70, "Inclusive J/#psi, 0.15 < #it{p}_{T} <15 GeV/#it{c}");
+  /* latex1.DrawLatex(0.5, 0.82, "Pb#font[122]{-}Pb #sqrt{#it{s}_{NN}} = 5.02 TeV"); */
+  latex1.DrawLatex(0.45, 0.82, "Centrality 70#font[122]{-}90%, |#it{y}|<0.9");
+  //  latex1.DrawLatex(0.45, 0.70, "Inclusive J/#psi, 0.15 < #it{p}_{T} <15 GeV/#it{c}");
+  latex1.DrawLatex(0.45, 0.75, "0.15 < #it{p}_{T} <15 GeV/#it{c}");
 
   c->SaveAs("output/InvMass_midy_MeanpT_70_90.pdf");
 }

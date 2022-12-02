@@ -141,12 +141,12 @@ void plot_ratio_cent_model_JpsitoD_ratio(){
   tex1.SetTextFont(42);
   tex1.SetTextSize(0.055);
   tex1.SetNDC();
-  tex1.DrawLatex(0.21,0.9,"ALICE Preliminary");
+  tex1.DrawLatex(0.21,0.9,"ALICE");
   tex1.SetTextSize(0.047);
 
   
-  tex1.DrawLatex(0.21,0.84,"Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.21,0.77,"Inclusive J/#psi, |#it{y}| < 0.9, 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
+  tex1.DrawLatex(0.21,0.84,"Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.21,0.77,"Inclusive J/#psi, |#it{y}| < 0.9, 0.15 < #it{p}_{T} <  15 GeV/#it{c}");
   tex1.DrawLatex(0.21,0.70,"Prompt D^{0}, |#it{y}| < 0.5, #it{p}_{T} > 0");
   
   TLegend  *legend= new TLegend(0.2,0.55,0.56,0.65);
@@ -245,11 +245,11 @@ void plot_ratio_cent_model_DtoJpsi_ratio(){
   tex1.SetTextFont(42);
   tex1.SetTextSize(0.055);
   tex1.SetNDC();
-  tex1.DrawLatex(0.21,0.9,"ALICE Preliminary");
+  tex1.DrawLatex(0.21,0.9,"ALICE");
   tex1.SetTextSize(0.047);
 
   
-  tex1.DrawLatex(0.21,0.84,"Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.21,0.84,"Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
   tex1.DrawLatex(0.21,0.77,"Inclusive J/#psi, |#it{y}| < 0.9, 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
   tex1.DrawLatex(0.21,0.70,"Prompt D^{0}, |#it{y}| < 0.5, #it{p}_{T} > 0");
   

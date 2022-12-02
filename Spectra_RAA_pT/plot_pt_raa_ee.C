@@ -67,11 +67,11 @@ void plot_pt_raa_ee()
 
   fileTAMU_pt_raa_0_10 = "../models/Ralf_Rapp/data/m0-10RAA.dat";
   fileTHUA_pt_raa_0_10 = "../models/PengfeiTM2/fig--central-rapidity-2022/RAA-pt-cent0-10--2022Jan5/theory-RAA-pt-cent0-10.dat";
-  fileSHM_pt_raa_0_10 = "input/models/SHM_PtDep_5020_midy_Cent0_11012019.txt";    
+  fileSHM_pt_raa_0_10 = "../models/SHMc/gRaaSHMc_midy_0_10.txt";    
 
   fileTAMU_pt_raa_30_50 = "../models/Ralf_Rapp/data/m30-50RAA.dat";
   fileTHUA_pt_raa_30_50 = "../models/PengfeiTM2/fig--central-rapidity-2022/RAA-pt-cent30-50-2022Jan5/theory-RAA-pt-cent30-50.dat";
-  fileSHM_pt_raa_30_50 = "input/models/SHM_PtDep_5020_midy_Cent3_11012019.txt";    
+  fileSHM_pt_raa_30_50 = "../models/SHMc/gRaaSHMc_midy_30_50.txt";    
 
   //energy losse mdoel
   fileEnergy_loss_model= "../models/energy-loss-model/ElossPredictions.root";
@@ -88,7 +88,7 @@ void plot_raa_pt_0_10(){
 
   TGraph * gr_PtRaaTM15020_0_10_model=  (TGraph *) GetPtRaaTM15020_model(16,fileTAMU_pt_raa_0_10);
   TGraph * gr_PtRaaTM25020_0_10_model=  (TGraph *) GetPtRaaTM15020_model(16,fileTHUA_pt_raa_0_10);
-  TGraph * gr_PtRaaSHM5020_0_10_model=  (TGraph *) GetPtRaaSHM5020_model(100,fileSHM_pt_raa_0_10);
+  TGraph * gr_PtRaaSHM5020_0_10_model=  (TGraph *) GetPtRaaTM15020_model(16,fileSHM_pt_raa_0_10);
 
   TGraphAsymmErrors * gr_PtRaaEL5020_0_10_model=  (TGraphAsymmErrors *) GetPtRaaEnergyLoss5020_model(fileEnergy_loss_model,"RAA_binned_centrality_0_10");
   
@@ -111,12 +111,12 @@ void plot_raa_pt_0_10(){
   TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
-  SetPad(pad1,0.02,0.15,0.1,0.03);
+  SetPad(pad1,0.02,0.17,0.14,0.03);
   c_temp->cd();
   pad1->Draw();
 
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{p}_{T} (GeV/#it{c});#it{R}_{AA}",100,0,15,100,0.,2.5);
-  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{p}_{T} (GeV/#it{c});#it{R}_{AA}",100,0,15,100,0.,2.2);
+  SetTH2F(mh2Dummy,0.07,0.07,1.15,0.88,0.06,0.06,0.015,0.015,504,504);
   
   TBox *boxEle0010    = new TBox(14.3,1.-sqrt(NormUncert1*NormUncert1+common_un*common_un),14.7,1.+sqrt(NormUncert1*NormUncert1+common_un*common_un));
   boxEle0010->SetFillColor(kRed);
@@ -152,11 +152,11 @@ void plot_raa_pt_0_10(){
   tex1.SetTextSize(0.047);
 
   tex1.DrawLatex(0.47,0.84,"Pb#font[122]{-}Pb,0#font[122]{-}10%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.47,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.47,0.77,"Inclusive J/#psi, |#it{y}| < 0.9");
 
   //  tex1.DrawLatex(0.17,0.65,"Pb#font[122]{-}Pb,0#font[122]{-}10%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
     
-  TLegend *legend = new TLegend(0.47,0.5,0.85,0.75);
+  TLegend *legend = new TLegend(0.43,0.41,0.8,0.71);
   SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
 
   legend->AddEntry( gr_PtRaaStat5020_00_10,lg_data,"P");
@@ -168,6 +168,18 @@ void plot_raa_pt_0_10(){
   legend->Draw();
   gPad->RedrawAxis();
   c_temp->SaveAs("output/Raa_Vs_pt_0_10_015_model_ee.pdf");
+
+
+  TFile *file=new TFile("Jpsi_RAA_Npart.root","UPDATE");
+  file->cd();
+
+  gr_PtRaaTM15020_0_10_model->Write("gr_RaaPt_Ralf_Rapp_5020_midy_0_10_model");
+  gr_PtRaaTM25020_0_10_model->Write("gr_RaaPt_Pengfei_5020_midy_0_10_model");
+  gr_PtRaaSHM5020_0_10_model->Write("gr_RaaPt_SHM_5020_midy_0_10_model");
+  gr_PtRaaEL5020_0_10_model->Write("gr_RaaPt_Eloss_5020_midy_0_10_model");
+
+  
+  
   delete mh2Dummy;
   delete c_temp;
 }
@@ -179,7 +191,7 @@ void plot_raa_pt_30_50(){
 
   TGraph * gr_PtRaaTM15020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileTAMU_pt_raa_30_50);
   TGraph * gr_PtRaaTM25020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileTHUA_pt_raa_30_50);
-  TGraph * gr_PtRaaSHM5020_30_50_model=  (TGraph *)GetPtRaaSHM5020_model(100,fileSHM_pt_raa_0_10);
+  TGraph * gr_PtRaaSHM5020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileSHM_pt_raa_30_50);
 
 
   TGraphAsymmErrors * gr_PtRaaEL5020_30_50_model=  (TGraphAsymmErrors *) GetPtRaaEnergyLoss5020_model(fileEnergy_loss_model,"RAA_binned_centrality_30_50");
@@ -203,12 +215,12 @@ void plot_raa_pt_30_50(){
   TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
-  SetPad(pad1,0.02,0.15,0.1,0.03);
+  SetPad(pad1,0.03,0.17,0.14,0.03);
   c_temp->cd();
   pad1->Draw();
 
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{p}_{T} (GeV/#it{c});#it{R}_{AA}",100,0,15,100,0.,2.5);
-  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{p}_{T} (GeV/#it{c});#it{R}_{AA}",100,0,15,100,0.,2.2);
+  SetTH2F(mh2Dummy,0.07,0.07,1.15,0.88,0.06,0.06,0.015,0.015,504,504);
   
   
   TBox *boxEle3050    = new TBox(14.3,1.-sqrt(NormUncert3*NormUncert3+common_un*common_un),14.7,1.+sqrt(NormUncert3*NormUncert3+common_un*common_un));
@@ -240,8 +252,8 @@ void plot_raa_pt_30_50(){
   tex1.DrawLatex(0.62,0.9,"ALICE");
   tex1.SetTextSize(0.047);
 
-  tex1.DrawLatex(0.48,0.84,"Pb-Pb, 30-50%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.48,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.48,0.84,"Pb#font[122]{-}Pb, 30#font[122]{-}50%, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.48,0.77,"Inclusive J/#psi, |#it{y}| < 0.9");
 
   TLegend *legend = new TLegend(0.47,0.5,0.85,0.75);
   SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
@@ -287,12 +299,12 @@ void plot_raa_pt_0_10_30_50(){
   TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
-  SetPad(pad1,0.02,0.15,0.1,0.03);
+  SetPad(pad1,0.03,0.17,0.14,0.03);
   c_temp->cd();
   pad1->Draw();
 
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{p}_{T} (GeV/#it{c});#it{R}_{AA}",100,0,15,100,0.,2);
-  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{p}_{T} (GeV/#it{c});#it{R}_{AA}",100,0,15,100,0.,2.2);
+  SetTH2F(mh2Dummy,0.07,0.07,1.1,0.9,0.06,0.06,0.015,0.015,504,504);
 
 
   SetTGraphError(gr_PtRaaStat5020_00_10,20,2.5,2,2,2,0);
@@ -318,19 +330,19 @@ void plot_raa_pt_0_10_30_50(){
   
   TLatex tex1(0.5,0.5," ");
   tex1.SetTextFont(42);
-  tex1.SetTextSize(0.055);
+  tex1.SetTextSize(0.06);
   tex1.SetNDC();
   tex1.DrawLatex(0.62,0.9,"ALICE");
-  tex1.SetTextSize(0.047);
+  tex1.SetTextSize(0.052);
 
-  tex1.DrawLatex(0.5,0.84,"Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.5,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.5,0.84,"Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.5,0.77,"Inclusive J/#psi, |#it{y}| < 0.9");
 
   TLegend *legend = new TLegend(0.5,0.62,0.9,0.755);
-  SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);
+  SetLegend(legend,42,0.05,0.0,0.0,0.0,0.0);
 
-  legend->AddEntry( gr_PtRaaStat5020_00_10,"0-10%","P");
-  legend->AddEntry( gr_PtRaaStat5020_30_50,"30-50%","P");
+  legend->AddEntry( gr_PtRaaStat5020_00_10,"0#font[122]{-}10%","P");
+  legend->AddEntry( gr_PtRaaStat5020_30_50,"30#font[122]{-}50%","P");
   legend->Draw();
   TLine *line_unity= (TLine *)GetLine(0,1.0,15,1.0,1,3,7);
   line_unity->Draw();

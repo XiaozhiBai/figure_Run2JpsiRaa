@@ -46,7 +46,7 @@ double NormUncert3   = 0.016; // 30-50 %
 double common_un=0.022;
 
 
-
+bool run_difference=true;
 
 inline TGraphErrors *GetPtRaaStat5020_00_10_midy();
 inline TGraphErrors *GetPtRaaSyst5020_00_10_midy();
@@ -77,7 +77,7 @@ void plot_pt_raa_fowd_mid()
   //gStyle->SetOptStat(0);
 
   final_results_pt_midy=new TFile("input/data/Raa_final.root","READ");
-  final_results_pt_fwdy= new TFile("input/data/mumu/RAA/RAA_vs_pT_0to20.root","READ");
+  final_results_pt_fwdy= new TFile("input/data/mumu/RAA_0-20.root","READ");
  
   fileTAMU_pt_raa_0_10_midy = "input/models/TAMU_5020_0010.txt";
   fileSHM_pt_raa_0_10_midy= "input/models/SHM_PtDep_5020_midy_Cent0_11012019.txt";    
@@ -101,12 +101,12 @@ void plot_raa_pt_0_10_data(){
   TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
-  SetPad(pad1,0.02,0.15,0.1,0.03);
+  SetPad(pad1,0.03,0.17,0.14,0.03);
   c_temp->cd();
   pad1->Draw();
 
   TH2F * mh2Dummy=new TH2F("mh2Dummy",";#it{p}_{T} (GeV/#it{c});#it{R}_{AA}",100,0,20,100,0.,2);
-  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+  SetTH2F(mh2Dummy,0.07,0.07,1.1,0.88,0.06,0.06,0.015,0.015,504,504);
   
   pad1->cd();
   /* TBox *boxEle0010    = new TBox(14.3,1.-NormUncert1,14.7,1.+NormUncert1); */
@@ -136,11 +136,15 @@ void plot_raa_pt_0_10_data(){
   TBox *boxEle0010    = new TBox(19.2,1.-sqrt(NormUncert1*NormUncert1+common_un*common_un),19.77,1.+sqrt(NormUncert1*NormUncert1+common_un*common_un));
   boxEle0010->SetFillColor(kRed);
 
+
+  
   TBox *boxEle3050    = new TBox(18.9,1.-NormUncert_Fw,19.3,1.+NormUncert_Fw);
   boxEle3050->SetFillColor(4);
 
   boxEle0010->Draw("same");
   boxEle3050->Draw("same");
+  cout<< " relatative correlated uncertainties at mid 0-10% "<< sqrt(NormUncert1*NormUncert1+common_un*common_un)<<endl;
+  cout<< " relatative correlated uncertainties at fwd 0-20% "<< NormUncert_Fw<<endl;
 
   
   TLine *line_unity= (TLine *)GetLine(0,1.0,20,1.0,1,2,7);
@@ -153,18 +157,26 @@ void plot_raa_pt_0_10_data(){
   tex1.DrawLatex(0.62,0.9,"ALICE");
   tex1.SetTextSize(0.047);
 
-  tex1.DrawLatex(0.5,0.84,"Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.5,0.84,"Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
   tex1.DrawLatex(0.5,0.77,"Inclusive J/#psi");
 
   /* TLegend *legend = new TLegend(0.5,0.6,0.85,0.75); */
   /* SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0); */
 
-  TLegend *legend = new TLegend(0.17,0.75,0.4,0.92);
+  TLegend *legend = new TLegend(0.48,0.6,0.7,0.75);
   SetLegend(legend,42,0.045,0.0,0.0,0.0,0.0);  
-  legend->AddEntry( gr_PtRaaStat5020_00_10_midy,"0-10%, |#it{y}|<0.9","P");
-  legend->AddEntry( gr_PtRaaStat5020_00_20_fwdy,"0-20%, 2.5 <#it{y}<4","P");
+  legend->AddEntry( gr_PtRaaStat5020_00_10_midy,"0#font[122]{-}10%, |#it{y}| < 0.9","P");
+  legend->AddEntry( gr_PtRaaStat5020_00_20_fwdy,"0#font[122]{-}20%, 2.5 < #it{y} < 4","P");
     
   legend->Draw();
+
+  TFile *file=new TFile("Jpsi_RAA_Npart.root","UPDATE");
+  file->cd();
+  gr_PtRaaStat5020_00_10_midy->Write("gr_RaaPtStat5020_0_10_midy_data");
+  gr_PtRaaSyst5020_00_10_midy->Write("gr_RaaPtSyst5020_0_10_midy_data");
+  gr_PtRaaStat5020_00_20_fwdy->Write("gr_RaaPtStat5020_0_20_fwdy_data");
+  gr_PtRaaSyst5020_00_20_fwdy->Write("gr_RaaPtSyst5020_0_20_fwdy_data");
+ 
 
   
   c_temp->SaveAs("output/Raa_Vs_pt_midy_fwdy.pdf");
@@ -172,6 +184,8 @@ void plot_raa_pt_0_10_data(){
   delete mh2Dummy;
   delete c_temp;
 
+
+  
 }
 
 void plot_raa_pt_0_10_model(){
@@ -209,8 +223,8 @@ void plot_raa_pt_0_10_model(){
   c_temp->cd();
   gPad->SetTopMargin(0.02);
   gPad->SetRightMargin(0.03);
-  gPad->SetBottomMargin(0.14);  
-  gPad->SetLeftMargin(0.12);
+  gPad->SetBottomMargin(0.17);  
+  gPad->SetLeftMargin(0.14);
 
   TH2F * mh2Dummy=new TH2F("mh2Dummy","",100,0,15,100,0.,2.5);
   mh2Dummy->GetXaxis()->SetTitle("#it{p}_{T} (GeV/#it{c})");
@@ -218,8 +232,8 @@ void plot_raa_pt_0_10_model(){
 
   mh2Dummy->GetXaxis()->SetTitleSize(0.06);
   mh2Dummy->GetYaxis()->SetTitleSize(0.06);
-  mh2Dummy->GetXaxis()->SetTitleOffset(0.9);
-  mh2Dummy->GetYaxis()->SetTitleOffset(0.7);
+  mh2Dummy->GetXaxis()->SetTitleOffset(1.2);
+  mh2Dummy->GetYaxis()->SetTitleOffset(1.1);
   mh2Dummy->GetXaxis()->SetLabelSize(0.05);
   mh2Dummy->GetYaxis()->SetLabelSize(0.05);
 
@@ -235,7 +249,8 @@ void plot_raa_pt_0_10_model(){
   TBox *boxEle3050    = new TBox(13.9,1.-NormUncert_Fw,14.3,1.+NormUncert_Fw);
   boxEle3050->SetFillColor(4);
 
-
+  boxEle0010->Print("all");
+  boxEle3050->Print("all");
   
   
   gr_PtRaaStat5020_00_10_midy->SetMarkerStyle(20);
@@ -333,7 +348,7 @@ void plot_raa_pt_0_10_model(){
   tex2.SetTextFont(22);
   tex2.DrawLatex(0.27,0.9,"ALICE");
   tex2.SetTextSize(0.04);
-  tex2.DrawLatex(0.27,0.84,"Pb-Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex2.DrawLatex(0.27,0.84,"Pb#font[122]{-}Pb #sqrt{#it{s}_{NN}} = 5.02 TeV");
   tex2.DrawLatex(0.27,0.78,"Inclusive J/#psi");
 
   
@@ -343,6 +358,99 @@ void plot_raa_pt_0_10_model(){
 
   delete mh2Dummy;
   delete c_temp;
+  if(run_difference)
+    {
+
+      cout<< " mwdy stst."<<endl;
+      gr_PtRaaStat5020_00_10_midy->Print("all"); 
+      cout<< " mwdy sys."<<endl;
+      gr_PtRaaSyst5020_00_10_midy->Print("all"); 
+
+      cout<< " fwdy stat"<<endl;
+      gr_PtRaaStat5020_00_20_fwdy->Print("all"); 
+      cout<< " fwdy syst."<<endl;
+      gr_PtRaaSyst5020_00_20_fwdy->Print("all"); 
+
+
+      Double_t  raa_mid=0.0;
+      Double_t  raa_mid_err=0.0;
+      
+      Double_t  raa_mid_tem_x=0.0;
+      Double_t  raa_mid_tem_y=0.0;
+
+      Double_t  raa_mid_tem_sts_err=0.0;
+      Double_t  raa_mid_tem_sys_err=0.0;
+
+      Double_t  raa_fwd=0.0;
+      Double_t  raa_fwd_err=0.0;
+      
+      Double_t  raa_fwd_tem_x=0.0;
+      Double_t  raa_fwd_tem_y=0.0;
+
+      Double_t  raa_fwd_tem_sts_err=0.0;
+      Double_t  raa_fwd_tem_sys_err=0.0;
+      
+
+      
+      for(int i=0;i<3;i++)
+	{
+
+	  gr_PtRaaStat5020_00_10_midy->GetPoint(i,raa_mid_tem_x,raa_mid_tem_y);
+      
+	  raa_mid_tem_sts_err=gr_PtRaaStat5020_00_10_midy->GetErrorY(i);
+	  raa_mid_tem_sys_err=gr_PtRaaSyst5020_00_10_midy->GetErrorY(i);
+	  
+	  //	  cout<< " "<<i <<" "<<raa_mid_tem_x<< "  "<<raa_mid_tem_y<< " sts."<< raa_mid_tem_x_err<<endl;
+	  raa_mid+=raa_mid_tem_y;
+
+
+	  raa_mid_err +=raa_mid_tem_sts_err *raa_mid_tem_sts_err;
+	  raa_mid_err +=raa_mid_tem_sys_err *raa_mid_tem_sys_err;
+
+	  cout<< "raa_mid"<< raa_mid<< " raa_mid_err" << raa_mid_err<<endl;
+
+
+	  // fwdy 
+	  gr_PtRaaStat5020_00_20_fwdy->GetPoint(i,raa_fwd_tem_x,raa_fwd_tem_y);
+      
+	  raa_fwd_tem_sts_err=gr_PtRaaStat5020_00_20_fwdy->GetErrorY(i);
+	  raa_fwd_tem_sys_err=gr_PtRaaSyst5020_00_20_fwdy->GetErrorY(i);
+	  
+	  //	  cout<< " "<<i <<" "<<raa_fwd_tem_x<< "  "<<raa_fwd_tem_y<< " sts."<< raa_fwd_tem_x_err<<endl;
+	  raa_fwd+=raa_fwd_tem_y;
+
+
+	  raa_fwd_err +=raa_fwd_tem_sts_err *raa_fwd_tem_sts_err;
+	  raa_fwd_err +=raa_fwd_tem_sys_err *raa_fwd_tem_sys_err;
+
+	  cout<< "raa_fwd"<< raa_fwd<< " raa_fwd_err" << raa_fwd_err<<endl;
+
+	  
+
+	  
+	  
+	}	
+
+      cout<<" XXX difference"<<endl;
+
+      raa_mid/=3.;
+      raa_fwd/=3.;
+
+      cout<< "mid"<<  raa_mid<< " fwd"<< raa_fwd<<endl;
+      Double_t diff= abs(raa_fwd-raa_mid);
+      //      diff/=3.;
+      Double_t err=raa_fwd_err+raa_mid_err;
+      err/=9.0;
+
+      err+=(0.023*raa_mid*0.023*raa_mid)+(0.04*raa_fwd*0.04*raa_fwd);
+      err=sqrt(err);
+
+      cout<< "diff "<<diff<< "  "<<err<< " "<< diff/err<<endl;
+      
+    }
+
+
+  
 }
 
 TGraphErrors *GetPtRaaStat5020_00_10_midy(){
@@ -361,27 +469,16 @@ TGraphErrors *GetPtRaaSyst5020_00_10_midy(){
 
 TGraphErrors *GetPtRaaStat5020_00_20_fwdy(){
 
-TGraphAsymmErrors* grAPtRaaStat5020_00_20= (TGraphAsymmErrors *) final_results_pt_fwdy ->Get("gr_Raa_CL");
-
-  grAPtRaaStat5020_00_20->RemovePoint(15);
-
-  TGraphErrors *grPtRaaStat5020_00_20 = (TGraphErrors *) TGraphAsymmErrors_to_TGraphErrors(grAPtRaaStat5020_00_20);
-
-  
-  return grPtRaaStat5020_00_20;
+TGraphErrors* grAPtRaaStat5020_0_20= (TGraphErrors *) final_results_pt_fwdy ->Get("gr_RAA_centbin1");
+  return grAPtRaaStat5020_0_20;
 
   
 
 }
 TGraphErrors *GetPtRaaSyst5020_00_20_fwdy(){
 
-  TGraphAsymmErrors* grAPtRaaSyst5020_00_20= (TGraphAsymmErrors *) final_results_pt_fwdy ->Get("gr_Raa_syst_CL");
-  grAPtRaaSyst5020_00_20->RemovePoint(15);
-
-  TGraphErrors *grPtRaaSyst5020_00_20 = (TGraphErrors *) TGraphAsymmErrors_to_TGraphErrors(grAPtRaaSyst5020_00_20);
-  return grPtRaaSyst5020_00_20;
-
-  
+  TGraphErrors* grAPtRaaSyst5020_0_20= (TGraphErrors *) final_results_pt_fwdy ->Get("gr_RAA_syst_centbin1");
+  return grAPtRaaSyst5020_0_20;  
 
 }
 

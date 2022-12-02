@@ -142,11 +142,11 @@ void plot_meanpT_data()
   TCanvas *c1=new TCanvas("c1","",1100,850);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
-  SetPad(pad1,0.02,0.15,0.11,0.035);
+  SetPad(pad1,0.03,0.17,0.14,0.035);
   pad1->Draw();
 
   TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #LT #it{p}_{T} #GT (GeV/#it{c})",100,-20,400,100,0.3,4.5);
-  SetTH2F(mh2Dummy,0.07,0.075,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+  SetTH2F(mh2Dummy,0.07,0.075,1.1,0.8,0.06,0.06,0.015,0.015,504,504);
 
   
   pad1->cd();
@@ -250,16 +250,16 @@ void plot_meanpT_data()
   
 
   TLatex tex3(0.5,0.5," ");
-  tex3.SetTextSize(0.035);
+  tex3.SetTextSize(0.03);
   tex3.SetTextFont(42);
   tex3.SetNDC();
-  tex3.SetTextSize(0.035);
+  tex3.SetTextSize(0.038);
 
 
-  tex3.DrawLatex(0.3,0.89,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb-Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(0.3,0.89,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb#font[122]{-}Pb, |#it{y}| < 0.9");
   //  tex3.DrawLatex(0.3,0.83,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb-Pb, |#it{y}|<0.8");
-  tex3.DrawLatex(0.3,0.81,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu-Cu, Au-Au, |#it{y}|<0.35");
-  tex3.DrawLatex(0.3,0.72,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+  tex3.DrawLatex(0.3,0.81,"PHENIX, #sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu#font[122]{-}Cu, Au#font[122]{-}Au, |#it{y}| < 0.35");
+  tex3.DrawLatex(0.3,0.72,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb#font[122]{-}Pb, |#it{y}| < 1");
 
  
 
@@ -300,11 +300,13 @@ void plot_raa_data()
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
   c1->cd();
-  SetPad(pad1,0.02,0.15,0.12,0.035);
+  SetPad(pad1,0.02,0.17,0.14,0.035);
   pad1->Draw();
 
+  //  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2.6);
+  //  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #LT_{ }#it{p}^{2}_{T}_{ }#GT_{PbPb}/#LT_{ }#it{p}^{2}_{T}_{ }#GT_{pp}",100,0,400,100,0.2,2.6);
   TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2.6);
-  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.7,0.06,0.06,0.015,0.015,504,504);
+  SetTH2F(mh2Dummy,0.07,0.07,1.1,0.85,0.06,0.06,0.015,0.015,504,504);
 
   
   pad1->cd();
@@ -390,16 +392,16 @@ void plot_raa_data()
   
   TLatex tex3(0.5,0.5," ");
 
-  tex3.SetTextSize(0.035);
+  tex3.SetTextSize(0.03);
   tex3.SetTextFont(42);
   tex3.SetNDC();
-  tex3.SetTextSize(0.035);
+  tex3.SetTextSize(0.038);
   
 
-  tex3.DrawLatex(0.28,0.9,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(0.28,0.9,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb#font[122]{-}Pb , |#it{y}| < 0.9");
   //  tex3.DrawLatex(0.28,0.84,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
-  tex3.DrawLatex(0.28,0.81,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
-  tex3.DrawLatex(0.28,0.72,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+  tex3.DrawLatex(0.28,0.81,"PHENIX, #sqrt{#it{s}_{NN}} = 0.2 TeV, Cu#font[122]{-}Cu, Au#font[122]{-}Au, |#it{y}| < 0.35");
+  tex3.DrawLatex(0.28,0.72,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb#font[122]{-}Pb, |#it{y}| < 1");
 
 
   c1->SaveAs("output/raa_vs_Cent_data.pdf");
@@ -433,11 +435,11 @@ void plot_meanpT_model()
   TCanvas *c1=new TCanvas("c1","",1100,850);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
-  SetPad(pad1,0.02,0.15,0.11,0.035);
+  SetPad(pad1,0.02,0.17,0.13,0.035);
   pad1->Draw();
 
   TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #LT #it{p}_{T} #GT (GeV/#it{c})",100,0,400,100,1.5,3.8);
-  SetTH2F(mh2Dummy,0.07,0.075,0.95,0.6,0.06,0.06,0.015,0.015,504,504);
+  SetTH2F(mh2Dummy,0.07,0.075,1.1,0.7,0.06,0.06,0.015,0.015,504,504);
 
   SetTGraphError(gr_CentMptStat5020,20,2.5,2,2,2,0);
   SetTGraphError(gr_CentMptSyst5020,20,2.5,2,2,2,0);
@@ -463,8 +465,8 @@ void plot_meanpT_model()
   tex1.SetTextSize(0.04);
 
   
-  tex1.DrawLatex(0.18,0.84,"Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.18,0.84,"Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}| < 0.9");
   tex1.DrawLatex(0.18,0.70," 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
   
@@ -495,7 +497,7 @@ void plot_raa_model()
   TGraphErrors *gr_CentraaTM1_5020 = (TGraphErrors *) GetMeanpT_model(29,fileTAMU_cent_raa);
   TGraphErrors *gr_CentraaTM2_5020 = (TGraphErrors *) GetMeanpT_model(26,fileTHU_cent_raa);
   //TGraphErrors *gr_CentMptSHM_5020 = (TGraphErrors *) GetMeanpT_model(29,fileSHM_cent_MeanpT);
-
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2.6);
 
   gr_CentraaTM1_5020  ->SetFillColorAlpha(kOrange+1,0.2);
   gr_CentraaTM1_5020 ->SetLineColor(kOrange+1);
@@ -513,11 +515,12 @@ void plot_raa_model()
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
   c1->cd();
-  SetPad(pad1,0.02,0.15,0.12,0.035);
+  SetPad(pad1,0.02,0.17,0.13,0.035);
   pad1->Draw();
 
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2);
-  SetTH2F(mh2Dummy,0.07,0.07,0.95,0.7,0.06,0.06,0.015,0.015,504,504);
+  //  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT; #it{r}_{AA}",100,0,400,100,0.2,2);
+
+  SetTH2F(mh2Dummy,0.07,0.07,1.1,0.8,0.06,0.06,0.015,0.015,504,504);
 
   SetTGraphError(gr_CentraaStat5020,20,2.5,2,2,2,0);
   SetTGraphError(gr_CentraaSyst5020,20,2.5,2,2,2,0);
@@ -543,8 +546,8 @@ void plot_raa_model()
   tex1.SetTextSize(0.04);
 
   
-  tex1.DrawLatex(0.18,0.84,"Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
+  tex1.DrawLatex(0.18,0.84,"Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}| < 0.9");
   tex1.DrawLatex(0.18,0.70," 0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
 
@@ -1073,10 +1076,10 @@ void DrawLegendaryLegendMPt(){
   TLatex tex3(0.5,0.5," ");
   tex3.SetTextSize(0.035);
   // tex3.SetNDC();
-  tex3.DrawLatex(65,3.4,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb-Pb, |#it{y}|<0.9");
-  tex3.DrawLatex(65,3.23,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb-Pb, |#it{y}|<0.8");
-  tex3.DrawLatex(65,3.06,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu-Cu, Au-Au, |#it{y}|<0.35");
-  tex3.DrawLatex(65,2.89,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+  tex3.DrawLatex(65,3.4,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, pp, Pb#font[122]{-}Pb, |#it{y}|<0.9");
+  tex3.DrawLatex(65,3.23,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, pp, Pb#font[122]{-}Pb, |#it{y}|<0.8");
+  tex3.DrawLatex(65,3.06,"PHENIX, #sqrt{#it{s}_{NN}} = 0.2 TeV, pp, Cu#font[122]{-}Cu, Au#font[122]{-}Au, |#it{y}|<0.35");
+  tex3.DrawLatex(65,2.89,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb#font[122]{-}Pb, |#it{y}|<1");
 
 
    
@@ -1153,10 +1156,10 @@ void DrawLegendaryLegendMPtSq(){
   TLatex tex3(0.5,0.5," ");
   tex3.SetTextSize(0.035);
   // tex3.SetNDC();
-  tex3.DrawLatex(60,2.3,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb-Pb, |#it{y}|<0.9");
-  tex3.DrawLatex(60,2.15,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb-Pb, |#it{y}|<0.8");
-  tex3.DrawLatex(60,2.0,"PHENIX,#sqrt{#it{s}_{NN}} = 0.2 TeV, Cu-Cu, Au-Au, |#it{y}|<0.35");
-  tex3.DrawLatex(60,1.85,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb-Pb, |#it{y}|<1");
+  tex3.DrawLatex(60,2.3,"ALICE, #sqrt{#it{s}_{NN}} = 5.02 TeV, Pb#font[122]{-}Pb, |#it{y}| < 0.9");
+  tex3.DrawLatex(60,2.15,"ALICE, #sqrt{#it{s}_{NN}} = 2.76 TeV, Pb#font[122]{-}Pb, |#it{y}| < 0.8");
+  tex3.DrawLatex(60,2.0,"PHENIX, #sqrt{#it{s}_{NN}} = 0.2 TeV, Cu#font[122]{-}Cu, Au#font[122]{-}Au, |#it{y}| < 0.35");
+  tex3.DrawLatex(60,1.85,"NA50, #sqrt{#it{s}_{NN}} = 17.3 GeV, Pb#font[122]{-}Pb, |#it{y}| < 1");
 
 
 

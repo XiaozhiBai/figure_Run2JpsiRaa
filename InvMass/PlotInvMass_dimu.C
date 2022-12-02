@@ -110,10 +110,10 @@ void PlotInvMass_dimu(){
   
   
   TH2F *hDummyUp = new TH2F("hDummyUp",";;Counts per 25 MeV/#it{c^{2}}",100,xMin,xMax,100,yMin1,yMax1);
-  TH2F *hDummyLo = new TH2F("hDummyLo",";#it{m}_{#mu#mu} (GeV/#it{c^{2}});Counts per 25 MeV/#it{c^{2}}",100,xMin,xMax,100,yMin2,yMax2);
+  TH2F *hDummyLo = new TH2F("hDummyLo",";#it{m}_{#mu^{+}#mu^{-}} (GeV/#it{c^{2}});Counts per 25 MeV/#it{c^{2}}",100,xMin,xMax,100,yMin2,yMax2);
 
-  SetTH2F(hDummyUp,0.07,0.07,0.9,0.9,0.06,0.06,0.02,0.02,504,504);
-  SetTH2F(hDummyLo,0.07,0.07,0.9,0.9,0.06,0.06,0.02,0.02,504,504);
+  SetTH2F(hDummyUp,0.07,0.07,0.97,0.93,0.06,0.06,0.02,0.02,504,504);
+  SetTH2F(hDummyLo,0.07,0.07,0.97,0.93,0.06,0.06,0.02,0.02,504,504);
  
   hDummyUp->GetYaxis()->SetMaxDigits(3);
   hDummyLo->GetYaxis()->SetMaxDigits(3);
@@ -124,7 +124,7 @@ void PlotInvMass_dimu(){
   auto padLo = new TPad("padLo","padLo",0.,0.,1,0.5);
 
   SetPad(padUp,0.02,0,0.13,0.02);
-  SetPad(padLo ,0.0,0.15,0.13,0.02);
+  SetPad(padLo ,0.0,0.16,0.13,0.02);
   
   
  
@@ -151,14 +151,14 @@ void PlotInvMass_dimu(){
   TLatex latex1;
   latex1.SetNDC();
   latex1.SetTextFont(42);
-  latex1.SetTextSize(0.055);
-  latex1.DrawLatex(0.65, 0.9, "ALICE");
-  latex1.SetTextSize(0.05);
-  latex1.DrawLatex(0.55, 0.82, "Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
+  latex1.SetTextSize(0.06);
+  // latex1.DrawLatex(0.65, 0.9, "ALICE");
+  // latex1.SetTextSize(0.05);
+  //  latex1.DrawLatex(0.55, 0.82, "Pb-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
   /* if(bCent == 1)latex1.DrawLatex(0.69, 0.78, "Centrality 0-20%"); */
   /* else latex1.DrawLatex(0.69, 0.78, "Centrality 60-90%"); */
-  latex1.DrawLatex(0.55, 0.74, "Centrality 0-20% , 2.5 < #it{y} < 4");
-  latex1.DrawLatex(0.55, 0.66, "J/#psi #rightarrow #mu^{+}#mu^{#minus}, 1 < #it{p}_{T} < 2 GeV/#it{c}");
+  latex1.DrawLatex(0.5, 0.74, "Centrality 0#font[122]{-}20% , 2.5 < #it{y} < 4");
+  latex1.DrawLatex(0.5, 0.66, "J/#psi #rightarrow #mu^{+}#mu^{#minus}, 1 < #it{p}_{T} < 2 GeV/#it{c}");
 
 
 
