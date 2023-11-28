@@ -389,7 +389,7 @@ void plot_raa_data()
   TBox *boxraa    = new TBox(390,1.-raa_global,400,1.+raa_global);
   boxraa ->SetFillColor(kRed);
   boxraa->Draw("sameE2");
-  
+  boxraa->Print("all");  
   TLatex tex3(0.5,0.5," ");
 
   tex3.SetTextSize(0.03);

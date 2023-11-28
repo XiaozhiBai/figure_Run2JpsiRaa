@@ -128,7 +128,7 @@ void plot_spectrum_pt_0_10(){
   pad1->SetLogy();
   
   TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/(d#it{y}d#it{p}_{T}) (GeV/#it{c})^{-1}",100,0,15,100,6e-7,0.3);
-  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,2.5);
+  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,15,100,1e-2,2.1);
 
   SetTH2F(h_dummy1,0.07,0.07,1.0,1.0,0.05,0.06,0.01,0.01,504,504);
   SetTH2F(h_dummy2,0.11,0.11, 1.2,0.65, 0.1,0.09, 0.02,0.02, 504,504);

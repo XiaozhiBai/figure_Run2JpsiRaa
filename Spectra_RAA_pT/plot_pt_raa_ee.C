@@ -57,6 +57,8 @@ const char *fileTHUA_pt_raa_30_50;
 const char *fileSHM_pt_raa_30_50;
 
 const char *fileEnergy_loss_model;
+const int Npoint_0_10=7;
+const int Npoint_30_50=5;
 
 void plot_pt_raa_ee()
 {
@@ -90,6 +92,19 @@ void plot_raa_pt_0_10(){
   TGraph * gr_PtRaaTM25020_0_10_model=  (TGraph *) GetPtRaaTM15020_model(16,fileTHUA_pt_raa_0_10);
   TGraph * gr_PtRaaSHM5020_0_10_model=  (TGraph *) GetPtRaaTM15020_model(16,fileSHM_pt_raa_0_10);
 
+  TGraphErrors *gr_PtRaaStat5020_00_10_extro = (TGraphErrors *) gr_PtRaaStat5020_00_10->Clone("gr_PtRaaStat5020_00_10_extro");
+
+  for(int i=0;i<gr_PtRaaSyst5020_00_10->GetN();i++) 
+    {
+      if(i<Npoint_0_10){
+	gr_PtRaaStat5020_00_10_extro->SetPoint(i,999,-999);
+      }
+      else 
+	{
+	  gr_PtRaaStat5020_00_10->SetPoint(i,999,-999);
+	}
+    }
+      
   TGraphAsymmErrors * gr_PtRaaEL5020_0_10_model=  (TGraphAsymmErrors *) GetPtRaaEnergyLoss5020_model(fileEnergy_loss_model,"RAA_binned_centrality_0_10");
   
   int ci1;
@@ -124,6 +139,8 @@ void plot_raa_pt_0_10(){
   SetTGraphError(gr_PtRaaStat5020_00_10,20,2.5,2,2,2,0);
   SetTGraphError(gr_PtRaaSyst5020_00_10,20,2.5,2,2,2,0);
 
+  SetTGraphError(gr_PtRaaStat5020_00_10_extro,24,2.5,2,2,2,0);
+
   SetErrorX(gr_PtRaaSyst5020_00_10,0.3);
   
   pad1->cd();
@@ -139,8 +156,15 @@ void plot_raa_pt_0_10(){
   gr_PtRaaStat5020_00_10->Draw("samePE");
   gr_PtRaaSyst5020_00_10->Draw("sameE2");
 
-  boxEle0010->Draw("sameE2");
 
+  gr_PtRaaStat5020_00_10_extro->Draw("samePE");
+  //TGraphErrors *gr_PtRaaSyst5020_00_10_extro = gr_PtRaaSyst5020_00_10->Clone("gr_PtRaaSyst5020_00_10_extro");
+
+  
+
+  
+  boxEle0010->Draw("sameE2");
+  boxEle0010->Print("all");
   TLine *line_unity= (TLine *)GetLine(0,1.0,15,1.0,1,2,7);
   line_unity  ->Draw("same");
   
@@ -178,7 +202,9 @@ void plot_raa_pt_0_10(){
   gr_PtRaaSHM5020_0_10_model->Write("gr_RaaPt_SHM_5020_midy_0_10_model");
   gr_PtRaaEL5020_0_10_model->Write("gr_RaaPt_Eloss_5020_midy_0_10_model");
 
-  
+  //  gr_PtRaaEL5020_0_10_model->Print("all");
+  /* gr_PtRaaStat5020_0_10->Print("all"); */
+  /* gr_PtRaaSyst5020_0_10->Print("all"); */
   
   delete mh2Dummy;
   delete c_temp;
@@ -189,6 +215,19 @@ void plot_raa_pt_30_50(){
   TGraphErrors *gr_PtRaaStat5020_30_50 = (TGraphErrors*)GetPtRaaStat5020_30_50();
   TGraphErrors *gr_PtRaaSyst5020_30_50  = (TGraphErrors*)GetPtRaaSyst5020_30_50();
 
+    TGraphErrors *gr_PtRaaStat5020_30_50_extro = (TGraphErrors *) gr_PtRaaStat5020_30_50->Clone("gr_PtRaaStat5020_30_50_extro");
+
+    for(int i=0;i<gr_PtRaaSyst5020_30_50->GetN();i++) 
+      {
+	if(i<Npoint_30_50){
+	  gr_PtRaaStat5020_30_50_extro->SetPoint(i,999,-999);
+	}
+	else 
+	  {
+	    gr_PtRaaStat5020_30_50->SetPoint(i,999,-999);
+	  }
+      }
+  
   TGraph * gr_PtRaaTM15020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileTAMU_pt_raa_30_50);
   TGraph * gr_PtRaaTM25020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileTHUA_pt_raa_30_50);
   TGraph * gr_PtRaaSHM5020_30_50_model=  (TGraph *)GetPtRaaTM15020_model(12,fileSHM_pt_raa_30_50);
@@ -226,8 +265,9 @@ void plot_raa_pt_30_50(){
   TBox *boxEle3050    = new TBox(14.3,1.-sqrt(NormUncert3*NormUncert3+common_un*common_un),14.7,1.+sqrt(NormUncert3*NormUncert3+common_un*common_un));
   boxEle3050->SetFillColor(kRed);
 
-
+  //  boxEle3050->Print("all");
   SetTGraphError(gr_PtRaaStat5020_30_50,20,2.5,2,2,2,0);
+  SetTGraphError(gr_PtRaaStat5020_30_50_extro,24,2.5,2,2,2,0);
   SetTGraphError(gr_PtRaaSyst5020_30_50,20,2.5,2,2,2,0);
 
   SetErrorX(gr_PtRaaSyst5020_30_50,0.3);
@@ -241,6 +281,7 @@ void plot_raa_pt_30_50(){
   gr_PtRaaEL5020_30_50_model->Draw("same E2");
 
   gr_PtRaaStat5020_30_50->Draw("samePE");
+  gr_PtRaaStat5020_30_50_extro->Draw("samePE");
   gr_PtRaaSyst5020_30_50->Draw("sameE2");
 
   boxEle3050->Draw("sameE2");
@@ -270,6 +311,9 @@ void plot_raa_pt_30_50(){
   legend->AddEntry(gr_PtRaaSHM5020_30_50_model,lg_SHM,"f");
   legend->AddEntry(gr_PtRaaEL5020_30_50_model,lg_EL,"f");
 
+  //  gr_PtRaaEL5020_30_50_model->Print("all");
+  /* gr_PtRaaStat5020_30_50->Print("all"); */
+  /* gr_PtRaaSyst5020_30_50->Print("all"); */
   //  legend->Draw();
 
   TLine *line_unity= (TLine *)GetLine(0,1.0,15,1.0,1,2,7);
@@ -296,6 +340,33 @@ void plot_raa_pt_0_10_30_50(){
   TGraphErrors *gr_PtRaaStat5020_30_50 = (TGraphErrors*)GetPtRaaStat5020_30_50();
   TGraphErrors *gr_PtRaaSyst5020_30_50  = (TGraphErrors*)GetPtRaaSyst5020_30_50();
 
+  TGraphErrors *gr_PtRaaStat5020_00_10_extro = (TGraphErrors *) gr_PtRaaStat5020_00_10->Clone("gr_PtRaaStat5020_00_10_extro");
+  TGraphErrors *gr_PtRaaStat5020_30_50_extro = (TGraphErrors *) gr_PtRaaStat5020_30_50->Clone("gr_PtRaaStat5020_30_50_extro");
+
+  for(int i=0;i<gr_PtRaaSyst5020_00_10->GetN();i++) 
+    {
+      if(i<Npoint_0_10){
+	gr_PtRaaStat5020_00_10_extro->SetPoint(i,999,-999);
+      }
+      else 
+	{
+	  gr_PtRaaStat5020_00_10->SetPoint(i,999,-999);
+	}
+    }
+
+  for(int i=0;i<gr_PtRaaSyst5020_30_50->GetN();i++) 
+    {
+      if(i<Npoint_30_50){
+	gr_PtRaaStat5020_30_50_extro->SetPoint(i,999,-999);
+      }
+      else 
+	{
+	  gr_PtRaaStat5020_30_50->SetPoint(i,999,-999);
+	}
+    }
+    
+
+  
   TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
   TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
 
@@ -308,11 +379,13 @@ void plot_raa_pt_0_10_30_50(){
 
 
   SetTGraphError(gr_PtRaaStat5020_00_10,20,2.5,2,2,2,0);
+  SetTGraphError(gr_PtRaaStat5020_00_10_extro,24,2.5,2,2,2,0);
   SetTGraphError(gr_PtRaaSyst5020_00_10,20,2.5,2,2,2,0);
   SetErrorX(gr_PtRaaSyst5020_00_10,0.3);
 
   
   SetTGraphError(gr_PtRaaStat5020_30_50,20,2.5,4,4,2,0);
+  SetTGraphError(gr_PtRaaStat5020_30_50_extro,24,2.5,4,4,2,0);
   SetTGraphError(gr_PtRaaSyst5020_30_50,20,2.5,4,4,2,0);
   SetErrorX(gr_PtRaaSyst5020_30_50,0.3);
   
@@ -321,8 +394,10 @@ void plot_raa_pt_0_10_30_50(){
   mh2Dummy->Draw();
 
   gr_PtRaaStat5020_00_10->Draw("samePE");
+  gr_PtRaaStat5020_00_10_extro->Draw("samePE");
   gr_PtRaaSyst5020_00_10->Draw("sameE2");
   gr_PtRaaStat5020_30_50->Draw("samePE");
+  gr_PtRaaStat5020_30_50_extro->Draw("samePE");
   gr_PtRaaSyst5020_30_50->Draw("sameE2");
 
   boxEle0010->Draw("sameE2");

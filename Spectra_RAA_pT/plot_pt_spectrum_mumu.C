@@ -156,7 +156,7 @@ void plot_spectrum_pt_0_20(){
   pad1->SetLogy();
   
   TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/(d#it{y}d#it{p}_{T}) (GeV/#it{c})^{-1}",100,0,20,100,1.9e-9,0.1);
-  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,20,100,1e-2,2.2);
+  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,20,100,1e-2,2.1);
 
   SetTH2F(h_dummy1,0.07,0.07,1.0,1.0,0.05,0.06,0.01,0.01,504,504);
   SetTH2F(h_dummy2,0.11,0.11,1.2,0.68, 0.1,0.09, 0.02,0.02, 504,504);
@@ -282,7 +282,7 @@ void plot_spectrum_pt_20_40(){
   pad1->SetLogy();
   
   TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/(d#it{y}d#it{p}_{T}) (GeV/#it{c})^{-1}",100,0,20,100,3e-8,3e-2);
-  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,20,100,1e-2,2.2);
+  TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,20,100,1e-2,2.1);
 
   SetTH2F(h_dummy1,0.07,0.07,1.0,1.0,0.05,0.06,0.01,0.01,504,504);
   SetTH2F(h_dummy2,0.11,0.11, 1.2,0.68, 0.1,0.09, 0.02,0.02, 504,504);
@@ -406,7 +406,7 @@ void plot_spectrum_pt_40_90(){
   pad1->cd();
   pad1->SetLogy();
   
-  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/{d#it{y}d#it{p}_{T}} (GeV/#it{c})^{-1}",100,0,20,100,2e-8,7e-3);
+  TH2F * h_dummy1=new TH2F("h_dummy1",";#it{p}_{T} (GeV/#it{c});1/#it{N}_{ev}d^{2}#it{N}/(d#it{y}d#it{p}_{T}) (GeV/#it{c})^{-1}",100,0,20,100,2e-8,7e-3);
   TH2F * h_dummy2=new TH2F("h_dummy2",";#it{p}_{T} (GeV/#it{c}); Model/Data",100,0,20,100,1e-2,2.1);
 
   SetTH2F(h_dummy1,0.07,0.07,1.0,1.0,0.05,0.06,0.01,0.01,504,504);

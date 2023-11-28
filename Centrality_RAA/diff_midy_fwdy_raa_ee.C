@@ -67,124 +67,16 @@ const char *fileQinghua_cent_raa;
 const char *fileSHM_cent_raa;
 const char *fileComover_cent_raa;
 
-bool comput_difference=false;
+bool comput_difference=true;
 bool comput_increasing=false;
-void plot_centrality_raa_ee()
+void diff_midy_fwdy_raa_ee()
 {
 
   SetStyle();
 
   final_results_cent_midy=new TFile("input/data/results_centrality.root","READ");
   final_results_cent_fwdy= "input/data/Raa_vs_centrality_fwd_fig4.txt";
-
-  fileTAMU_cent_raa = "../models/Ralf_Rapp/data/TAMU_5020_cent_RAA_mid.txt";
-  fileQinghua_cent_raa = "../models/PengfeiTM2/fig--central-rapidity-2022/RAA-Np-2022Jan5/theory-RAA-Np.dat";
-  fileComover_cent_raa = "input/models/comover_5020_midy.txt";
-  //  fileSHM_cent_raa = "input/models/SHM_CentDep_PbPb5020_midy_11012019.txt";
-  fileSHM_cent_raa = "../models/SHMc/gRaaSHMc_midy_RAA_Npart.txt";    
-
-  plot_raa_cent_model();
   plot_raa_cent_data();
-}
-
-void plot_raa_cent_model(){
-
-  TGraphErrors *gr_CentRaaStat5020 = (TGraphErrors*)GetCentRaaStat5020();
-  TGraphErrors *gr_CentRaaSyst5020  = (TGraphErrors*)GetCentRaaSyst5020();
-
-  TGraph * gr_CentRaaTM15020_model=  (TGraph *)GetCentRaaTM1_5020_model(29,fileTAMU_cent_raa);
-  TGraph * gr_CentRaaTM25020_model=  (TGraph *)GetCentRaaTM2_5020_model(26,fileQinghua_cent_raa);
-  TGraph * gr_CentRaaSHM5020_model=  (TGraph *)GetCentRaaSHM_5020_model(38,fileSHM_cent_raa);
-  TGraph * gr_CentRaaComv5020_model=  (TGraph *)GetCentRaaComv020_model(14,fileComover_cent_raa);  
-
-  int ci1;
-  ci1 = TColor::GetColor("#33ccff");
-
-  gr_CentRaaSHM5020_model->SetFillColorAlpha(ci1,0.15);
-  gr_CentRaaSHM5020_model->SetLineColor(ci1);
-
-  gr_CentRaaComv5020_model ->SetFillColorAlpha(kGreen,0.15);
-  gr_CentRaaComv5020_model ->SetLineColor(kGreen);
-
-  gr_CentRaaTM15020_model  ->SetFillColorAlpha(kOrange+1,0.2);
-  gr_CentRaaTM15020_model ->SetLineColor(kOrange+1);
-  
-  gr_CentRaaTM25020_model->SetFillColorAlpha(kBlue,0.15);
-  gr_CentRaaTM25020_model->SetLineColor(kBlue);
-
-  TCanvas *c_temp=new TCanvas("c_temp","",1200,900);
-  TPad *pad1 = new TPad("pad1", "", 0, 0, 1, 1);
-
-  SetPad(pad1,0.02,0.17,0.13,0.035);
-  c_temp->cd();
-  pad1->Draw();
-
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";#LT_{ }#it{N}_{part}_{ }#GT;#it{R}_{AA}",100,0,400,100,0.,2.2);
-  SetTH2F(mh2Dummy,0.07,0.07,1.1,0.8,0.06,0.06,0.015,0.015,504,504);
-
-  
-  TBox *box_comm    = new TBox(392,1.-common_uncertainty,400,1.+common_uncertainty);
-  box_comm ->SetFillColor(kRed);
-
-  SetTGraphError(gr_CentRaaStat5020,20,2.5,2,2,2,0);
-  SetTGraphError(gr_CentRaaSyst5020,20,2.5,2,2,2,0);
-
-  SetErrorX(gr_CentRaaSyst5020,6);
-  
-  pad1->cd();
-  mh2Dummy->Draw();
-  gr_CentRaaTM15020_model->Draw("FL same");
-  gr_CentRaaSHM5020_model->Draw("FL same");
-  gr_CentRaaTM25020_model->Draw("FL same");
-  
-  gr_CentRaaStat5020->Draw("samePE");
-  gr_CentRaaSyst5020->Draw("sameE2");
-
-  box_comm ->Draw("sameE2");
-
-  //  box_comm->Print("all");
-    
-  TLine *line_unity= (TLine *)GetLine(0,1.0,400,1.0,1,2,7);
-  line_unity  ->Draw("same");
-  
-  TLatex tex1(0.5,0.5," ");
-  tex1.SetTextFont(42);
-  tex1.SetTextSize(0.055);
-  tex1.SetNDC();
-  tex1.DrawLatex(0.280,0.9,"ALICE");
-  tex1.SetTextSize(0.047);
-
-  
-  tex1.DrawLatex(0.18,0.84,"Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  tex1.DrawLatex(0.18,0.77,"Inclusive J/#psi, |#it{y}|<0.9");
-  tex1.DrawLatex(0.18,0.70,"#it{p}_{T} > 0.15 GeV/#it{c}");
-  
-  TLegend  *legend= new TLegend(0.52,0.7,0.82,0.92);
-  SetLegend(legend,42,0.044,0.0,0.0,0.0,0.0);
-  
-  legend->AddEntry( gr_CentRaaStat5020,lg_data,"P");
-  legend->AddEntry(gr_CentRaaTM15020_model,lg_TM1,"f");
-  legend->AddEntry(gr_CentRaaTM25020_model,lg_TM2,"f");
-  legend->AddEntry(gr_CentRaaSHM5020_model,lg_SHM,"f");
-  
-  legend->Draw();
-
-  gPad->RedrawAxis();
-  c_temp->SaveAs("output/Raa_Vs_cent_015_model.pdf");
-  c_temp->SaveAs("output/Raa_Vs_cent_015_model.png");
-
-
-  /* TFile *file=new TFile("Jpsi_RAA_Npart.root","RECREATE"); */
-  /* file->cd(); */
-  /* gr_CentRaaTM15020_model->Write("gr_RaaNpart_Ralf_Papp_midy_model"); */
-  /* gr_CentRaaSHM5020_model->Write("gr_RaaNpart_SHM_midy_model"); */
-  /* gr_CentRaaTM25020_model->Write("gr_RaaNpart_Pengfei_midy_model"); */
-  
-  /* gr_CentRaaStat5020->Write("gr_RaaNpart_stat_midy_data"); */
-  /* gr_CentRaaSyst5020->Write("gr_RaaNpart_syst_midy_data"); */
-  
-  delete mh2Dummy;
-  delete c_temp;
 }
 
 void plot_raa_cent_data(){
@@ -217,9 +109,7 @@ void plot_raa_cent_data(){
   SetTGraphError(gr_CentRaaStat5020,20,2.5,2,2,2,0);
   SetTGraphError(gr_CentRaaSyst5020,20,2.5,2,2,2,0);
 
-  
-  /* SetTGraphError(gr_CentRaaStat5020,20,2,2,2,2,0); */
-  /* SetTGraphError(gr_CentRaaSyst5020,20,2,2,2,2,0); */
+
   SetErrorX(gr_CentRaaSyst5020,6);
 
   SetTGraphError(gr_CentRaaStat5020_fwd,20,2.5,4,4,2,0);
@@ -236,49 +126,9 @@ void plot_raa_cent_data(){
   gr_CentRaaStat5020->Draw("samePE");
   gr_CentRaaSyst5020->Draw("sameE2");
 
-  
-  
-  if(comput_increasing)
-    {
 
-  for(int i=0;i<8;i++)
-        {
-
-	  Double_t  raa_mid=0.0;
-	  Double_t  raa_mid_err=0.0;
-      
-	  Double_t  raa_mid_tem_x=0.0;
-	  Double_t  raa_mid_tem_y=0.0;
- 
-	  Double_t  raa_mid_tem_sts_err=0.0;
-	  Double_t  raa_mid_tem_sys_err=0.0;
-
-	  Double_t total_uncer=0.0;
-	  
-          gr_CentRaaStat5020->GetPoint(i,raa_mid_tem_x,raa_mid_tem_y);
-      
-          raa_mid_tem_sts_err=gr_CentRaaStat5020->GetErrorY(i);
-          raa_mid_tem_sys_err=gr_CentRaaSyst5020->GetErrorY(i);
-
-	  gr_CentRaaStat5020->SetPointError(i,0.0,sqrt(raa_mid_tem_sts_err*raa_mid_tem_sts_err+raa_mid_tem_sys_err*raa_mid_tem_sys_err));
-          /* //      cout<< " "<<i <<" "<<raa_mid_tem_x<< "  "<<raa_mid_tem_y<< " sts."<< raa_mid_tem_x_err<<endl; */
-	  /* //   raa_mid+=raa_mid_tem_y; */
- 
- 
-          /* raa_mid_err +=raa_mid_tem_sts_err *raa_mid_tem_sts_err; */
-          /* raa_mid_err +=raa_mid_tem_sys_err *raa_mid_tem_sys_err; */
- 
-          /* cout<< "raa_mid"<< raa_mid<< " raa_mid_err" << raa_mid_err<<endl; */
- 
-	}
-
-  //  gr_CentRaaStat5020->Fit("pol0","","",120,400);
-  
-    }
-    
   if(comput_difference)
-    {
-
+    {      
 
       cout<< " mwdy stst."<<endl;
       gr_CentRaaStat5020->Print("all"); 
@@ -309,86 +159,117 @@ void plot_raa_cent_data(){
       Double_t  raa_fwd_tem_sts_err=0.0;
       Double_t  raa_fwd_tem_sys_err=0.0;
       
- 
-      
-      for(int i=3;i<8;i++)
-        {
-	  Double_t TAA[8][2]={{26.08,0.176},{20.44,0.166},{14.4,0.126},{8.767,0.101},{5.086,0.0814},{2.747,0.04786},{0.9755,0.0233},{0.1611,0.00365}};
+      int Npoint_mid=2;
+      Double_t weight_mid[Npoint_mid];
 
+      int Npoint_fwd=1;
+      Double_t weight_fwd[Npoint_fwd];
+      
+      Double_t weight_mid_all=0.0;
+      
+      //      Double_t weight_mid=0.0;
+
+      Double_t weight_fwd_all=0.0;
+      //Double_t weight_mid=0.0;
+      Double_t TAA_old_fwd[9][2]={{23.4,0.78},{14.3,0.46},{8.59,0.27},{4.92,0.16},{2.61,0.1},{1.28,0.063},{0.569,0.032},{0.232,0.015},{0.0923,0.007}};
+      Double_t TAA_mid[8][2]={{26.08,0.176},{20.44,0.166},{14.4,0.126},{8.767,0.101},{5.086,0.0814},{2.747,0.04786},{0.9755,0.0233},{0.1611,0.00365}};
+	  
+      for(int i=8-Npoint_mid;i<8;i++)
+        {
           gr_CentRaaStat5020->GetPoint(i,raa_mid_tem_x,raa_mid_tem_y);
       
           raa_mid_tem_sts_err=gr_CentRaaStat5020->GetErrorY(i);
           raa_mid_tem_sys_err=gr_CentRaaSyst5020->GetErrorY(i);
 
-	  //	  raa_mid_tem_sys_err
-	  cout<< " XXXX"<<i <<" "<<raa_mid_tem_x<< "  "<<raa_mid_tem_sts_err<< " sts."<< raa_mid_tem_sts_err<< " "<<TAA[i][0]<<" "<<TAA[i][1]<<" "<<raa_mid_tem_y<<endl;
-	  raa_mid_tem_sys_err=sqrt(raa_mid_tem_sys_err*raa_mid_tem_sys_err-(TAA[i][1]/TAA[i][0]*raa_mid_tem_y)*(TAA[i][1]/TAA[i][0]*raa_mid_tem_y)); //remove the TAA from mid;
-	    
-	    raa_mid+=raa_mid_tem_y;
- 
- 
-          raa_mid_err +=raa_mid_tem_sts_err *raa_mid_tem_sts_err;
-          raa_mid_err +=raa_mid_tem_sys_err *raa_mid_tem_sys_err;
- 
-          cout<< "raa_mid"<< raa_mid<< " raa_mid_err" << raa_mid_err<<endl;
+
+	  Double_t relative_sts=raa_mid_tem_sts_err/raa_mid_tem_y;
+	  weight_mid_all+=1./(relative_sts*relative_sts);
  
 	}
 
-      for(int i=0;i<4;i++)
+      Double_t Average_RAA_mid=0.0;
+      Double_t Average_RAA_mid_sts=0.0;
+      Double_t Average_RAA_mid_sys=0.0;
+      
+      for(int i=8-Npoint_mid;i<8;i++)                                                                                                                                                                                                                                                                                          
         {
-	  Double_t TAA[9][2]={{23.4,0.78},{14.3,0.46},{8.59,0.27},{4.92,0.16},{2.61,0.1},{1.28,0.063},{0.569,0.032},{0.232,0.015},{0.0923,0.007}};
+
+	  gr_CentRaaStat5020->GetPoint(i,raa_mid_tem_x,raa_mid_tem_y);
+          raa_mid_tem_sts_err=gr_CentRaaStat5020->GetErrorY(i);
+          raa_mid_tem_sys_err=gr_CentRaaSyst5020->GetErrorY(i);
+
+	  raa_mid_tem_sys_err=sqrt(raa_mid_tem_sys_err*raa_mid_tem_sys_err-(TAA_mid[i][1]/TAA_mid[i][0]*raa_mid_tem_y)*(TAA_mid[i][1]/TAA_mid[i][0]*raa_mid_tem_y)); //remove the TAA from mid;
+ 
+	  Double_t relative_sts=raa_mid_tem_sts_err/raa_mid_tem_y;
+	  Double_t weight=1./(relative_sts*relative_sts)/weight_mid_all;
+	  
+	  
+	  Average_RAA_mid += raa_mid_tem_y*weight;
+	  Average_RAA_mid_sys += raa_mid_tem_sys_err*weight;
+
+	  Average_RAA_mid_sts+=(raa_mid_tem_sts_err*weight)*(raa_mid_tem_sts_err*weight);
+	  
+	  
+	}
+
+      Average_RAA_mid_sts=sqrt(Average_RAA_mid_sts);
+
+      //      cout<< "Average RAA mid"<< Average_RAA_mid<< "Average_RAA_mid_sys"<< Average_RAA_mid_sys<<" Average_RAA_mid_sts"<< Average_RAA_mid_sts<< endl;
+	
+      for(int i=0;i<Npoint_fwd;i++)
+        {
+	  
           // fwdy 
          gr_CentRaaStat5020_fwd->GetPoint(i,raa_fwd_tem_x,raa_fwd_tem_y);
       
           raa_fwd_tem_sts_err=gr_CentRaaStat5020_fwd->GetErrorY(i);
           raa_fwd_tem_sys_err=gr_CentRaaSyst5020_fwd->GetErrorY(i);
-          
-	  cout<< " XXX "<<i <<" "<<raa_fwd_tem_x<< "  "<<raa_fwd_tem_y<< " sts."<<endl;
-	  raa_mid_tem_sys_err=sqrt(raa_mid_tem_sys_err*raa_mid_tem_sys_err-(TAA[i][1]/TAA[i][0]*raa_mid_tem_y)*(TAA[i][1]/TAA[i][0]*raa_mid_tem_y)); //remove the TAA from mid;
-	  raa_fwd+=raa_fwd_tem_y;
+	  
+	  Double_t relative_sts=raa_fwd_tem_sts_err/raa_fwd_tem_y;
+	  
+	  weight_fwd_all+=1./(relative_sts*relative_sts);
  
- 
-          raa_fwd_err +=raa_fwd_tem_sts_err *raa_fwd_tem_sts_err;
-          raa_fwd_err +=raa_fwd_tem_sys_err *raa_fwd_tem_sys_err;
- 
-          cout<< "raa_fwd"<< raa_fwd<< " raa_fwd_err" << raa_fwd_err<<endl;
-
-	  //      cout<< " "<<i <<" "<<raa_fwd_tem_x<< "  "<<raa_fwd_tem_y<< " sts."<< raa_fwd_tem_x_err<<endl;
-          raa_fwd+=raa_fwd_tem_y;
- 
- 
-          raa_fwd_err +=raa_fwd_tem_sts_err *raa_fwd_tem_sts_err;
-          raa_fwd_err +=raa_fwd_tem_sys_err *raa_fwd_tem_sys_err;
- 
-	  //    cout<< "raa_fwd"<< raa_fwd<< " raa_fwd_err" << raa_fwd_err<<endl;
-          
-          
-          
         }       
- 
-      /* cout<<" XXX difference"<<endl; */
- 
-      raa_mid/=5.;
-      raa_mid_err/=25;
+      Double_t Average_RAA_fwd=0.0;
+      Double_t Average_RAA_fwd_sts=0.0;
+      Double_t Average_RAA_fwd_sys=0.0;
+      
+      for(int i=0;i<Npoint_fwd;i++)
+        {
+	  gr_CentRaaStat5020_fwd->GetPoint(i,raa_fwd_tem_x,raa_fwd_tem_y);
+      
+          raa_fwd_tem_sts_err=gr_CentRaaStat5020_fwd->GetErrorY(i);
+          raa_fwd_tem_sys_err=gr_CentRaaSyst5020_fwd->GetErrorY(i);
+	  raa_mid_tem_sys_err=sqrt(raa_mid_tem_sys_err*raa_mid_tem_sys_err-(TAA_old_fwd[i][1]/TAA_old_fwd[i][0]*raa_mid_tem_y)*(TAA_old_fwd[i][1]/TAA_old_fwd[i][0]*raa_mid_tem_y)); //remove the TAA from mid;
+	  
+	  Double_t relative_sts=raa_fwd_tem_sts_err/raa_fwd_tem_y; 
+	  Double_t weight=1./(relative_sts*relative_sts)/weight_fwd_all;
+	  
+	  Average_RAA_fwd += raa_fwd_tem_y*weight;
+	  Average_RAA_fwd_sys+=raa_fwd_tem_sys_err*weight;
+	  Average_RAA_fwd_sts+=raa_fwd_tem_sts_err*weight*raa_fwd_tem_sts_err*weight;
+	}
 
-      raa_fwd/=4.;
-      raa_fwd_err/=16;
+      raa_fwd_tem_sts_err=sqrt(raa_fwd_tem_sts_err);
       
-      
+      //      cout<< "Average RAA fwd"<< Average_RAA_fwd<< " Average_RAA_fwd_sys "<< Average_RAA_fwd_sys << " Average_RAA_fwd_sts "<< Average_RAA_fwd_sts<<endl;
+	    
+
+
+      Double_t Average_RAA_err=Average_RAA_mid_sts*Average_RAA_mid_sts+Average_RAA_mid_sys*Average_RAA_mid_sys;
+      Average_RAA_err+=Average_RAA_fwd_sts*Average_RAA_fwd_sts+Average_RAA_fwd_sys*Average_RAA_fwd_sys;
+      Average_RAA_err+=(0.07*Average_RAA_mid)*(0.07*Average_RAA_mid)+(0.07*Average_RAA_fwd)*(0.07*Average_RAA_fwd);
 	
-      /* raa_fwd/=3.; */
- 
-      /* cout<< "mid"<<  raa_mid<< " fwd"<< raa_fwd<<endl; */
-      Double_t diff= abs(raa_fwd-raa_mid);
-      /* //      diff/=3.; */
-      Double_t err=raa_fwd_err+raa_mid_err;
-      /* err/=9.0; */
- 
-      err+=(0.07*raa_mid*0.07*raa_mid)+(0.07*raa_fwd*0.07*raa_fwd);
-      err=sqrt(err);
- 
-      cout<< "diff "<<diff<< "  "<<err<< " "<< diff/err<<endl;
+      Average_RAA_err=sqrt(Average_RAA_err);
+
+      Double_t sigma=abs(Average_RAA_mid-Average_RAA_fwd)/Average_RAA_err;
       
+      
+
+      cout  <<"Average RAA mid"<< Average_RAA_mid<< "Average_RAA_mid_sts" <<  Average_RAA_mid_sts<< "Average_RAA_mid_sys"<< Average_RAA_mid_sys<<endl;
+      cout  << "Average RAA fwd " << Average_RAA_fwd<< "Average_RAA_fwd_sts" <<  Average_RAA_fwd_sts<< "Average_RAA_fwd_sys"<< Average_RAA_fwd_sys<<endl;
+
+      cout << "diff "<<abs(Average_RAA_mid-Average_RAA_fwd)<< " sigma "<<sigma<<endl;
       // }
 
 

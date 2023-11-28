@@ -80,7 +80,7 @@ void plot_ratio_cent_model_JpsitoD_ratio(){
   c_temp->cd();
   pad1->Draw();
 
-  TH2F * mh2Dummy=new TH2F("mh2Dummy",";Centrality; J/#psi/D^{0}",2,2,6,100,0.008,0.042);
+  TH2F * mh2Dummy=new TH2F("mh2Dummy",";Centrality; J/#psi / D^{0}",2,2,6,100,0.008,0.042);
   SetTH2F(mh2Dummy,0.07,0.07,1.14,1.14,0.0,0.06,0.015,0.015,2,504);
 
   
@@ -128,6 +128,8 @@ void plot_ratio_cent_model_JpsitoD_ratio(){
 
   gr_SHM_5020_model_centra->Draw("sameE0");
 
+  gr_CentRaaStat5020->Print("all");
+  //  gr_CentRaaSyst5020->Print("all");
 
    TLatex tex0(0.5,0.5," ");
   tex0.SetTextFont(42);

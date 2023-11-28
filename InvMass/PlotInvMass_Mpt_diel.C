@@ -88,9 +88,26 @@ void plot_0_5_Cent()
   
   mh2Dummy->Draw();
 
+  TF1 *fullFit = (TF1 *) hUS->GetFunction("fullFit");
+  hUS->GetListOfFunctions()->Remove(fullFit);
+  TH1F * Ffit_total=(TH1F *) hUS->Clone("Ffit_total");  //->GetListOfFunctions()->Remove(fullFit);
+
+  for(int i=1;i<Ffit_total->GetNbinsX();i++)
+    {
+      Ffit_total->SetBinContent(i,fFit->Eval(Ffit_total->GetBinCenter(i)));
+      Ffit_total->SetBinError(i,0);
+      
+    }
+  //  fullFit->Print("all");
+  Ffit_total->SetLineColor(2);
+  Ffit_total->SetLineWidth(2);
+  
+  Ffit_total->Draw("sameHIST");
+
+  
   hME->Draw("same");
   hUS->Draw("same");
-  fFit->Draw("same");
+  //  fFit->Draw("sameSHIST");
   
   //  TLegend *legend1 = new TLegend(0.17,0.7,0.5,0.9);
   TLegend *legend1 = new TLegend(0.5,0.4,0.85,0.6);
@@ -110,9 +127,9 @@ void plot_0_5_Cent()
   latex1.SetTextSize(0.05);
 
   latex1.DrawLatex(0.5, 0.83, "Pb#font[122]{-}Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-  latex1.DrawLatex(0.5, 0.76, "Centrality 0#font[122]{-}5%, |#it{y}|<0.9");
+  latex1.DrawLatex(0.5, 0.76, "Centrality 0#font[122]{-}5%, |#it{y}| < 0.9");
   //  latex1.DrawLatex(0.5, 0.68, "Inclusive J/#psi, 0.15 < #it{p}_{T} <15 GeV/#it{c}");
-  latex1.DrawLatex(0.5, 0.68, "0.15 < #it{p}_{T} <15 GeV/#it{c}");
+  latex1.DrawLatex(0.5, 0.68, "0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
   c->SaveAs("output/InvMass_midy_MeanpT_0_5.pdf");
 }
@@ -156,11 +173,26 @@ void plot_70_90_Cent()
   
   mh2Dummy->Draw();
 
-  // 
-  
+
   hME->Draw("same");
-  hUS->Draw("same");
-  fFit->Draw("same");
+  hUS->Draw("sameP");
+  
+  TF1 *fullFit = (TF1 *) hUS->GetFunction("fullFit");
+  hUS->GetListOfFunctions()->Remove(fullFit);
+  TH1F * Ffit_total=(TH1F *) hUS->Clone("Ffit_total");  //->GetListOfFunctions()->Remove(fullFit);
+
+  for(int i=1;i<Ffit_total->GetNbinsX();i++)
+    {
+      Ffit_total->SetBinContent(i,fFit->Eval(Ffit_total->GetBinCenter(i)));
+      Ffit_total->SetBinError(i,0);
+      
+    }
+  //  fullFit->Print("all");
+  Ffit_total->SetLineColor(2);
+  Ffit_total->SetLineWidth(2);
+  
+  Ffit_total->Draw("sameHIST");
+  //  fFit->Draw("sameHIST");
   
   TLegend *legend1 = new TLegend(0.17,0.7,0.5,0.9);
   legend1->SetFillColor(0);
@@ -181,9 +213,9 @@ void plot_70_90_Cent()
   latex1.SetTextSize(0.05);
 
   /* latex1.DrawLatex(0.5, 0.82, "Pb#font[122]{-}Pb #sqrt{#it{s}_{NN}} = 5.02 TeV"); */
-  latex1.DrawLatex(0.45, 0.82, "Centrality 70#font[122]{-}90%, |#it{y}|<0.9");
+  latex1.DrawLatex(0.45, 0.82, "Centrality 70#font[122]{-}90%, |#it{y}| < 0.9");
   //  latex1.DrawLatex(0.45, 0.70, "Inclusive J/#psi, 0.15 < #it{p}_{T} <15 GeV/#it{c}");
-  latex1.DrawLatex(0.45, 0.75, "0.15 < #it{p}_{T} <15 GeV/#it{c}");
+  latex1.DrawLatex(0.45, 0.75, "0.15 < #it{p}_{T} < 15 GeV/#it{c}");
 
   c->SaveAs("output/InvMass_midy_MeanpT_70_90.pdf");
 }
